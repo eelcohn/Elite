@@ -1,0 +1,4 @@
+*BASIC
+*DIR $
+MODE 7
+CHAIN"Elite"
