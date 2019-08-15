@@ -111,6 +111,8 @@ ORG &1900
 	EQUB &17, &00, &0A, &20, &00, &00, &00, &00, &00, &00 ; Cursor off
 .str_disk
 	EQUS "Disc", &0D
+.str_build
+	EQUS "Build ", TIME$("%F"), &EA
 
 .memcheck_flag
 	EQUB &80                 ; Memory flag: memory size must be 32K (&80) for this version of Elite
