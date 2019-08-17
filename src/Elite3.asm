@@ -23,6 +23,8 @@ osword         = &FFF1
 osbyte         = &FFF4
 oscli          = &FFF7
 
+addr0D89 = &0D89
+
 ORG &1900
 
 .start
@@ -94,9 +96,9 @@ ORG &1900
 	JSR osbyte                      ; *FX 16, 3 (Select 3 ADC channels to be sampled)
 	LDA #&60
 	STA indv                        ; Set INDV to RTS
-	LDA #indv MOD 256
-	STA netv+1
 	LDA #indv DIV 256
+	STA netv+1
+	LDA #indv MOD 256
 	STA netv                        ; Set NETV to &0232
 	LDA #&BE
 	LDX #&08
@@ -160,7 +162,7 @@ ORG &1900
 	LDA #&11
 	STA irq1v+1                     ; Set IRQ1V to &114B
 	LDA #&39
-	STA systenvia_t1hc              ; System VIA T1 High-Order Counter
+	STA systemvia_t1ch              ; System VIA T1 High-Order Counter
 	CLI
 	LDA #&00
 	STA &70
@@ -289,7 +291,7 @@ ORG &1900
 	JSR addr0D89
 	INC &0D9A                       ; Sector
 	INC &0D94                       ; Address MSB
-.addr0D89
+;.addr0D89
 	LDA #&7F
 	LDX #&92
 	LDY #&0D
@@ -297,7 +299,7 @@ ORG &1900
 
 .osword7Fblock
 	EQUB &00                        ; Drive
-	EQUW &00000F00                  ; Address
+	EQUD &00000F00                  ; Address
 	EQUB &03                        ; Number of parameters
 	EQUB &53                        ; Command &53: Read data
 	EQUB &00                        ; Track
@@ -327,7 +329,7 @@ ORG &1900
 ; -----------------------------------------------------------------------------
 .addr1B89
 	LDA systemvia_t1lc
-	STA addr1C86
+	STA addr1C85+1
 	JSR addr1C6A
 	JSR addr1C89
 	STA &71
@@ -600,8 +602,11 @@ ORG &1900
 	DEY
 	BNE addr1D2E
 	RTS
-	ASL &2C20
-	ORA &71E6,X
+.addr1D38
+	EQUB &0E
+.addr1D39
+	JSR addr1D2C
+	INC &71
 	INC &73
 	DEX
 	BNE addr1D39
@@ -617,20 +622,20 @@ ORG &1900
 	INCBIN "data/Elite3-0400code.bin"
 
 .bin_unknown1
-	INCBIN "data/Elite3-unknown1"
+	INCBIN "data/Elite3-unknown1.bin"
 
 .img_logo_elite
-	INCBIN "data/elite.img
+	INCBIN "data/elite.bin"
 
 .img_logo_acornsoft
-	INCBIN "data/acornsoft.img"
+	INCBIN "data/acornsoft.bin"
 
 .img_logo_copyright
-	INCBIN "data/copyright.img
+	INCBIN "data/copyright.bin"
 
 .bin_unknown2
-	INCBIN "data/Elite3-unknown2.img"
+	INCBIN "data/Elite3-unknown2.bin"
 
 .end
 
-SAVE "$.Elite3", start, end, startcode
+SAVE "$.Elite3", start, end, startcode, start
