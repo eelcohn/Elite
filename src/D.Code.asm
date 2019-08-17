@@ -73,7 +73,7 @@ inwk_ai_attack_univ_ecm  = &66                    ; INWK ai_attack_univ_ecm: bit
 inwk_line_pointer_lo     = &67                    ; INWK 
 inwk_line_pointer_hi     = &68                    ; INWK 
 inwk_energy              = &69                    ; INWK Object's energy
-w0_h                     = &6C                    ; system seeds w0_l
+w0_l                     = &6C                    ; system seeds w0_l
 w0_h                     = &6D                    ; system seeds w0_h Economy
 w1_l                     = &6E                    ; system seeds w1_l
 w1_h                     = &6F                    ; system seeds w1_h Radius lo / x-coord of star
@@ -83,8 +83,8 @@ my_speed                 = &7D                    ; Player's speed (1=lowest, &2
 edgecounter              = &86                    ; edge counter
 shiptype                 = &8D                    ; Ship type (&80=planet_2ring/&82=planet_crater, &81=sun, &E0=autodocking
 visibility               = &96                    ; visibility
-                         = &97                    ; number of edges
-                         = &A9                    ; 
+edges                    = &97                    ; number of edges
+;                         = &A9                    ; 
 xsublo                   = &D3                    ; xsublo
 xsubhi                   = &D4                    ; xsubhi
 ysublo                   = &D6                    ; ysublo
@@ -92,7 +92,6 @@ ysubhi                   = &D7                    ; ysubhi
 zsublo                   = &D9                    ; zsublo
 zsubhi                   = &DA                    ; zsubhi
 
-key_
 key_question             = &0301                  ; ? key flag (Speed down)
 key_spacebar             = &0302                  ; SPACE key flag (Speed up)
 key_rotleft              = &0303                  ; < key flag
@@ -133,22 +132,22 @@ ship_shuttle_total       = &0326                  ; Total number of Shuttles
 ship_transporter_total   = &0327                  ; Total number of Transporters
 ship_cobramk3_total      = &0328                  ; Total number of Cobra Mk III
 ship_python_total        = &0329                  ; Total number of Pythons
-ship__total              = &032A                  ; Total number of 
+ship_13_total              = &032A                  ; Total number of 
 ship_anaconda_total      = &032B                  ; Total number of Anacondas
 ship_worm_total          = &032C                  ; Total number of Worms
 ship_viper_total         = &032D                  ; Total number of Vipers
-ship__total              = &032E                  ; Total number of 
-ship__total              = &032F                  ; Total number of 
+ship_17_total              = &032E                  ; Total number of 
+ship_18_total              = &032F                  ; Total number of 
 ship_krait_total         = &0330                  ; Total number of Krait
 ship_adder_total         = &0331                  ; Total number of Adders
-ship__total              = &0332                  ; Total number of 
-ship__total              = &0333                  ; Total number of 
-ship__total              = &0334                  ; Total number of 
-ship__total              = &0335                  ; Total number of 
+ship_21_total              = &0332                  ; Total number of 
+ship_22_total              = &0333                  ; Total number of 
+ship_23_total              = &0334                  ; Total number of 
+ship_24_total              = &0335                  ; Total number of 
 ship_asp_mk2_total       = &0336                  ; Total number of Asp Mk2
 ship_ferdelance_total    = &0337                  ; Total number of Fer De Lances
-ship__total              = &0338                  ; Total number of 
-ship__total              = &0339                  ; Total number of 
+ship_27_total              = &0338                  ; Total number of 
+ship_28_total              = &0339                  ; Total number of 
 ship_thargoid_total      = &033A                  ; Total number of Thargoid
 ship_thargon_total       = &033B                  ; Total number of Thargons
 ship_constrictor_total   = &033C                  ; Total number of Constrictor
@@ -182,8 +181,8 @@ my_competition           = &0366                  ; The player's competition num
 my_galaxy                = &0367                  ; The player's current galaxy
 my_laser_front           = &0368                  ; The player's front laser power
 my_laser_rear            = &0369                  ; The player's rear laser power
-my_laser_                = &036A                  ; The player's ... laser power
-my_laser_                = &036B                  ; The player's ... laser power
+my_laser_left            = &036A                  ; The player's left laser power
+my_laser_right           = &036B                  ; The player's right laser power
 my_cargobay_size         = &036E                  ; The player's cargo bay size
 my_cargo_food            = &036F                  ; Total ton of food on board
 my_cargo_textiles        = &0370                  ; Total ton of textiles on board
@@ -209,10 +208,10 @@ my_energyunit            = &0383                  ; Ship is equipped with an ene
 my_dockingcomputer       = &0384                  ; Ship is equipped with docking computers (00=no, FF=yes)
 my_hyperspace            = &0385                  ; Ship is equipped with galactic hyperspace drive (00=no, FF=yes)
 my_escapepod             = &0386                  ; Ship is equipped with an escape pod (00=no, FF=yes)
-my_dampening             = &0387                  ; 
-my_dampening             = &0388                  ; 
-my_dampening             = &0389                  ; 
-my_dampening             = &038A                  ; 
+my_dampening0            = &0387                  ; 
+my_dampening1            = &0388                  ; 
+my_dampening2            = &0389                  ; 
+my_dampening3            = &038A                  ; 
 my_missiles              = &038B                  ; The player's number of missiles on ship
 my_fugitivestatus        = &038C                  ; The player's innocent/fugitive status
 planet_cargo_food        = &038D                  ; Total ton of food on board
@@ -237,20 +236,20 @@ my_kills_lo              = &039F                  ; The player's number of kills
 my_kills_hi              = &03A0                  ; The player's number of kills
 my_competition_number    = &03A1                  ; Competition number
                                                   ; &03A1-&03A3 unused
-                         = &03A4                  ; Message
+;                         = &03A4                  ; Message
 my_shield_front          = &03A5                  ; The player's front shield
 my_shield_aft            = &03A6                  ; The player's rear shield
 my_energy                = &03A7                  ; The player's energy
 my_compass_x             = &03A8                  ; The player's space compass x
 my_compass_y             = &03A9                  ; The player's space compass y
-                         = &03AA                  ; 
-                         = &03AB                  ; 
+;                         = &03AA                  ; 
+;                         = &03AB                  ; 
 planet_economy           = &03AC                  ; (0=Rich Industrial)
 my_cargo_item_index      = &03AD
 planet_government        = &03AE                  ; (0=Anarchy)
 planet_techlevel         = &03AF                  ; Technology level ()
-                         = &03B0                  ; 
-                         = &03B1                  ; 
+;                         = &03B0                  ; 
+;                         = &03B1                  ; 
 planet_seed0             = &03B2                  ; Seed (6 bytes)
 planet_seed1             = &03B3                  ; Seed (6 bytes)
 planet_seed2             = &03B4                  ; Seed (6 bytes)
@@ -279,7 +278,7 @@ enable_bitstik           = &03CE                  ; &00=Bitstick disabled, &FF=B
 disccat_fail             = &03CF                  ; Disc catalogue fail flag
                                                   ; &03D0-&03FF unused
 sine_table               = &07C0                  ; &07C0-&07DF = sine table
-                         = &07E0                  ; &07E0-&07FF = ACT???
+;                         = &07E0                  ; &07E0-&07FF = ACT???
 obj_planet_xlo           = &0900                  ; Planet xlo
 obj_planet_xhi           = &0901                  ; Planet xhi
 obj_planet_xsg           = &0902                  ; Planet xsign
@@ -309,31 +308,37 @@ video_ula_palette        = &FE21
 systemvia_irb            = &FE40
 systemvia_orb            = &FE40
 systemvia_ddra           = &FE43
-systemvia_ira            = &FE4F
-systemvia_ora            = &FE4F
+systemvia_ira_nh         = &FE4F
+systemvia_ora_nh         = &FE4F
 
 osword                   = &FFF1
 osbyte                   = &FFF4
 oscli                    = &FFF7
 
 
+;temp stuff
+addr0D7A = &0D7A
+addr114B = &114B
+addr11D5 = &11D5
 
 ORG &11E3
 
 .start
+
+.codestart
 	JMP descramble
 	JMP descramble
 .wrchv
 	JMP addr1EFC
 .addr11EC
-	DW &1148
+	EQUW addr114B                   ; irq1v (Used for screen interrupt)
 .brkv
 	JMP addr11D5
 
 ; -----------------------------------------------------------------------------
 ; Switch from flight mode to docked mode
 ; -----------------------------------------------------------------------------
-.addr11F1
+.dockship
 	LDX #str_load_t_code MOD 256
 	LDY #str_load_t_code DIV 256
 	JSR oscli
@@ -355,7 +360,7 @@ ORG &11E3
 	EOR #&33
 	STA (screen),Y
 	DEY
-	BNE addr1207
+	BNE descramble1
 	INX
 	CPX #&56
 	BNE descramble1
@@ -445,20 +450,20 @@ ORG &11E3
 	STA &7D
 	BNE addr12B6
 .addr129E
-	LDA &0302
+	LDA key_spacebar
 	BEQ addr12AB
 	LDA &7D
 	CMP #&28
 	BCS addr12AB
 	INC &7D
 .addr12AB
-	LDA &0301
+	LDA key_question
 	BEQ addr12B6
 	DEC &7D
 	BNE addr12B6
 	INC &7D
 .addr12B6
-	LDA &030B
+	LDA key_u
 	AND &038B
 	BEQ addr12CD
 	LDY #&EE
@@ -468,9 +473,9 @@ ORG &11E3
 	LDA #&00
 	STA &0344
 .addr12CD
-	LDA &45
+	LDA missile_target
 	BPL addr12E3
-	LDA &030A
+	LDA key_t
 	BEQ addr12E3
 	LDX &038B
 	BEQ addr12E3
@@ -478,13 +483,13 @@ ORG &11E3
 	LDY #&E0
 	JSR addr383D
 .addr12E3
-	LDA &030C
+	LDA key_m
 	BEQ addr12EF
-	LDA &45
+	LDA missile_target
 	BMI addr1326
 	JSR addr252E
 .addr12EF
-	LDA &0308
+	LDA key_tab
 	BEQ addr12F7
 	ASL &0382
 .addr12F7
@@ -493,16 +498,16 @@ ORG &11E3
 	LDA #&00
 	STA &033F
 .addr1301
-	LDA &0309
+	LDA key_escape
 	AND &0386
 	BEQ addr130C
 	JMP addr20C1
 .addr130C
-	LDA &030E
+	LDA key_j
 	BEQ addr1314
 	JSR addr434E
 .addr1314
-	LDA &030D
+	LDA key_e
 	AND &0380
 	BEQ addr1326
 	LDA ecm_on
@@ -510,7 +515,7 @@ ORG &11E3
 	DEC &0340
 	JSR addr3813
 .addr1326
-	LDA &030F
+	LDA key_c
 	AND &0384
 	BEQ addr1331
 	STA &033F
@@ -526,7 +531,7 @@ ORG &11E3
 	STA &7F
 	LDA &0346
 	BNE addr1374
-	LDA &0307
+	LDA key_a
 	BEQ addr1374
 	LDA &0347
 	CMP #&F2
@@ -551,7 +556,7 @@ ORG &11E3
 	LDX #&00
 .addr1376
 	STX &84
-	LDA &0311,X
+	LDA object01_type,X
 	BNE addr1380
 	JMP addr153F
 .addr1380
@@ -594,7 +599,7 @@ ORG &11E3
 	AND #&A0
 	JSR addr41BF
 	BNE addr141D
-	LDA &46
+	LDA inwk_xlo
 	ORA &49
 	ORA &4C
 	BMI addr141D
@@ -829,7 +834,7 @@ ORG &11E3
 	LDX #&1C
 .addr1590
 	LDA &0900,X
-	STA &46,X
+	STA inwk_xlo,X
 	DEX
 	BPL addr1590
 	INX
@@ -1764,11 +1769,11 @@ ORG &11E3
 	ROR A
 	STA &43
 	JSR addr1D4C
-	STA &48,X
+	STA inwk_xsg,X
 	LDY &41
-	STY &46
+	STY inwk_xlo,X
 	LDY &42
-	STY &47
+	STY inwk_xhi,X
 	AND #&7F
 	RTS
 .addr1C41
@@ -1873,7 +1878,7 @@ ORG &11E3
 	STA &96
 .addr1CFF
 	TAY
-	LDX &0311,Y
+	LDX object01_type,Y
 	BEQ addr1D08
 	JSR addr1D44
 .addr1D08
@@ -1922,17 +1927,17 @@ ORG &11E3
 	STA &83
 	AND #&80
 	STA &D1
-	EOR &48,X
+	EOR inwk_xsg,X
 	BMI addr1D70
 	LDA &41
 	CLC
-	ADC &46,X
+	ADC inwk_xlo,X
 	STA &41
 	LDA &42
-	ADC &47,X
+	ADC inwk_xhi,X
 	STA &42
 	LDA &43
-	ADC &48,X
+	ADC inwk_xsg,X
 	AND #&7F
 	ORA &D1
 	STA &43
@@ -1941,14 +1946,14 @@ ORG &11E3
 	LDA &83
 	AND #&7F
 	STA &83
-	LDA &46,X
+	LDA inwk_xlo,X
 	SEC
 	SBC &41
 	STA &41
-	LDA &47,X
+	LDA inwk_xhi,X
 	SBC &42
 	STA &42
-	LDA &48,X
+	LDA inwk_xsg,X
 	AND #&7F
 	SBC &83
 	ORA #&80
@@ -1969,15 +1974,15 @@ ORG &11E3
 .addr1DA7
 	RTS
 .addr1DA8
-	LDA &47,X
+	LDA inwk_xhi,X
 	AND #&7F
 	LSR A
 	STA &D1
-	LDA &46,X
+	LDA inwk_xlo,X
 	SEC
 	SBC &D1
 	STA &82
-	LDA &47,X
+	LDA inwk_xhi,X
 	SBC #&00
 	STA &83
 	LDA &0046,Y
@@ -2013,12 +2018,12 @@ ORG &11E3
 	LDA &0047,Y
 	SBC #&00
 	STA &83
-	LDA &46,X
+	LDA inwk_xlo,X
 	STA &1B
-	LDA &47,X
+	LDA inwk_xhi,X
 	AND #&80
 	STA &D1
-	LDA &47,X
+	LDA inwk_xhi,X
 	AND #&7F
 	LSR A
 	ROR &1B
@@ -2034,12 +2039,12 @@ ORG &11E3
 	STX &81
 	JSR addr28FF
 	STA &0047,Y
-	STX &46,Y
+	STX inwk_xlo,Y
 	LDX &81
 	LDA &40
-	STA &46,X
+	STA inwk_xlo,X
 	LDA &41
-	STA &47,X
+	STA inwk_xhi,X
 	RTS
 	PHA
 	ROR &E8,X
@@ -2267,7 +2272,7 @@ ORG &11E3
 	LDX #&03
 	STX &06
 .addr1FB3
-	STY &3A
+	STY &3A,X
 	DEX
 	BPL addr1FB3
 	LDX #&03
@@ -2329,7 +2334,9 @@ ORG &11E3
 	AND &03CA
 	BEQ addr2033
 	TXA
-	BIT &0FA9
+	EQUB &2C
+.addr2033
+	LDA #&0F
 	RTS
 .addr2036
 	LSR A
@@ -2497,7 +2504,7 @@ ORG &11E3
 	ORA #&80
 	STA (vertices_ptr),Y
 .addr2150
-	LDA &46
+	LDA inwk_xlo
 	ORA &49
 	ORA &4C
 	BNE addr215D
@@ -2612,7 +2619,7 @@ ORG &11E3
 .addr2211
 	LDX #&08
 .addr2213
-	LDA &46,X
+	LDA inwk_xlo,X
 	STA &D2,X
 	DEX
 	BPL addr2213
@@ -2707,7 +2714,7 @@ ORG &11E3
 	LDA &4D
 	CMP #&03
 	BCS addr22D4
-	LDA &47
+	LDA inwk_xhi
 	ORA &4A
 	AND #&FE
 	BEQ addr22E6
@@ -2997,10 +3004,10 @@ ORG &11E3
 	BMI addr2505
 	LDA &65
 	AND #&20
-	ORA &47
+	ORA inwk_xhi
 	ORA &4A
 	BNE addr2505
-	LDA &46
+	LDA inwk_xlo
 	JSR addr280D
 	STA &83
 	LDA &1B
@@ -3035,7 +3042,7 @@ ORG &11E3
 	STA &4C
 	LDA #&80
 	STA &4B
-	LDA &45
+	LDA missile_target
 	ASL A
 	ORA #&80
 	STA &66
@@ -3053,9 +3060,9 @@ ORG &11E3
 	LDX #&01
 	JSR addr2508
 	BCC addr2589
-	LDX &45
+	LDX missile_target
 	JSR addr3732
-	LDA &0311,X
+	LDA object01_type,X
 	JSR addr254D
 	LDY #&00
 	JSR addr3805
@@ -3174,7 +3181,7 @@ ORG &11E3
 	LDX #&24
 .addr2609
 	LDA &0100,X
-	STA &46,X
+	STA inwk_xlo,X
 	DEX
 	BPL addr2609
 	PLA
@@ -3611,11 +3618,11 @@ ORG &11E3
 .addr28DE
 	LDY #&0A
 .addr28E0
-	LDX &46,Y
+	LDX inwk_xlo,Y
 	STX &81
 	LDA &34
 	JSR addr28D4
-	LDX &48,Y
+	LDX inwk_xsg,Y
 	STX &81
 	LDA &35
 	JSR addr28FC
@@ -4456,7 +4463,7 @@ ORG &11E3
 	STA &97
 	LDX #&18
 .addr2EDB
-	STA &46,X
+	STA inwk_xlo,X
 	DEX
 	BPL addr2EDB
 .addr2EE0
@@ -4500,14 +4507,14 @@ ORG &11E3
 	LSR A
 	LSR A
 	TAY
-	LDX &46,Y
+	LDX inwk_xlo,Y
 	BEQ addr2F31
 	INY
-	LDX &46,Y
+	LDX inwk_xlo,Y
 	BEQ addr2F31
 	DEY
 	DEY
-	LDX &46,Y
+	LDX inwk_xlo,Y
 	BNE addr2F43
 .addr2F31
 	STY text_cursor_y
@@ -4635,7 +4642,7 @@ ORG &11E3
 .addr3011
 	LDA hyperspace_countdown_hi
 	ORA &8E
-	BNE addr3085
+	BNE addr3084+1                  ; RTS
 	JSR addr4437
 	BMI addr305E
 	LDA &87
@@ -4646,7 +4653,7 @@ ORG &11E3
 .addr3026
 	LDA &03BF
 	ORA &03C0
-	BEQ addr3085
+	BEQ addr3084+1                  ; RTS
 	LDA #&07
 	STA text_cursor_x
 	LDA #&17
@@ -4671,7 +4678,7 @@ ORG &11E3
 	JMP addr30AC
 .addr305E
 	LDX &0385
-	BEQ addr3085
+	BEQ addr3084+1                  ; RTS
 	INX
 	STX &0385
 	STX &038C
@@ -4687,6 +4694,7 @@ ORG &11E3
 	ROL &035B,X
 	DEX
 	BPL addr307A
+.addr3084
 	LDA #&60
 	STA &03C1
 	STA &03C2
@@ -5060,7 +5068,7 @@ ORG &11E3
 	LDA &6C,X
 	LDY &03B2,X
 	STA &03B2,X
-	STY &6C
+	STY &6C, X
 	DEX
 	BPL addr3350
 	RTS
@@ -5408,7 +5416,7 @@ ORG &11E3
 	ADC #&03
 	STA &4E
 	ROR A
-	STA &48
+	STA inwk_xsg
 	STA &4B
 	JSR addr356D
 	LDA &6F
@@ -5417,8 +5425,8 @@ ORG &11E3
 	STA &4E
 	LDA &71
 	AND #&03
-	STA &48
-	STA &47
+	STA inwk_xsg
+	STA inwk_xhi
 	LDA #&00
 	STA &63
 	STA &64
@@ -5446,7 +5454,7 @@ ORG &11E3
 .addr35D8
 	LDX #&00
 .addr35DA
-	LDA &0311,X
+	LDA object01_type,X
 	BEQ addr3602
 	BMI addr35FF
 	STA &8C
@@ -5662,7 +5670,7 @@ ORG &11E3
 	LDX #&00
 	STX &64
 	STX &6A
-	STX &0312
+	STX object02_type
 	DEX
 	STX &63
 	LDX #&0A
@@ -5678,7 +5686,7 @@ ORG &11E3
 	STA &D1
 	LDX #&00
 .addr376C
-	LDA &0311,X
+	LDA object01_type,X
 	BEQ addr3778
 	INX
 	CPX #&0C
@@ -5734,7 +5742,7 @@ ORG &11E3
 	STA &65
 	LDA &D1
 .addr37D1
-	STA &0311,X
+	STA object01_type,X
 	TAX
 	BMI addr37E5
 	CPX #&03
@@ -5759,16 +5767,16 @@ ORG &11E3
 	SEC
 	RTS
 .addr37FC
-	LDA &46,X
+	LDA inwk_xlo,X
 	EOR #&80
-	STA &46,X
+	STA inwk_xlo,X
 	INX
 	INX
 	RTS
 .addr3805
 	LDX #&FF
 .addr3807
-	STX &45
+	STX missile_target
 	LDX &038B
 	JSR addr383D
 	STY &0344
@@ -5814,11 +5822,11 @@ ORG &11E3
 	BNE addr3850
 	RTS
 .addr3856
-	LDA &46
+	LDA inwk_xlo
 	STA &1B
-	LDA &47
+	LDA inwk_xhi
 	STA &1C
-	LDA &48
+	LDA inwk_xsg
 	JSR addr3CFA
 	BCS addr388D
 	LDA &40
@@ -5957,12 +5965,12 @@ ORG &11E3
 	STA &94
 	BEQ addr398B
 .addr3969
-	LDA &46,X
+	LDA inwk_xlo,X
 	STA &1B
-	LDA &47,X
+	LDA inwk_xhi,X
 	AND #&7F
 	STA &1C
-	LDA &47,X
+	LDA inwk_xhi,X
 	AND #&80
 	JSR addr297E
 	LDA &40
@@ -6582,7 +6590,7 @@ ORG &11E3
 	LDX #&FF
 .addr3DA3
 	INX
-	LDA &0311,X
+	LDA object01_type,X
 	BEQ addr3D74
 	CMP #&01
 	BNE addr3DA3
@@ -6612,7 +6620,7 @@ ORG &11E3
 	BEQ addr3DA3
 .addr3DD8
 	STX &96
-	CPX &45
+	CPX missile_target
 	BNE addr3DE8
 	LDY #&EE
 	JSR addr3805
@@ -6620,7 +6628,7 @@ ORG &11E3
 	JSR addr45C6
 .addr3DE8
 	LDY &96
-	LDX &0311,Y
+	LDX object01_type,Y
 	CPX #&02
 	BEQ addr3D89
 	CPX #&1F
@@ -6649,7 +6657,7 @@ ORG &11E3
 	STA &1C
 .addr3E1F
 	INX
-	LDA &0311,X
+	LDA object01_type,X
 	STA &0310,X
 	BNE addr3E2B
 	JMP addr3DA1
@@ -6757,7 +6765,7 @@ ORG &11E3
 	LDX #&FF
 	STX &0EC0
 	STX &0F0E
-	STX &45
+	STX missile_target
 	LDA #&80
 	STA &034C
 	STA &034D
@@ -6822,12 +6830,12 @@ ORG &11E3
 	JSR addr3F86
 	STA &06
 	AND #&80
-	STA &48
+	STA inwk_xsg
 	TXA
 	AND #&80
 	STA &4B
 	LDA #&19
-	STA &47
+	STA inwk_xhi
 	STA &4A
 	STA &4D
 	JSR addr3F86
@@ -6894,15 +6902,15 @@ ORG &11E3
 	LDA #&26
 	STA &4D
 	JSR addr3F86
-	STA &46
+	STA inwk_xlo
 	STX &49
 	AND #&80
-	STA &48
+	STA inwk_xsg
 	TXA
 	AND #&80
 	STA &4B
-	ROL &47
-	ROL &47
+	ROL inwk_xhi
+	ROL inwk_xhi
 	JSR addr3F86
 	BVS addr3F9A
 	JMP addr3F9A
@@ -6986,7 +6994,9 @@ ORG &11E3
 	BEQ addr40AA
 .addr40A8
 	TYA
-	BIT &1FA9
+	EQUB &2C
+.addr40AA
+	LDA #&1F                        ; Ship type = 31: Constrictor
 	JSR addr3768
 	JMP addr40DB
 .addr40B2
@@ -7128,7 +7138,7 @@ ORG &11E3
 .addr41B2
 	LDA #&E0
 .addr41B4
-	CMP &47
+	CMP inwk_xhi
 	BCC addr41BE
 	CMP &4A
 	BCC addr41BE
@@ -7136,7 +7146,7 @@ ORG &11E3
 .addr41BE
 	RTS
 .addr41BF
-	ORA &47
+	ORA inwk_xhi
 	ORA &4A
 	ORA &4D
 	RTS
@@ -7159,10 +7169,10 @@ ORG &11E3
 	JSR addr3F62
 	LSR A
 	LSR A
-	STA &46
+	STA inwk_xlo
 	LDY #&00
 	STY &87
-	STY &47
+	STY inwk_xhi
 	STY &4A
 	STY &4D
 	STY &66
@@ -7237,17 +7247,18 @@ ORG &11E3
 	ADC #&41
 	STA &4294
 	JSR addr0D7A
-	LDX #&8E
-	LDY #&42
+	LDX #str_load_d_mo0 MOD 256
+	LDY #str_load_d_mo0 DIV 256
 	JMP oscli
-	JMP addr442E
-	ROL &4F4D
-	BMI addr42A3
+
+.str_load_d_mo0
+	EQUS "L.D.MO0", &0D
+
 .addr4296
 	LDX #&3A
 	LDA #&00
 .addr429A
-	STA &0311,X
+	STA object01_type,X
 	DEX
 	BPL addr429A
 	RTS
@@ -7514,7 +7525,7 @@ ORG &11E3
 	TAX
 	AND #&10
 	EOR #&10
-	STA &0307
+	STA key_a
 	LDX #&01
 	JSR addr4452
 	ORA #&01
@@ -7567,7 +7578,7 @@ ORG &11E3
 	BMI addr44F0
 	INX
 .addr44F0
-	STA &0301,X
+	STA key_question,X
 .addr44F3
 	LDA #&80
 	LDX #&00
@@ -7582,7 +7593,7 @@ ORG &11E3
 	STA &034C
 	LDA #&00
 .addr4509
-	STA &0303,X
+	STA key_rotleft,X
 	LDA &034C
 .addr450F
 	STA &034C
@@ -7593,29 +7604,29 @@ ORG &11E3
 	BCS addr451D
 	INX
 .addr451D
-	STA &0305,X
+	STA key_x,X
 	LDA &034D
 .addr4523
 	STA &034D
 .addr4526
 	LDX &034C
 	LDA #&07
-	LDY &0303
+	LDY key_rotleft
 	BEQ addr4533
 	JSR addr2A16
 .addr4533
-	LDY &0304
+	LDY key_rotright
 	BEQ addr453B
 	JSR addr2A26
 .addr453B
 	STX &034C
 	ASL A
 	LDX &034D
-	LDY &0305
+	LDY key_x
 	BEQ addr454A
 	JSR addr2A26
 .addr454A
-	LDY &0306
+	LDY key_s
 	BEQ addr4552
 	JSR addr2A16
 .addr4552
@@ -7679,8 +7690,12 @@ ORG &11E3
 	LDA &03A4
 	JSR addr45DD
 	PLA
-	BIT &6CA9
-	BIT &6FA9
+	EQUB &2C
+.addr45C1
+	LDA #&6C
+	EQUB &2C
+.addr45C4
+	LDA #&6F
 .addr45C6
 	LDX #&00
 	STX &72
@@ -8122,9 +8137,9 @@ ORG &11E3
 	LDA &4D
 	CMP #&C0
 	BCS addr48CF
-	LDA &46
+	LDA inwk_xlo
 	CMP &4C
-	LDA &47
+	LDA inwk_xhi
 	SBC &4D
 	BCS addr48CF
 	LDA &49
@@ -8192,7 +8207,7 @@ ORG &11E3
 	BPL addr4957
 	LDX #&08
 .addr496C
-	LDA &46,X
+	LDA inwk_xlo,X
 	STA &72,X
 	DEX
 	BPL addr496C
@@ -8513,24 +8528,24 @@ ORG &11E3
 	ASL A
 	STA &39
 	JSR addr4832
-	LDA &48
+	LDA inwk_xsg
 	STA &36
 	EOR &3B
 	BMI addr4BBC
 	CLC
 	LDA &3A
-	ADC &46
+	ADC inwk_xlo
 	STA &34
-	LDA &47
+	LDA inwk_xhi
 	ADC #&00
 	STA &35
 	JMP addr4BDF
 .addr4BBC
-	LDA &46
+	LDA inwk_xlo
 	SEC
 	SBC &3A
 	STA &34
-	LDA &47
+	LDA inwk_xhi
 	SBC #&00
 	STA &35
 	BCS addr4BDF
@@ -8777,7 +8792,7 @@ ORG &11E3
 	STA &3B
 	LDA &4C
 	STA &3A
-	LDA &48
+	LDA inwk_xsg
 	BPL addr4D88
 	DEC &38
 .addr4D88
@@ -9324,14 +9339,14 @@ ORG &11E3
 	LDA #&00
 	STA &62
 	LDX &31
-	LDA &46
+	LDA inwk_xlo
 	EOR #&FF
 	STA &1B
-	LDA &47
+	LDA inwk_xhi
 	JSR addr2877
 	STA &1D
 	LDA &33
-	EOR &48
+	EOR inwk_xsg
 	LDX #&03
 	JSR addr5308
 	STA &9E
@@ -9398,11 +9413,11 @@ ORG &11E3
 	EOR &4B
 	LDX #&00
 	JSR addr5308
-	STA &48
+	STA inwk_xsg
 	LDA &1D
-	STA &47
+	STA inwk_xhi
 	LDA &1C
-	STA &46
+	STA inwk_xlo
 .addr51BF
 	LDA &7D
 	STA &82
@@ -9482,74 +9497,74 @@ ORG &11E3
 	ROR A
 	STA &D1
 	LSR &83
-	EOR &48,X
+	EOR inwk_xsg,X
 	BMI addr526F
 	LDA &82
-	ADC &46,X
-	STA &46,X
+	ADC inwk_xlo,X
+	STA inwk_xlo,X
 	LDA &83
-	ADC &47,X
-	STA &47,X
-	LDA &48,X
+	ADC inwk_xhi,X
+	STA inwk_xhi,X
+	LDA inwk_xsg,X
 	ADC #&00
 	ORA &D1
-	STA &48,X
+	STA inwk_xsg,X
 	RTS
 .addr526F
-	LDA &46,X
+	LDA inwk_xlo,X
 	SEC
 	SBC &82
-	STA &46,X
-	LDA &47,X
+	STA inwk_xlo,X
+	LDA inwk_xhi,X
 	SBC &83
-	STA &47,X
-	LDA &48,X
+	STA inwk_xhi,X
+	LDA inwk_xsg,X
 	AND #&7F
 	SBC #&00
 	ORA #&80
 	EOR &D1
-	STA &48,X
+	STA inwk_xsg,X
 	BCS addr52A0
 	LDA #&01
-	SBC &46,X
-	STA &46,X
+	SBC inwk_xlo,X
+	STA inwk_xlo,X
 	LDA #&00
-	SBC &47,X
-	STA &47,X
+	SBC inwk_xhi,X
+	STA inwk_xhi,X
 	LDA #&00
-	SBC &48,X
+	SBC inwk_xsg,X
 	AND #&7F
 	ORA &D1
-	STA &48,X
+	STA inwk_xsg,X
 .addr52A0
 	RTS
 .addr52A1
 	LDA shiptype
 	STA &81
-	LDX &48,Y
+	LDX inwk_xsg,Y
 	STX &82
 	LDX &49,Y
 	STX &83
-	LDX &46,Y
+	LDX inwk_xlo,Y
 	STX &1B
 	LDA &0047,Y
 	EOR #&80
 	JSR addr28FC
 	STA &0049,Y
-	STX &48,Y
+	STX inwk_xsg,Y
 	STX &1B
-	LDX &46,Y
+	LDX inwk_xlo,Y
 	STX &82
-	LDX &47,Y
+	LDX inwk_xhi,Y
 	STX &83
 	LDA &0049,Y
 	JSR addr28FC
 	STA &0047,Y
-	STX &46,Y
+	STX inwk_xlo,Y
 	STX &1B
 	LDA beta
 	STA &81
-	LDX &48,Y
+	LDX inwk_xsg,Y
 	STX &82
 	LDX &49,Y
 	STX &83
@@ -9559,7 +9574,7 @@ ORG &11E3
 	EOR #&80
 	JSR addr28FC
 	STA &0049,Y
-	STX &48,Y
+	STX inwk_xsg,Y
 	STX &1B
 	LDX &4A,Y
 	STX &82
@@ -9572,23 +9587,23 @@ ORG &11E3
 	RTS
 .addr5308
 	TAY
-	EOR &48,X
+	EOR inwk_xsg,X
 	BMI addr531C
 	LDA &1C
 	CLC
-	ADC &46,X
+	ADC inwk_xlo,X
 	STA &1C
 	LDA &1D
-	ADC &47,X
+	ADC inwk_xhi,X
 	STA &1D
 	TYA
 	RTS
 .addr531C
-	LDA &46,X
+	LDA inwk_xlo,X
 	SEC
 	SBC &1C
 	STA &1C
-	LDA &47,X
+	LDA inwk_xhi,X
 	SBC &1D
 	STA &1D
 	BCC addr532F
@@ -9608,11 +9623,11 @@ ORG &11E3
 	LDA shiptype
 	EOR #&80
 	STA &81
-	LDA &46
+	LDA inwk_xlo
 	STA &1B
-	LDA &47
+	LDA inwk_xhi
 	STA &1C
-	LDA &48
+	LDA inwk_xsg
 	JSR addr2782
 	LDX #&03
 	JSR addr1D4C
@@ -9697,18 +9712,18 @@ ORG &11E3
 	LDX #&00
 	JSR addr1D4C
 	LDA &41
-	STA &46
+	STA inwk_xlo
 	LDA &42
-	STA &47
+	STA inwk_xhi
 	LDA &43
-	STA &48
+	STA inwk_xsg
 	JMP addr51BF
 .addr5404
 	DEX
 	BNE addr5438
-	LDA &48
+	LDA inwk_xsg
 	EOR #&80
-	STA &48
+	STA inwk_xsg
 	LDA &4E
 	EOR #&80
 	STA &4E
@@ -9738,20 +9753,20 @@ ORG &11E3
 	STA &9A
 	EOR #&80
 	STA &99
-	LDA &46
+	LDA inwk_xlo
 	LDX &4C
 	STA &4C
-	STX &46
-	LDA &47
+	STX inwk_xlo
+	LDA inwk_xhi
 	LDX &4D
 	STA &4D
-	STX &47
-	LDA &48
+	STX inwk_xhi
+	LDA inwk_xsg
 	EOR &99
 	TAX
 	LDA &4E
 	EOR &9A
-	STA &48
+	STA inwk_xsg
 	STX &4E
 	LDY #&09
 	JSR addr546C
@@ -9762,7 +9777,7 @@ ORG &11E3
 	LDA &0046,Y
 	LDX &4A,Y
 	STA &004A,Y
-	STX &46,Y
+	STX inwk_xlo,Y
 	LDA &0047,Y
 	EOR &99
 	TAX
@@ -9892,14 +9907,14 @@ ORG &11E3
 	LDX #&F0
 .addr556A
 	STX &91
-	LDA &47
+	LDA inwk_xhi
 	ORA &4A
 	ORA &4D
 	AND #&C0
 	BNE addr5557
-	LDA &47
+	LDA inwk_xhi
 	CLC
-	LDX &48
+	LDX inwk_xsg
 	BPL addr5581
 	EOR #&FF
 	ADC #&01
