@@ -1,5 +1,5 @@
 ; -----------------------------------------------------------------------------
-; Elite loader
+; Elite - Third stage loader
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; Filename       : $.Elite3
 ; Load address   : 00001900
