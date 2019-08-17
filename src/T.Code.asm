@@ -1,7 +1,7 @@
 ; -----------------------------------------------------------------------------
 ; Elite - Docked code
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
-; Filename       : D.Code
+; Filename       : T.Code
 ; Load address   : 000011E3
 ; Exec address   : 000011E3
 ; Length         : 00004E1D
@@ -10,6 +10,17 @@
 screen                   = &07                    ; Pointer to screen memory
 screen_lo                = &07                    ; Pointer to screen memory LSB
 screen_hi                = &08                    ; Pointer to screen memory MSB
+
+crtc_register            = &FE00
+crtc_data                = &FE01
+systemvia_irb            = &FE40
+systemvia_ier            = &FE4E
+
+osfile                   = &FFDD
+oswrch                   = &FFEE
+osword                   = &FFF1
+osbyte                   = &FFF4
+oscli                    = &FFF7
 
 
 
@@ -369,7 +380,7 @@ ORG &11E3
 	BEQ &1446
 	CLC
 .addr1446
-1446  60                 `    RTS
+	RTS
 
 .addr1447
 1447  A8                 .    TAY
@@ -1069,7 +1080,7 @@ ORG &11E3
 .addr18EC
 	LDA #&0F
 	TAX
-	JMP &FFF4
+	JMP osbyte
 .addr18F2
 	JSR &31AC
 .addr18F5
@@ -1487,10 +1498,10 @@ ORG &11E3
 	BCC &1B82
 	RTS
 .addr1BB4
-1BB4  20 A1 31            .1  JSR &31A1
-1BB7  A2 06              ..   LDX #&06
-1BB9  86 2C              .,   STX &2C
-1BBB  60                 `    RTS
+	JSR &31A1
+	LDX #&06
+	STX &2C
+	RTS
 
 .addr1BBC
 	EQUB &48, &76, &E8, &00
@@ -1660,419 +1671,420 @@ ORG &11E3
 	TYA
 	PHA
 .addr1CCD
-1CCD  AE 87 1C           ...  LDX &1C87
-1CD0  F0 78              .x   BEQ &1D4A
-1CD2  E0 1F              ..   CPX #&1F
-1CD4  90 71              .q   BCC &1D47
-1CD6  46 08              F.   LSR &08
+	LDX &1C87
+	BEQ &1D4A
+	CPX #&1F
+	BCC &1D47
+	LSR &08
 .addr1CD8
-1CD8  A5 08              ..   LDA &08
-1CDA  30 04              0.   BMI &1CE0
-1CDC  A9 40              .@   LDA #&40
-1CDE  85 08              ..   STA &08
+	LDA &08
+	BMI &1CE0
+	LDA #&40
+	STA &08
 .addr1CE0
-1CE0  A0 1D              ..   LDY #&1D
+	LDY #&1D
 .addr1CE2
-1CE2  AD 1F 0E           ...  LDA &0E1F
-1CE5  C9 20              .    CMP #&20
-1CE7  F0 2D              .-   BEQ &1D16
+	LDA &0E1F
+	CMP #&20
+	BEQ &1D16
 .addr1CE9
-1CE9  88                 .    DEY
-1CEA  30 EC              0.   BMI &1CD8
-1CEC  F0 EA              ..   BEQ &1CD8
-1CEE  B9 01 0E           ...  LDA &0E01,Y
-1CF1  C9 20              .    CMP #&20
-1CF3  D0 F4              ..   BNE &1CE9
-1CF5  06 08              ..   ASL &08
-1CF7  30 F0              0.   BMI &1CE9
-1CF9  84 07              ..   STY &07
-1CFB  AC 87 1C           ...  LDY &1C87
+	DEY
+	BMI &1CD8
+	BEQ &1CD8
+	LDA &0E01,Y
+	CMP #&20
+	BNE &1CE9
+	ASL &08
+	BMI &1CE9
+	STY &07
+	LDY &1C87
 .addr1CFE
-1CFE  B9 01 0E           ...  LDA &0E01,Y
-1D01  99 02 0E           ...  STA &0E02,Y
-1D04  88                 .    DEY
-1D05  C4 07              ..   CPY &07
-1D07  B0 F5              ..   BCS &1CFE
-1D09  EE 87 1C           ...  INC &1C87
+	LDA &0E01,Y
+	STA &0E02,Y
+	DEY
+	CPY &07
+	BCS &1CFE
+	INC &1C87
 .addr1D0C
-1D0C  D9 01 0E           ...  CMP &0E01,Y
-1D0F  D0 D1              ..   BNE &1CE2
-1D11  88                 .    DEY
-1D12  10 F8              ..   BPL &1D0C
-1D14  30 C2              0.   BMI &1CD8
+	CMP &0E01,Y
+	BNE &1CE2
+	DEY
+	BPL &1D0C
+	BMI &1CD8
 .addr1D16
-1D16  A2 1E              ..   LDX #&1E
-1D18  20 3A 1D            :.  JSR &1D3A
-1D1B  A9 0C              ..   LDA #&0C
-1D1D  20 56 1D            V.  JSR &1D56
-1D20  AD 87 1C           ...  LDA &1C87
-1D23  E9 1E              ..   SBC #&1E
-1D25  8D 87 1C           ...  STA &1C87
-1D28  AA                 .    TAX
-1D29  F0 1F              ..   BEQ &1D4A
-1D2B  A0 00              ..   LDY #&00
-1D2D  E8                 .    INX
+	LDX #&1E
+	JSR &1D3A
+	LDA #&0C
+	JSR &1D56
+	LDA &1C87
+	SBC #&1E
+	STA &1C87
+	TAX
+	BEQ &1D4A
+	LDY #&00
+	INX
 .addr1D2E
-1D2E  B9 20 0E           . .  LDA &0E20,Y
-1D31  99 01 0E           ...  STA &0E01,Y
-1D34  C8                 .    INY
-1D35  CA                 .    DEX
-1D36  D0 F6              ..   BNE &1D2E
-1D38  F0 93              ..   BEQ &1CCD
+	LDA &0E20,Y
+	STA &0E01,Y
+	INY
+	DEX
+	BNE &1D2E
+	BEQ &1CCD
 .addr1D3A
-1D3A  A0 00              ..   LDY #&00
+	LDY #&00
 .addr1D3C
-1D3C  B9 01 0E           ...  LDA &0E01,Y
-1D3F  20 56 1D            V.  JSR &1D56
-1D42  C8                 .    INY
-1D43  CA                 .    DEX
-1D44  D0 F6              ..   BNE &1D3C
-1D46  60                 `    RTS
+	LDA &0E01,Y
+	JSR &1D56
+	INY
+	DEX
+	BNE &1D3C
+	RTS
 .addr1D47
-1D47  20 3A 1D            :.  JSR &1D3A
+	JSR &1D3A
 .addr1D4A
-1D4A  8E 87 1C           ...  STX &1C87
-1D4D  68                 h    PLA
-1D4E  A8                 .    TAY
-1D4F  68                 h    PLA
-1D50  AA                 .    TAX
-1D51  A9 0C              ..   LDA #&0C
-1D53  2C A9 07           ,..  BIT &07A9
+	STX &1C87
+	PLA
+	TAY
+	PLA
+	TAX
+	LDA #&0C
+	BIT &07A9
 .addr1D56
-1D56  85 D2              ..   STA &D2
-1D58  8C 4F 03           .O.  STY &034F
-1D5B  8E 4E 03           .N.  STX &034E
+	STA &D2
+	STY &034F
+	STX &034E
 .addr1D5E
-1D5E  A4 72              .r   LDY &72
-1D60  C8                 .    INY
-1D61  F0 72              .r   BEQ &1DD5
-1D63  A8                 .    TAY
-1D64  F0 6F              .o   BEQ &1DD5
-1D66  30 6D              0m   BMI &1DD5
-1D68  C9 07              ..   CMP #&07
-1D6A  F0 73              .s   BEQ &1DDF
-1D6C  C9 20              .    CMP #&20
-1D6E  B0 10              ..   BCS &1D80
-1D70  C9 0A              ..   CMP #&0A
-1D72  F0 08              ..   BEQ &1D7C
-1D74  A2 01              ..   LDX #&01
-1D76  86 2C              .,   STX &2C
-1D78  C9 0D              ..   CMP #&0D
-1D7A  F0 59              .Y   BEQ &1DD5
+	LDY &72
+	INY
+	BEQ &1DD5
+	TAY
+	BEQ &1DD5
+	BMI &1DD5
+	CMP #&07
+	BEQ &1DDF
+	CMP #&20
+	BCS &1D80
+	CMP #&0A
+	BEQ &1D7C
+	LDX #&01
+	STX &2C
+	CMP #&0D
+	BEQ &1DD5
 .addr1D7C
-1D7C  E6 2D              .-   INC &2D
-1D7E  D0 55              .U   BNE &1DD5
+	INC &2D
+	BNE &1DD5
 .addr1D80
-1D80  A2 BF              ..   LDX #&BF
-1D82  0A                 .    ASL A
-1D83  0A                 .    ASL A
-1D84  90 02              ..   BCC &1D88
-1D86  A2 C1              ..   LDX #&C1
+	LDX #&BF
+	ASL A
+	ASL A
+	BCC &1D88
+	LDX #&C1
 .addr1D88
-1D88  0A                 .    ASL A
-1D89  90 01              ..   BCC &1D8C
-1D8B  E8                 .    INX
+	ASL A
+	BCC &1D8C
+	INX
 .addr1D8C
-1D8C  85 1C              ..   STA &1C
-1D8E  86 1D              ..   STX &1D
-1D90  A5 2C              .,   LDA &2C
-1D92  AE CF 03           ...  LDX &03CF
-1D95  F0 08              ..   BEQ &1D9F
-1D97  C0 20              .    CPY #&20
-1D99  D0 04              ..   BNE &1D9F
-1D9B  C9 11              ..   CMP #&11
-1D9D  F0 36              .6   BEQ &1DD5
+	STA &1C
+	STX &1D
+	LDA &2C
+	LDX &03CF
+	BEQ &1D9F
+	CPY #&20
+	BNE &1D9F
+	CMP #&11
+	BEQ &1DD5
 .addr1D9F
-1D9F  0A                 .    ASL A
-1DA0  0A                 .    ASL A
-1DA1  0A                 .    ASL A
-1DA2  85 07              ..   STA &07
-1DA4  A5 2D              .-   LDA &2D
-1DA6  C0 7F              .   CPY #&7F
-1DA8  D0 0C              ..   BNE &1DB6
-1DAA  C6 2C              .,   DEC &2C
-1DAC  69 5E              i^   ADC #&5E
-1DAE  AA                 .    TAX
-1DAF  A0 F8              ..   LDY #&F8
-1DB1  20 03 3A            .:  JSR &3A03
-1DB4  F0 1F              ..   BEQ &1DD5
+	ASL A
+	ASL A
+	ASL A
+	STA &07
+	LDA &2D
+	CPY #&7F
+	BNE &1DB6
+	DEC &2C
+	ADC #&5E
+	TAX
+	LDY #&F8
+	JSR &3A03
+	BEQ &1DD5
 .addr1DB6
-1DB6  E6 2C              .,   INC &2C
-1DB8  C9 18              ..   CMP #&18
-1DBA  90 0A              ..   BCC &1DC6
-1DBC  48                 H    PHA
-1DBD  20 39 25            9%  JSR &2539
-1DC0  68                 h    PLA
-1DC1  A5 D2              ..   LDA &D2
-1DC3  4C 5E 1D           L^.  JMP &1D5E
+	INC &2C
+	CMP #&18
+	BCC &1DC6
+	PHA
+	JSR &2539
+	PLA
+	LDA &D2
+	JMP &1D5E
 .addr1DC6
-1DC6  09 60              .`   ORA #&60
+	ORA #&60
 .addr1DC8
-1DC8  85 08              ..   STA &08
-1DCA  A0 07              ..   LDY #&07
+	STA &08
+	LDY #&07
 .addr1DCC
-1DCC  B1 1C              ..   LDA (&1C),Y
-1DCE  11 07              ..   ORA (&07),Y
-1DD0  91 07              ..   STA (&07),Y
-1DD2  88                 .    DEY
-1DD3  10 F7              ..   BPL &1DCC
+	LDA (&1C),Y
+	ORA (&07),Y
+	STA (&07),Y
+	DEY
+	BPL &1DCC
 .addr1DD5
-1DD5  AC 4F 03           .O.  LDY &034F
-1DD8  AE 4E 03           .N.  LDX &034E
-1DDB  A5 D2              ..   LDA &D2
-1DDD  18                 .    CLC
+	LDY &034F
+	LDX &034E
+	LDA &D2
+	CLC
 .addr1DDE
-1DDE  60                 `    RTS
+	RTS
 .addr1DDF
-1DDF  20 43 3C            C<  JSR &3C43
-1DE2  4C D5 1D           L..  JMP &1DD5
+	JSR &3C43
+	JMP &1DD5
 .addr1DE5
-1DE5  A9 D0              ..   LDA #&D0
-1DE7  85 07              ..   STA &07
-1DE9  A9 78              .x   LDA #&78
-1DEB  85 08              ..   STA &08
-1DED  20 A6 1E            ..  JSR &1EA6
-1DF0  86 41              .A   STX &41
-1DF2  85 40              .@   STA &40
-1DF4  A9 0E              ..   LDA #&0E
-1DF6  85 06              ..   STA &06
-1DF8  A5 7D              .}   LDA &7D
-1DFA  20 B9 1E            ..  JSR &1EB9
-1DFD  A9 00              ..   LDA #&00
-1DFF  85 82              ..   STA &82
-1E01  85 1B              ..   STA &1B
-1E03  A9 08              ..   LDA #&08
-1E05  85 83              ..   STA &83
-1E07  A5 31              .1   LDA &31
-1E09  4A                 J    LSR A
-1E0A  4A                 J    LSR A
-1E0B  05 32              .2   ORA &32
-1E0D  49 80              I.   EOR #&80
-1E0F  20 B0 22            ."  JSR &22B0
-1E12  20 0D 1F            ..  JSR &1F0D
-1E15  A5 2A              .*   LDA &2A
-1E17  A6 2B              .+   LDX &2B
-1E19  F0 02              ..   BEQ &1E1D
-1E1B  E9 01              ..   SBC #&01
+	LDA #&D0
+	STA &07
+	LDA #&78
+	STA &08
+	JSR &1EA6
+	STX &41
+	STA &40
+	LDA #&0E
+	STA &06
+	LDA &7D
+	JSR &1EB9
+	LDA #&00
+	STA &82
+	STA &1B
+	LDA #&08
+	STA &83
+	LDA &31
+	LSR A
+	LSR A
+	ORA &32
+	EOR #&80
+	JSR &22B0
+	JSR &1F0D
+	LDA &2A
+	LDX &2B
+	BEQ &1E1D
+	SBC #&01
 .addr1E1D
-1E1D  20 B0 22            ."  JSR &22B0
-1E20  20 0D 1F            ..  JSR &1F0D
-1E23  A5 8A              ..   LDA &8A
-1E25  29 03              ).   AND #&03
-1E27  D0 B5              ..   BNE &1DDE
-1E29  A0 00              ..   LDY #&00
-1E2B  20 A6 1E            ..  JSR &1EA6
-1E2E  86 40              .@   STX &40
-1E30  85 41              .A   STA &41
-1E32  A2 03              ..   LDX #&03
-1E34  86 06              ..   STX &06
+	JSR &22B0
+	JSR &1F0D
+	LDA &8A
+	AND #&03
+	BNE &1DDE
+	LDY #&00
+	JSR &1EA6
+	STX &40
+	STA &41
+	LDX #&03
+	STX &06
 .addr1E36
-1E36  94 3A              .:   STY &3A
-1E38  CA                 .    DEX
-1E39  10 FB              ..   BPL &1E36
-1E3B  A2 03              ..   LDX #&03
-1E3D  AD A7 03           ...  LDA &03A7
-1E40  4A                 J    LSR A
-1E41  4A                 J    LSR A
-1E42  85 81              ..   STA &81
+	STY &3A
+	DEX
+	BPL &1E36
+	LDX #&03
+	LDA &03A7
+	LSR A
+	LSR A
+	STA &81
 .addr1E44
-1E44  38                 8    SEC
-1E45  E9 10              ..   SBC #&10
-1E47  90 0D              ..   BCC &1E56
-1E49  85 81              ..   STA &81
-1E4B  A9 10              ..   LDA #&10
-1E4D  95 3A              .:   STA &3A,X
-1E4F  A5 81              ..   LDA &81
-1E51  CA                 .    DEX
-1E52  10 F0              ..   BPL &1E44
-1E54  30 04              0.   BMI &1E5A
+	SEC
+	SBC #&10
+	BCC &1E56
+	STA &81
+	LDA #&10
+	STA &3A,X
+	LDA &81
+	DEX
+	BPL &1E44
+	BMI &1E5A
 .addr1E56
-1E56  A5 81              ..   LDA &81
-1E58  95 3A              .:   STA &3A,X
+	LDA &81
+	STA &3A,X
 .addr1E5A
-1E5A  B9 3A 00           .:.  LDA &003A,Y
-1E5D  84 1B              ..   STY &1B
-1E5F  20 BA 1E            ..  JSR &1EBA
-1E62  A4 1B              ..   LDY &1B
-1E64  C8                 .    INY
-1E65  C0 04              ..   CPY #&04
-1E67  D0 F1              ..   BNE &1E5A
-1E69  A9 78              .x   LDA #&78
-1E6B  85 08              ..   STA &08
-1E6D  A9 10              ..   LDA #&10
-1E6F  85 07              ..   STA &07
-1E71  AD A5 03           ...  LDA &03A5
-1E74  20 B6 1E            ..  JSR &1EB6
-1E77  AD A6 03           ...  LDA &03A6
-1E7A  20 B6 1E            ..  JSR &1EB6
-1E7D  AD 65 03           .e.  LDA &0365
-1E80  20 B8 1E            ..  JSR &1EB8
-1E83  20 A6 1E            ..  JSR &1EA6
-1E86  86 41              .A   STX &41
-1E88  85 40              .@   STA &40
-1E8A  A2 0B              ..   LDX #&0B
-1E8C  86 06              ..   STX &06
-1E8E  AD 42 03           .B.  LDA &0342
-1E91  20 B6 1E            ..  JSR &1EB6
-1E94  AD 47 03           .G.  LDA &0347
-1E97  20 B6 1E            ..  JSR &1EB6
-1E9A  A9 F0              ..   LDA #&F0
-1E9C  85 06              ..   STA &06
-1E9E  85 41              .A   STA &41
-1EA0  AD D1 0F           ...  LDA &0FD1
-1EA3  4C B6 1E           L..  JMP &1EB6
+	LDA &003A,Y
+	STY &1B
+	JSR &1EBA
+	LDY &1B
+	INY
+	CPY #&04
+	BNE &1E5A
+	LDA #&78
+	STA &08
+	LDA #&10
+	STA &07
+	LDA &03A5
+	JSR &1EB6
+	LDA &03A6
+	JSR &1EB6
+	LDA &0365
+	JSR &1EB8
+	JSR &1EA6
+	STX &41
+	STA &40
+	LDX #&0B
+	STX &06
+	LDA &0342
+	JSR &1EB6
+	LDA &0347
+	JSR &1EB6
+	LDA #&F0
+	STA &06
+	STA &41
+	LDA &0FD1
+	JMP &1EB6
 .addr1EA6
-1EA6  A2 F0              ..   LDX #&F0
-1EA8  A5 8A              ..   LDA &8A
-1EAA  29 08              ).   AND #&08
-1EAC  2D CA 03           -..  AND &03CA
-1EAF  F0 02              ..   BEQ &1EB3
-1EB1  8A                 .    TXA
-1EB2  2C A9 0F           ,..  BIT &0FA9
-1EB5  60                 `    RTS
+	LDX #&F0
+	LDA &8A
+	AND #&08
+	AND &03CA
+	BEQ &1EB3
+	TXA
+	BIT &0FA9
+	RTS
 .addr1EB6
-1EB6  4A                 J    LSR A
-1EB7  4A                 J    LSR A
+	LSR A
+	LSR A
 .addr1EB8
-1EB8  4A                 J    LSR A
+	LSR A
 .addr1EB9
-1EB9  4A                 J    LSR A
+	LSR A
 .addr1EBA
-1EBA  85 81              ..   STA &81
-1EBC  A2 FF              ..   LDX #&FF
-1EBE  86 82              ..   STX &82
-1EC0  C5 06              ..   CMP &06
-1EC2  B0 04              ..   BCS &1EC8
-1EC4  A5 41              .A   LDA &41
-1EC6  D0 02              ..   BNE &1ECA
+	STA &81
+	LDX #&FF
+	STX &82
+	CMP &06
+	BCS &1EC8
+	LDA &41
+	BNE &1ECA
 .addr1EC8
-1EC8  A5 40              .@   LDA &40
+	LDA &40
 .addr1ECA
-1ECA  85 91              ..   STA &91
-1ECC  A0 02              ..   LDY #&02
-1ECE  A2 03              ..   LDX #&03
+	STA &91
+	LDY #&02
+	LDX #&03
 .addr1ED0
-1ED0  A5 81              ..   LDA &81
-1ED2  C9 04              ..   CMP #&04
-1ED4  90 1A              ..   BCC &1EF0
-1ED6  E9 04              ..   SBC #&04
-1ED8  85 81              ..   STA &81
-1EDA  A5 82              ..   LDA &82
+	LDA &81
+	CMP #&04
+	BCC &1EF0
+	SBC #&04
+	STA &81
+	LDA &82
 .addr1EDC
-1EDC  25 91              %.   AND &91
-1EDE  91 07              ..   STA (&07),Y
-1EE0  C8                 .    INY
-1EE1  91 07              ..   STA (&07),Y
-1EE3  C8                 .    INY
-1EE4  91 07              ..   STA (&07),Y
-1EE6  98                 .    TYA
-1EE7  18                 .    CLC
-1EE8  69 06              i.   ADC #&06
-1EEA  A8                 .    TAY
-1EEB  CA                 .    DEX
-1EEC  30 1C              0.   BMI &1F0A
-1EEE  10 E0              ..   BPL &1ED0
+	AND &91
+	STA (&07),Y
+	INY
+	STA (&07),Y
+	INY
+	STA (&07),Y
+	TYA
+	CLC
+	ADC #&06
+	TAY
+	DEX
+	BMI &1F0A
+	BPL &1ED0
 .addr1EF0
-1EF0  49 03              I.   EOR #&03
-1EF2  85 81              ..   STA &81
-1EF4  A5 82              ..   LDA &82
+	EOR #&03
+	STA &81
+	LDA &82
 .addr1EF6
-1EF6  0A                 .    ASL A
-1EF7  29 EF              ).   AND #&EF
-1EF9  C6 81              ..   DEC &81
-1EFB  10 F9              ..   BPL &1EF6
-1EFD  48                 H    PHA
-1EFE  A9 00              ..   LDA #&00
-1F00  85 82              ..   STA &82
-1F02  A9 63              .c   LDA #&63
-1F04  85 81              ..   STA &81
-1F06  68                 h    PLA
-1F07  4C DC 1E           L..  JMP &1EDC
+	ASL A
+	AND #&EF
+	DEC &81
+	BPL &1EF6
+	PHA
+	LDA #&00
+	STA &82
+	LDA #&63
+	STA &81
+	PLA
+	JMP &1EDC
 .addr1F0A
-1F0A  E6 08              ..   INC &08
-1F0C  60                 `    RTS
+	INC &08
+	RTS
 .addr1F0D
-1F0D  A0 01              ..   LDY #&01
-1F0F  85 81              ..   STA &81
+	LDY #&01
+	STA &81
 .addr1F11
-1F11  38                 8    SEC
-1F12  A5 81              ..   LDA &81
-1F14  E9 04              ..   SBC #&04
-1F16  B0 0E              ..   BCS &1F26
-1F18  A9 FF              ..   LDA #&FF
-1F1A  A6 81              ..   LDX &81
-1F1C  85 81              ..   STA &81
-1F1E  BD 6B 17           .k.  LDA &176B,X
-1F21  29 F0              ).   AND #&F0
-1F23  4C 2A 1F           L*.  JMP &1F2A
+	SEC
+	LDA &81
+	SBC #&04
+	BCS &1F26
+	LDA #&FF
+	LDX &81
+	STA &81
+	LDA &176B,X
+	AND #&F0
+	JMP &1F2A
 .addr1F26
-1F26  85 81              ..   STA &81
-1F28  A9 00              ..   LDA #&00
+	STA &81
+	LDA #&00
 .addr1F2A
-1F2A  91 07              ..   STA (&07),Y
-1F2C  C8                 .    INY
-1F2D  91 07              ..   STA (&07),Y
-1F2F  C8                 .    INY
+	STA (&07),Y
+	INY
+	STA (&07),Y
+	INY
 .addr1F30
-1F30  91 07              ..   STA (&07),Y
-1F32  C8                 .    INY
-1F33  91 07              ..   STA (&07),Y
-1F35  98                 .    TYA
-1F36  18                 .    CLC
-1F37  69 05              i.   ADC #&05
-1F39  A8                 .    TAY
-1F3A  C0 1E              ..   CPY #&1E
-1F3C  90 D3              ..   BCC &1F11
-1F3E  E6 08              ..   INC &08
-1F40  60                 `    RTS
+	STA (&07),Y
+	INY
+	STA (&07),Y
+	TYA
+	CLC
+	ADC #&05
+	TAY
+	CPY #&1E
+	BCC &1F11
+	INC &08
+	RTS
 .addr1F41
-1F41  A9 0E              ..   LDA #&0E
-1F43  20 CE 12            ..  JSR &12CE
-1F46  20 23 2B            #+  JSR &2B23
-1F49  20 28 2C            (,  JSR &2C28
-1F4C  A9 00              ..   LDA #&00
-1F4E  85 97              ..   STA &97
+	LDA #&0E
+	JSR &12CE
+	JSR &2B23
+	JSR &2C28
+	LDA #&00
+	STA &97
 .addr1F50
-1F50  20 DF 13            ..  JSR &13DF
-1F53  20 19 31            .1  JSR &3119
-1F56  AE 87 1C           ...  LDX &1C87
-1F59  B5 4B              .K   LDA &4B,X
-1F5B  C9 0D              ..   CMP #&0D
-1F5D  D0 0D              ..   BNE &1F6C
+	JSR &13DF
+	JSR &3119
+	LDX &1C87
+	LDA &4B,X
+	CMP #&0D
+	BNE &1F6C
 .addr1F5F
-1F5F  CA                 .    DEX
-1F60  B5 4B              .K   LDA &4B,X
-1F62  09 20              .    ORA #&20
-1F64  DD 01 0E           ...  CMP &0E01,X
-1F67  F0 F6              ..   BEQ &1F5F
-1F69  8A                 .    TXA
-1F6A  30 17              0.   BMI &1F83
+	DEX
+	LDA &4B,X
+	ORA #&20
+	CMP &0E01,X
+	BEQ &1F5F
+	TXA
+	BMI &1F83
 .addr1F6C
-1F6C  20 31 26            1&  JSR &2631
-1F6F  E6 97              ..   INC &97
-1F71  D0 DD              ..   BNE &1F50
-1F73  20 33 2C            3,  JSR &2C33
-1F76  20 23 2B            #+  JSR &2B23
-1F79  A9 28              .(   LDA #&28
-1F7B  20 6C 3C            l<  JSR &3C6C
-1F7E  A9 D7              ..   LDA #&D7
-1F80  4C CE 12           L..  JMP &12CE
+	JSR &2631
+	INC &97
+	BNE &1F50
+	JSR &2C33
+	JSR &2B23
+	LDA #&28
+	JSR &3C6C
+	LDA #&D7
+	JMP &12CE
 .addr1F83
-1F83  A5 6F              .o   LDA &6F
-1F85  8D C1 03           ...  STA &03C1
-1F88  A5 6D              .m   LDA &6D
-1F8A  8D C2 03           ...  STA &03C2
-1F8D  20 33 2C            3,  JSR &2C33
-1F90  20 23 2B            #+  JSR &2B23
-1F93  20 E2 13            ..  JSR &13E2
-1F96  4C 45 38           LE8  JMP &3845
+	LDA &6F
+	STA &03C1
+	LDA &6D
+	STA &03C2
+	JSR &2C33
+	JSR &2B23
+	JSR &13E2
+	JMP &3845
+
+.addr1F99
 1F99  02                 .    ...
 1F9A  54                 T    ...
 1F9B  3B                 ;    ...
 1F9C  03                 .    ...
 1F9D  82                 .    ...
 1F9E  B0 00              ..   BCS &1FA0
-.addr1FA0
 1FA0  00                 .    BRK
 1FA1  00                 .    BRK
 1FA2  01 50              .P   ORA (&50,X)
@@ -2094,48 +2106,52 @@ ORG &11E3
 1FB9  75 00              u.   ADC &00,X
 1FBB  00                 .    BRK
 1FBC  00                 .    BRK
+
+; -----------------------------------------------------------------------------
+; 
+; -----------------------------------------------------------------------------
 .addr1FBD
-1FBD  20 18 21            .!  JSR &2118
-1FC0  A9 00              ..   LDA #&00
-1FC2  20 37 25            7%  JSR &2537
-1FC5  20 36 37            67  JSR &3736
-1FC8  10 29              .)   BPL &1FF3
-1FCA  29 03              ).   AND #&03
-1FCC  85 D1              ..   STA &D1
-1FCE  0A                 .    ASL A
-1FCF  0A                 .    ASL A
-1FD0  0A                 .    ASL A
-1FD1  65 D1              e.   ADC &D1
-1FD3  AA                 .    TAX
-1FD4  A0 03              ..   LDY #&03
-1FD6  84 94              ..   STY &94
+	JSR &2118
+	LDA #&00
+	JSR &2537
+	JSR &3736
+	BPL &1FF3
+	AND #&03
+	STA &D1
+	ASL A
+	ASL A
+	ASL A
+	ADC &D1
+	TAX
+	LDY #&03
+	STY &94
 .addr1FD8
-1FD8  A0 02              ..   LDY #&02
+	LDY #&02
 .addr1FDA
-1FDA  BD 99 1F           ...  LDA &1F99,X
-1FDD  99 34 00           .4.  STA &0034,Y
-1FE0  E8                 .    INX
-1FE1  88                 .    DEY
-1FE2  10 F6              ..   BPL &1FDA
-1FE4  8A                 .    TXA
-1FE5  48                 H    PHA
-1FE6  20 79 20            y   JSR &2079
-1FE9  68                 h    PLA
-1FEA  AA                 .    TAX
-1FEB  C6 94              ..   DEC &94
-1FED  D0 E9              ..   BNE &1FD8
-1FEF  A0 80              ..   LDY #&80
-1FF1  D0 14              ..   BNE &2007
+	LDA &1F99,X
+	STA &0034,Y
+	INX
+	DEY
+	BPL &1FDA
+	TXA
+	PHA
+	JSR &2079
+	PLA
+	TAX
+	DEC &94
+	BNE &1FD8
+	LDY #&80
+	BNE &2007
 .addr1FF3
-1FF3  4A                 J    LSR A
-1FF4  85 35              .5   STA &35
-1FF6  20 36 37            67  JSR &3736
-1FF9  85 34              .4   STA &34
-1FFB  20 36 37            67  JSR &3736
-1FFE  29 07              ).   AND #&07
-2000  85 36              .6   STA &36
-2002  20 79 20            y   JSR &2079
-2005  A0 00              ..   LDY #&00
+	LSR A
+	STA &35
+	JSR &3736
+	STA &34
+	JSR &3736
+	AND #&07
+	STA &36
+	JSR &2079
+	LDY #&00
 .addr2007
 2007  84 85              ..   STY &85
 2009  20 18 21            .!  JSR &2118
@@ -4162,9 +4178,9 @@ ORG &11E3
 2E9A  CA                 .    DEX
 2E9B  10 F7              ..   BPL &2E94
 2E9D  20 7A 0D            z.  JSR &0D7A
-2EA0  A2 FC              ..   LDX #&FC
-2EA2  A0 2E              ..   LDY #&2E
-2EA4  4C F7 FF           L..  JMP &FFF7
+2EA0  A2 FC              ..   LDX #&2EFC MOD 256
+2EA2  A0 2E              ..   LDY #&2EFC DIV 256
+2EA4  4C F7 FF           L..  JMP oscli
 .addr2EA7
 2EA7  86 06              ..   STX &06
 2EA9  AD 64 03           .d.  LDA &0364
@@ -4209,12 +4225,10 @@ ORG &11E3
 2EF8  A8                 .    TAY
 2EF9  A6 1B              ..   LDX &1B
 2EFB  60                 `    RTS
-2EFC  52                 R    ...
-2EFD  2E 44 2E           .D.  ROL &2E44
-2F00  43                 C    ...
-2F01  4F                 O    ...
-2F02  44                 D    ...
-2F03  45 0D              E.   EOR &0D
+
+.str_run_d_code
+	EQUS "R.D.CODE", &0D
+
 .addr2F05
 2F05  4C B0 38           L.8  JMP &38B0
 .addr2F08
@@ -4763,8 +4777,8 @@ ORG &11E3
 32BE  60                 `    RTS
 32BF  A9 06              ..   LDA #&06
 32C1  78                 x    SEI
-32C2  8D 00 FE           ...  STA &FE00
-32C5  8E 01 FE           ...  STX &FE01
+32C2  8D 00 FE           ...  STA crtc_register
+32C5  8E 01 FE           ...  STX crtc_data
 32C8  58                 X    CLI
 32C9  60                 `    RTS
 .addr32CA
@@ -5704,7 +5718,7 @@ ORG &11E3
 3939  85 2D              .-   STA &2D
 393B  A0 00              ..   LDY #&00
 .addr393D
-393D  20 EE FF            ..  JSR &FFEE
+393D  20 EE FF            ..  JSR oswrch
 3940  C8                 .    INY
 3941  B1 FD              ..   LDA (&FD),Y
 3943  D0 F8              ..   BNE &393D
@@ -5732,7 +5746,7 @@ ORG &11E3
 396C  85 49              .I   STA &49
 396E  20 0F 40            .@  JSR &400F
 3971  C6 8A              ..   DEC &8A
-3973  AD 40 FE           .@.  LDA &FE40
+3973  AD 40 FE           .@.  LDA systemvia_irb
 3976  29 10              ).   AND #&10
 3978  F0 06              ..   BEQ &3980
 397A  20 20 3C             <  JSR &3C20
@@ -5787,18 +5801,18 @@ ORG &11E3
 39C9  F0 D1              ..   BEQ &399C
 39CB  60                 `    RTS
 .addr39CC
-39CC  A9 81              ..   LDA #&81
-39CE  8D 4E FE           .N.  STA &FE4E
+39CC  A9 81              ..   LDA #%10000001
+39CE  8D 4E FE           .N.  STA systemvia_ier
 39D1  20 EC 18            ..  JSR &18EC
 39D4  A2 E9              ..   LDX #&E9
 39D6  A0 39              .9   LDY #&39
 39D8  A9 00              ..   LDA #&00
-39DA  20 F1 FF            ..  JSR &FFF1
+39DA  20 F1 FF            ..  JSR osword
 39DD  90 02              ..   BCC &39E1
 39DF  A0 00              ..   LDY #&00
 .addr39E1
-39E1  A9 01              ..   LDA #&01
-39E3  8D 4E FE           .N.  STA &FE4E
+39E1  A9 01              ..   LDA #%00000001
+39E3  8D 4E FE           .N.  STA systemvia_ier
 39E6  4C 8A 1C           L..  JMP &1C8A
 39E9  4B                 K    ...
 39EA  00                 .    BRK
@@ -5827,18 +5841,15 @@ ORG &11E3
 3A09  C8                 .    INY
 3A0A  D0 FB              ..   BNE &3A07
 3A0C  60                 `    RTS
-3A0D  2E 30 0D           .0.  ROL &0D30
-3A10  44                 D    ...
-3A11  45 2E              E.   EOR &2E
-3A13  3A                 :    ...
-3A14  30 2E              0.   BMI &3A44
-3A16  45 2E              E.   EOR &2E
-3A18  31 32              12   AND (&32),Y
-3A1A  33                 3    ...
-3A1B  34                 4    ...
-3A1C  35 36              56   AND &36,X
-3A1E  37                 7    ...
-3A1F  0D 20 2F           . /  ORA &2F20
+
+.str_cat_0
+	EQUS".0", &0D
+
+.str_delete
+	EQUS "DE.:0.E.1234567", &0D
+
+.addr3A20
+	JSR &3B2F
 3A22  3B                 ;    ...
 3A23  B0 1D              ..   BCS &3A42
 3A25  8D 0E 3A           ..:  STA &3A0E
@@ -5848,9 +5859,9 @@ ORG &11E3
 3A30  A9 01              ..   LDA #&01
 3A32  8D CF 03           ...  STA &03CF
 3A35  85 2C              .,   STA &2C
-3A37  A2 0D              ..   LDX #&0D
-3A39  A0 3A              .:   LDY #&3A
-3A3B  20 F7 FF            ..  JSR &FFF7
+3A37  A2 0D              ..   LDX #str_cat_0
+3A39  A0 3A              .:   LDY #str_cat_0 DIV 256
+3A3B  20 F7 FF            ..  JSR oscli
 3A3E  CE CF 03           ...  DEC &03CF
 3A41  18                 .    CLC
 .addr3A42
@@ -5871,9 +5882,9 @@ ORG &11E3
 3A5D  9D 15 3A           ..:  STA &3A15,X
 3A60  CA                 .    DEX
 3A61  D0 F8              ..   BNE &3A5B
-3A63  A2 10              ..   LDX #&10
-3A65  A0 3A              .:   LDY #&3A
-3A67  20 F7 FF            ..  JSR &FFF7
+3A63  A2 10              ..   LDX #str_delete MOD 256
+3A65  A0 3A              .:   LDY #str_delete DIV 256
+3A67  20 F7 FF            ..  JSR oscli
 3A6A  4C 86 3A           L.:  JMP &3A86
 3A6D  00                 .    BRK
 3A6E  AE 6D 3A           .m:  LDX &3A6D
@@ -5881,7 +5892,7 @@ ORG &11E3
 3A72  A0 00              ..   LDY #&00
 3A74  A9 07              ..   LDA #&07
 .addr3A76
-3A76  20 EE FF            ..  JSR &FFEE
+3A76  20 EE FF            ..  JSR oswrch
 3A79  C8                 .    INY
 3A7A  B1 FD              ..   LDA (&FD),Y
 3A7C  D0 F8              ..   BNE &3A76
@@ -5967,7 +5978,7 @@ ORG &11E3
 3B23  8E 00 0C           ...  STX &0C00
 3B26  A2 00              ..   LDX #&00
 3B28  A0 0C              ..   LDY #&0C
-3B2A  20 DD FF            ..  JSR &FFDD
+3B2A  20 DD FF            ..  JSR osfile
 3B2D  18                 .    CLC
 .addr3B2E
 3B2E  60                 `    RTS
@@ -6018,7 +6029,7 @@ ORG &11E3
 .addr3B84
 3B84  A0 00              ..   LDY #&00
 3B86  A9 C8              ..   LDA #&C8
-3B88  4C F4 FF           L..  JMP &FFF4
+3B88  4C F4 FF           L..  JMP osbyte
 3B8B  20 AC 39            .9  JSR &39AC
 3B8E  60                 `    RTS
 3B8F  A2 00              ..   LDX #&00
@@ -6146,7 +6157,7 @@ ORG &11E3
 3C74  A2 09              ..   LDX #&09
 3C76  A0 00              ..   LDY #&00
 3C78  A9 07              ..   LDA #&07
-3C7A  4C F1 FF           L..  JMP &FFF1
+3C7A  4C F1 FF           L..  JMP osword
 .addr3C7D
 3C7D  4A                 J    LSR A
 3C7E  69 03              i.   ADC #&03
@@ -6166,19 +6177,19 @@ ORG &11E3
 .addr3C93
 3C93  A9 03              ..   LDA #&03
 3C95  78                 x    SEI
-3C96  8D 40 FE           .@.  STA &FE40
+3C96  8D 40 FE           .@.  STA systemvia_irb
 3C99  A9 7F              .   LDA #&7F
-3C9B  8D 43 FE           .C.  STA &FE43
-3C9E  8E 4F FE           .O.  STX &FE4F
-3CA1  AE 4F FE           .O.  LDX &FE4F
+3C9B  8D 43 FE           .C.  STA systemvia_ddra
+3C9E  8E 4F FE           .O.  STX systemvia_ora_nh
+3CA1  AE 4F FE           .O.  LDX systemvia_ira_nh
 3CA4  A9 0B              ..   LDA #&0B
-3CA6  8D 40 FE           .@.  STA &FE40
+3CA6  8D 40 FE           .@.  STA systemvia_orb
 3CA9  58                 X    CLI
 3CAA  8A                 .    TXA
 3CAB  60                 `    RTS
 .addr3CAC
 3CAC  A9 80              ..   LDA #&80
-3CAE  20 F4 FF            ..  JSR &FFF4
+3CAE  20 F4 FF            ..  JSR osbyte
 3CB1  98                 .    TYA
 3CB2  4D CC 03           M..  EOR &03CC
 3CB5  60                 `    RTS
@@ -6194,7 +6205,7 @@ ORG &11E3
 3CCA  A4 D1              ..   LDY &D1
 .addr3CCC
 3CCC  60                 `    RTS
-3CCD  AD 40 FE           .@.  LDA &FE40
+3CCD  AD 40 FE           .@.  LDA systemvia_irb
 3CD0  AA                 .    TAX
 3CD1  29 10              ).   AND #&10
 3CD3  49 10              I.   EOR #&10
