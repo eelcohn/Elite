@@ -277,6 +277,31 @@ ORG &1900
 ; Acornsoft logo in teletext graphics
 ; ------------------------------------------------------------------------------
 .acornsoft_logo
+	EQUB &91, &9A, &A0, &A0, &A0, &FC, &B4, &E0, &FC, &FC, &B0, &A0, &F8, &FC, &F4, &A0, &FC, &FC, &FC, &B0, &E8, &F4, &A0, &E8, &B4, &F8, &FC, &FC, &B0, &A0, &FE, &FF, &B4, &A0, &FC, &FC, &FC, &FC, &FC, &FC,
+	EQUB &91, 9A, A0, A0, FA, FF, B5, FF, A7, AB, FF, EA, BF, A3, EF, B5, FF, A3, EB, B5, EA, FF, B4, EA, B5, FF, B1, AB, A5, EA, FF, FF, FF, A0, FF, A3, A3, A3, FF, A3, 91, 9A, A0, E8, BF, EB, B5, FF, A0, A0 A0 EA B5 A0 EA B5          
+ 6C60  FF FC FE A5 EA BF FF FA          
+ 6C68  B5 AB FF FD B0 FF FF FF          
+ 6C70  FF B5 FF FF FF A0 FF A0          
+ 
+ 6C78  91 9A E0 FF FD FE B5 FF
+ 6C80  B0 E0 FC EA F5 A0 FA B5
+ 6C88  FF AB FD A0 EA B5 EB FF
+ 6C90  B5 F0 A0 EB FF F3 F3 F3
+ 6C98  F3 B1 FF A0 A0 A0 FF A0
+ 
+ 6CA0  91 9A FE B7 A0 EA B5 AB
+ 6CA8  FF FF A7 A2 EF FF BF A1
+ 6CB0  FF A0 EB F5 EA B5 A0 EF
+ 6CB8  B5 EF FF FF A5 EF FF FF
+ 6CC0  FF A5 FF A0 A0 A0 FF A0
+ 
+ 6CC8  91 9A A0 A0 A0 A0 A0 A0
+ 6CD0  A0 A0 A0 A0 A0 A0 A0 A0
+ 6CD8  A0 A0 A0 A0 A0 A0 A0 A0
+ 6CE0  A0 A0 A0 A0 A0 A0 A2 A3
+ 6CE8  A0 A0 A0 A0 A0 A0 A0 20
+ 6CF0  92 9A A0 A0 A0 FC B4 E0
+ 6CF8  FC FC B0 A0 F8 FC F4 A0
 
 ; ------------------------------------------------------------------------------
 ; Character definitions for Acornsoft logo for Electron
