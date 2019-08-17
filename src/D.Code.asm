@@ -11,12 +11,16 @@ rand0                    = &00                    ; Random number storage
 rand1                    = &01                    ; Random number storage
 rand2                    = &02                    ; Random number storage
 rand3                    = &03                    ; Random number storage
+screen                   = &07                    ; Pointer to screen memory
 screen_lo                = &07                    ; Pointer to screen memory LSB
 screen_hi                = &08                    ; Pointer to screen memory MSB
+hull_pointer             = &1E                    ; Pointer to object's hull data
 hull_pointer_lo          = &1E                    ; Pointer to object's hull data LSB
 hull_pointer_hi          = &1F                    ; Pointer to object's hull data MSB
-inf_pointer_lo           = &20
-inf_pointer_hi           = &21
+inf_pointer              = &20                    ; 
+inf_pointer_lo           = &20                    ; 
+inf_pointer_hi           = &21                    ; 
+vertices_ptr             = &22                    ; Pointer to start of object's hull vertices
 vertices_ptr_lo          = &22                    ; Pointer to start of object's hull vertices LSB 
 vertices_ptr_hi          = &23                    ; Pointer to start of object's hull vertices MSB 
 sunx                     = &28                    ; SUNX
@@ -104,19 +108,19 @@ key_m                    = &030C                  ; M key flag (Fire missile)
 key_e                    = &030D                  ; E key flag (Activate ECM)
 key_j                    = &030E                  ; J key flag (Jump)
 key_c                    = &030F                  ; C key flag (Activate docking computer)
-object01_type            = &0311                  ; Object 1: type (&00=empty, &80=planet, &81=sun, &82=planet)
-object02_type            = &0312                  ; Object 1: type (&00=empty)
-object03_type            = &0313                  ; Object 1: type (&00=empty)
-object04_type            = &0314                  ; Object 1: type (&00=empty)
-object05_type            = &0315                  ; Object 1: type (&00=empty)
-object06_type            = &0316                  ; Object 1: type (&00=empty)
-object07_type            = &0317                  ; Object 1: type (&00=empty)
-object08_type            = &0318                  ; Object 1: type (&00=empty)
-object09_type            = &0319                  ; Object 1: type (&00=empty)
-object10_type            = &031A                  ; Object 1: type (&00=empty)
-object11_type            = &031B                  ; Object 1: type (&00=empty)
-object12_type            = &031C                  ; Object 1: type (&00=empty)
-object13_type            = &031D                  ; Object 1: type (&00=empty)
+object01_type            = &0311                  ; Object  1: type (&00=empty, &80=planet, &81=sun, &82=planet)
+object02_type            = &0312                  ; Object  2: type (&00=empty)
+object03_type            = &0313                  ; Object  3: type (&00=empty)
+object04_type            = &0314                  ; Object  4: type (&00=empty)
+object05_type            = &0315                  ; Object  5: type (&00=empty)
+object06_type            = &0316                  ; Object  6: type (&00=empty)
+object07_type            = &0317                  ; Object  7: type (&00=empty)
+object08_type            = &0318                  ; Object  8: type (&00=empty)
+object09_type            = &0319                  ; Object  9: type (&00=empty)
+object10_type            = &031A                  ; Object 10: type (&00=empty)
+object11_type            = &031B                  ; Object 11: type (&00=empty)
+object12_type            = &031C                  ; Object 12: type (&00=empty)
+object13_type            = &031D                  ; Object 13: type (&00=empty)
 ship_missile_total       = &031E                  ; Total number of Missile
 ship_spacestation_total  = &031F                  ; Total number of Space Station
 ship_escapepod_total     = &0320                  ; Total number of Escape Pods
@@ -317,8 +321,8 @@ oscli                    = &FFF7
 ORG &11E3
 
 .start
-	JMP addr1201
-	JMP addr1201
+	JMP descramble
+	JMP descramble
 .wrchv
 	JMP addr1EFC
 .addr11EC
@@ -330,8 +334,8 @@ ORG &11E3
 ; Switch from flight mode to docked mode
 ; -----------------------------------------------------------------------------
 .addr11F1
-	LDX #&F8
-	LDY #&11
+	LDX #str_load_t_code MOD 256
+	LDY #str_load_t_code DIV 256
 	JSR oscli
 
 .str_load_t_code
@@ -341,15 +345,15 @@ ORG &11E3
 ; Descramble main code
 ; -----------------------------------------------------------------------------
 .descramble
-	LDY #&00
-	STY &07
-	LDX #&13
+	LDY #&1300 MOD 256
+	STY screen_lo
+	LDX #&1300 DIV 256
 .descramble1
-	STX &08
+	STX screen_hi
 	TYA
-	EOR (&07),Y
+	EOR (screen),Y
 	EOR #&33
-	STA (&07),Y
+	STA (screen),Y
 	DEY
 	BNE addr1207
 	INX
@@ -361,19 +365,19 @@ ORG &11E3
 ; Dock the ship
 ; -----------------------------------------------------------------------------
 .addr121B
-	LDA #&52
-	STA &11F8
+	LDA #'R'                        ; *Run
+	STA &11F8                       ; Change *Load to *Run
 .addr1220
 	JSR addr3EE1
 	JSR addr0D7A
-	BNE addr11F1
+	BNE dockship
 
 ; -----------------------------------------------------------------------------
 ; 
 ; -----------------------------------------------------------------------------
 .addr1228
 	LDA &0900
-	STA &00
+	STA rand0
 	LDX &034C
 	JSR addr29FF
 	JSR addr29FF
@@ -399,7 +403,7 @@ ORG &11E3
 .addr1254
 	STA &31
 	ORA &32
-	STA &8D
+	STA shiptype
 	LDX &034D
 	JSR addr29FF
 	TXA
@@ -423,9 +427,9 @@ ORG &11E3
 	BCS addr127F
 	LSR A
 .addr127F
-	STA &2B
+	STA beta1
 	ORA &7B
-	STA &2A
+	STA beta
 	LDA &03CE
 	BEQ addr129E
 	LDX #&03
@@ -501,7 +505,7 @@ ORG &11E3
 	LDA &030D
 	AND &0380
 	BEQ addr1326
-	LDA &30
+	LDA ecm_on
 	BNE addr1326
 	DEC &0340
 	JSR addr3813
@@ -555,7 +559,7 @@ ORG &11E3
 	JSR addr3732
 	LDY #&24
 .addr1387
-	LDA (&20),Y
+	LDA (inf_pointer),Y
 	STA &0046,Y
 	DEY
 	BPL addr1387
@@ -564,9 +568,9 @@ ORG &11E3
 	ASL A
 	TAY
 	LDA &55FE,Y
-	STA &1E
+	STA hull_pointer_lo
 	LDA &55FF,Y
-	STA &1F
+	STA hull_pointer_hi
 	LDA &0382                       ; Has the player used the energy bomb?
 	BPL addr13B6                    ; No? Then branch
 	CPY #&04
@@ -583,7 +587,7 @@ ORG &11E3
 	LDY #&24
 .addr13BB
 	LDA &0046,Y
-	STA (&20),Y
+	STA (inf_pointer),Y
 	DEY
 	BPL addr13BB
 	LDA &65
@@ -608,7 +612,7 @@ ORG &11E3
 	CPX #&05
 	BEQ addr13FD
 	LDY #&00
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	LSR A
 	LSR A
 	LSR A
@@ -748,7 +752,7 @@ ORG &11E3
 .addr14F0
 	LDY #&23
 	LDA &69
-	STA (&20),Y
+	STA (inf_pointer),Y
 	LDA &6A
 	BMI addr1527
 	LDA &65
@@ -763,11 +767,11 @@ ORG &11E3
 	ORA &0341
 	BNE addr1527
 	LDY #&0A
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	BEQ addr1527
 	TAX
 	INY
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	TAY
 	JSR addr32D0
 	LDA #&00
@@ -782,7 +786,7 @@ ORG &11E3
 .addr1533
 	LDY #&1F
 	LDA &65
-	STA (&20),Y
+	STA (inf_pointer),Y
 	LDX &84
 	INX
 	JMP addr1376
@@ -929,9 +933,9 @@ ORG &11E3
 	JSR addr3629
 	BEQ addr166E
 .addr1666
-	LDA &30
+	LDA ecm_on
 	BEQ addr1671
-	DEC &30
+	DEC ecm_on
 	BNE addr1671
 .addr166E
 	JSR addr43A3
@@ -947,7 +951,7 @@ ORG &11E3
 	TAX
 	PLA
 	LDY #&00
-	AND (&1E),Y
+	AND (hull_pointer),Y
 	AND #&0F
 .addr1687
 	STA &93
@@ -1028,13 +1032,13 @@ ORG &11E3
 	LSR A
 	LSR A
 	ORA #&60
-	STA &08
+	STA screen_hi
 	LDA &35
 	AND #&07
 	TAY
 	TXA
 	AND #&F8
-	STA &07
+	STA screen_lo
 	TXA
 	AND #&07
 	TAX
@@ -1064,15 +1068,15 @@ ORG &11E3
 	DEX
 .addr1742
 	LDA &82
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 .addr1748
 	LSR &82
 	BCC addr1754
 	ROR &82
-	LDA &07
+	LDA screen_lo
 	ADC #&08
-	STA &07
+	STA screen_lo
 .addr1754
 	LDA &83
 	ADC &81
@@ -1080,7 +1084,7 @@ ORG &11E3
 	BCC addr1763
 	DEY
 	BPL addr1763
-	DEC &08
+	DEC screen_hi
 	LDY #&07
 .addr1763
 	DEX
@@ -1093,15 +1097,15 @@ ORG &11E3
 	DEX
 .addr176E
 	LDA &82
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 .addr1774
 	LSR &82
 	BCC addr1780
 	ROR &82
-	LDA &07
+	LDA screen_lo
 	ADC #&08
-	STA &07
+	STA screen_lo
 .addr1780
 	LDA &83
 	ADC &81
@@ -1110,7 +1114,7 @@ ORG &11E3
 	INY
 	CPY #&08
 	BNE addr1791
-	INC &08
+	INC screen_hi
 	LDY #&00
 .addr1791
 	DEX
@@ -1137,10 +1141,10 @@ ORG &11E3
 	LSR A
 	LSR A
 	ORA #&60
-	STA &08
+	STA screen_hi
 	TXA
 	AND #&F8
-	STA &07
+	STA screen_lo
 	TXA
 	AND #&07
 	TAX
@@ -1174,12 +1178,12 @@ ORG &11E3
 	DEX
 .addr17ED
 	LDA &82
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 .addr17F3
 	DEY
 	BPL addr17FA
-	DEC &08
+	DEC screen_hi
 	LDY #&07
 .addr17FA
 	LDA &83
@@ -1189,9 +1193,9 @@ ORG &11E3
 	LSR &82
 	BCC addr180E
 	ROR &82
-	LDA &07
+	LDA screen_lo
 	ADC #&08
-	STA &07
+	STA screen_lo
 .addr180E
 	DEX
 	BNE addr17ED
@@ -1203,12 +1207,12 @@ ORG &11E3
 	DEX
 .addr1819
 	LDA &82
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 .addr181F
 	DEY
 	BPL addr1826
-	DEC &08
+	DEC screen_hi
 	LDY #&07
 .addr1826
 	LDA &83
@@ -1218,9 +1222,9 @@ ORG &11E3
 	ASL &82
 	BCC addr183B
 	ROL &82
-	LDA &07
+	LDA screen_lo
 	SBC #&07
-	STA &07
+	STA screen_lo
 	CLC
 .addr183B
 	DEX
@@ -1238,7 +1242,7 @@ ORG &11E3
 	BNE addr1852
 .addr184E
 	LDA #&17
-	INC &2D
+	INC text_cursor_y
 .addr1852
 	STA &35
 	LDX #&02
@@ -1268,10 +1272,10 @@ ORG &11E3
 	LSR A
 	LSR A
 	ORA #&60
-	STA &08
+	STA screen_hi
 	LDA &35
 	AND #&07
-	STA &07
+	STA screen_lo
 	TXA
 	AND #&F8
 	TAY
@@ -1291,8 +1295,8 @@ ORG &11E3
 	AND #&07
 	TAX
 	LDA addr18F5,X
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	TYA
 	ADC #&08
 	TAY
@@ -1302,8 +1306,8 @@ ORG &11E3
 	CLC
 .addr18B7
 	LDA #&FF
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	TYA
 	ADC #&08
 	TAY
@@ -1314,8 +1318,8 @@ ORG &11E3
 	AND #&07
 	TAX
 	LDA addr18EE,X
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	LDY &85
 	RTS
 .addr18D3
@@ -1329,8 +1333,8 @@ ORG &11E3
 	TAX
 	LDA addr18EE,X
 	AND &D1
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 .addr18EB
 	LDY &85
 	RTS
@@ -1342,8 +1346,8 @@ ORG &11E3
 
 .addr18FD 
 	LDA addr16AF,X
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	LDY &06
 	RTS
 
@@ -1380,10 +1384,10 @@ ORG &11E3
 	LSR A
 	LSR A
 	ORA #&60
-	STA &08
+	STA screen_hi
 	TXA
 	AND #&F8
-	STA &07
+	STA screen_lo
 	TYA
 	AND #&07
 	TAY
@@ -1394,8 +1398,8 @@ ORG &11E3
 	CMP #&90
 	BCS addr18FD
 	LDA addr16B7,X
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	LDA &88
 	CMP #&50
 	BCS addr1968
@@ -1404,8 +1408,8 @@ ORG &11E3
 	LDY #&01
 .addr1961
 	LDA addr16B7,X
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 .addr1968
 	LDY &06
 .addr196A
@@ -1563,7 +1567,7 @@ ORG &11E3
 	JSR addr28FF
 	STA &25
 	STX &24
-	LDX &2B
+	LDX beta1
 	LDA &27
 	EOR &7C
 	JSR addr27C8
@@ -1585,7 +1589,7 @@ ORG &11E3
 	STA &83
 	LDA #&00
 	STA &1B
-	LDA &2A
+	LDA beta
 	EOR #&80
 	JSR addr1907
 	LDA &25
@@ -1677,7 +1681,7 @@ ORG &11E3
 	STX &24
 	LDA &27
 	EOR &7C
-	LDX &2B
+	LDX beta1
 	JSR addr27C8
 	STA &81
 	LDA &25
@@ -1700,7 +1704,7 @@ ORG &11E3
 	STA &83
 	LDA #&00
 	STA &1B
-	LDA &2A
+	LDA beta
 	JSR addr1907
 	LDA &25
 	STA &34
@@ -1809,7 +1813,7 @@ ORG &11E3
 	JSR addr54C8
 	JSR addr2F75
 	LDA #&07
-	STA &2C
+	STA text_cursor_x
 	LDA #&7E
 	JSR addr1847
 	LDA #&E6
@@ -1911,7 +1915,7 @@ ORG &11E3
 .addr1D44
 	JSR addr338F
 	LDX #&06
-	STX &2C
+	STX text_cursor_x
 	RTS
 .addr1D4C
 	LDA &43
@@ -2173,9 +2177,9 @@ ORG &11E3
 	CMP #&0A
 	BEQ addr1F1A
 	LDX #&01
-	STX &2C
+	STX text_cursor_x
 .addr1F1A
-	INC &2D
+	INC text_cursor_y
 	BNE addr1F52
 .addr1F1E
 	LDX #&BF
@@ -2190,13 +2194,13 @@ ORG &11E3
 .addr1F2A
 	STA &1C
 	STX &1D
-	LDA &2C
+	LDA text_cursor_x
 	ASL A
 	ASL A
 	ASL A
-	STA &07
-	INC &2C
-	LDA &2D
+	STA screen_lo
+	INC text_cursor_x
+	LDA text_cursor_y
 	CMP #&18
 	BCC addr1F43
 	JSR addr54C8
@@ -2204,12 +2208,12 @@ ORG &11E3
 .addr1F43
 	ORA #&60
 .addr1F45
-	STA &08
+	STA screen_hi
 	LDY #&07
 .addr1F49
 	LDA (&1C),Y
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	DEY
 	BPL addr1F49
 .addr1F52
@@ -2224,9 +2228,9 @@ ORG &11E3
 	JMP addr1F52
 .addr1F62
 	LDA #&D0
-	STA &07
+	STA screen_lo
 	LDA #&78
-	STA &08
+	STA screen_hi
 	JSR addr2026
 	STX &41
 	STA &40
@@ -2246,8 +2250,8 @@ ORG &11E3
 	EOR #&80
 	JSR addr28FF
 	JSR addr208D
-	LDA &2A
-	LDX &2B
+	LDA beta
+	LDX beta1
 	BEQ addr1F9A
 	SBC #&01
 .addr1F9A
@@ -2294,9 +2298,9 @@ ORG &11E3
 	CPY #&04
 	BNE addr1FD7
 	LDA #&78
-	STA &08
+	STA screen_hi
 	LDA #&10
-	STA &07
+	STA screen_lo
 	LDA &03A5
 	JSR addr2036
 	LDA &03A6
@@ -2357,11 +2361,11 @@ ORG &11E3
 	LDA &82
 .addr205C
 	AND &91
-	STA (&07),Y
+	STA (screen),Y
 	INY
-	STA (&07),Y
+	STA (screen),Y
 	INY
-	STA (&07),Y
+	STA (screen),Y
 	TYA
 	CLC
 	ADC #&06
@@ -2386,7 +2390,7 @@ ORG &11E3
 	PLA
 	JMP addr205C
 .addr208A
-	INC &08
+	INC screen_hi
 	RTS
 .addr208D
 	LDY #&01
@@ -2406,20 +2410,20 @@ ORG &11E3
 	STA &81
 	LDA #&00
 .addr20AA
-	STA (&07),Y
+	STA (screen),Y
 	INY
-	STA (&07),Y
+	STA (screen),Y
 	INY
-	STA (&07),Y
+	STA (screen),Y
 	INY
-	STA (&07),Y
+	STA (screen),Y
 	TYA
 	CLC
 	ADC #&05
 	TAY
 	CPY #&1E
 	BCC addr2091
-	INC &08
+	INC screen_hi
 	RTS
 .addr20C1
 	JSR addr3EE1
@@ -2464,7 +2468,7 @@ ORG &11E3
 	LDA #&FA
 	JMP addr36E4
 .addr2117
-	LDA &30
+	LDA ecm_on
 	BNE addr2150
 	LDA &66
 	ASL A
@@ -2472,7 +2476,7 @@ ORG &11E3
 	LSR A
 	TAX
 	LDA addr1695,X
-	STA &22
+	STA vertices_ptr_lo
 	LDA addr1695+1,X
 	JSR addr2409
 	LDA &D4
@@ -2487,11 +2491,11 @@ ORG &11E3
 	CMP #&82
 	BEQ addr2150
 	LDY #&1F
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	BIT &216E
 	BNE addr2150
 	ORA #&80
-	STA (&22),Y
+	STA (vertices_ptr),Y
 .addr2150
 	LDA &46
 	ORA &49
@@ -2512,7 +2516,7 @@ ORG &11E3
 	CMP #&10
 	BCS addr2174
 	LDY #&20
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	LSR A
 	BCS addr2177
 .addr2174
@@ -2556,7 +2560,7 @@ ORG &11E3
 .addr21BB
 	LDY #&0E
 	LDA &69
-	CMP (&1E),Y
+	CMP (hull_pointer),Y
 	BCS addr21C5
 	INC &69
 .addr21C5
@@ -2637,7 +2641,7 @@ ORG &11E3
 	STA &63
 .addr2249
 	LDY #&0E
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	LSR A
 	CMP &69
 	BCC addr2294
@@ -2663,7 +2667,7 @@ ORG &11E3
 	AND #&1F
 	CMP &D1
 	BCS addr2294
-	LDA &30
+	LDA ecm_on
 	BNE addr2294
 	DEC &65
 	LDA &8C
@@ -2683,7 +2687,7 @@ ORG &11E3
 	CPX #&A0
 	BCC addr22C6
 	LDY #&13
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	AND #&F8
 	BEQ addr22C6
 	LDA &65
@@ -2691,11 +2695,11 @@ ORG &11E3
 	STA &65
 	CPX #&A3
 	BCC addr22C6
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	LSR A
 	JSR addr36E4
 	DEC &62
-	LDA &30
+	LDA ecm_on
 	BNE addr2311
 	LDA #&08
 	JMP addr43F3
@@ -2883,24 +2887,24 @@ ORG &11E3
 	RTS
 .addr2403
 	LDA #&25
-	STA &22
+	STA vertices_ptr_lo
 	LDA #&09
 .addr2409
-	STA &23
+	STA vertices_ptr_hi
 	LDY #&02
 	JSR addr2417
 	LDY #&05
 	JSR addr2417
 	LDY #&08
 .addr2417
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	EOR #&80
 	STA &43
 	DEY
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &42
 	DEY
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &41
 	STY &80
 	LDX &80
@@ -3012,11 +3016,11 @@ ORG &11E3
 	BCS addr2506
 	STA &83
 	LDY #&02
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	CMP &83
 	BNE addr2505
 	DEY
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	CMP &82
 .addr2505
 	RTS
@@ -3062,29 +3066,29 @@ ORG &11E3
 	CMP #&02
 	BEQ addr2580
 	LDY #&24
-	LDA (&20),Y
+	LDA (inf_pointer),Y
 	AND #&20
 	BEQ addr255C
 	JSR addr2580
 .addr255C
 	LDY #&20
-	LDA (&20),Y
+	LDA (inf_pointer),Y
 	BEQ addr2505
 	ORA #&80
-	STA (&20),Y
+	STA (inf_pointer),Y
 	LDY #&1C
 	LDA #&02
-	STA (&20),Y
+	STA (inf_pointer),Y
 	ASL A
 	LDY #&1E
-	STA (&20),Y
+	STA (inf_pointer),Y
 	LDA &8C
 	CMP #&0B
 	BCC addr257F
 	LDY #&24
-	LDA (&20),Y
+	LDA (inf_pointer),Y
 	ORA #&04
-	STA (&20),Y
+	STA (inf_pointer),Y
 .addr257F
 	RTS
 .addr2580
@@ -3103,19 +3107,19 @@ ORG &11E3
 	STA &06
 	TXA
 	PHA
-	LDA &1E
+	LDA hull_pointer_lo
 	PHA
-	LDA &1F
+	LDA hull_pointer_hi
 	PHA
-	LDA &20
+	LDA inf_pointer_lo
 	PHA
-	LDA &21
+	LDA inf_pointer_hi
 	PHA
 	LDY #&24
 .addr25A4
 	LDA &0046,Y
 	STA &0100,Y
-	LDA (&20),Y
+	LDA (inf_pointer),Y
 	STA &0046,Y
 	DEY
 	BPL addr25A4
@@ -3164,9 +3168,9 @@ ORG &11E3
 .addr25FE
 	JSR addr3768
 	PLA
-	STA &21
+	STA inf_pointer_hi
 	PLA
-	STA &20
+	STA inf_pointer_lo
 	LDX #&24
 .addr2609
 	LDA &0100,X
@@ -3174,9 +3178,9 @@ ORG &11E3
 	DEX
 	BPL addr2609
 	PLA
-	STA &1F
+	STA hull_pointer_hi
 	PLA
-	STA &1E
+	STA hull_pointer_lo
 	PLA
 	TAX
 	RTS
@@ -3264,7 +3268,7 @@ ORG &11E3
 	LDA &0F82,Y
 	STA &35
 	EOR &7B
-	LDX &2B
+	LDX beta1
 	JSR addr27C8
 	JSR addr28FF
 	STX &24
@@ -3273,7 +3277,7 @@ ORG &11E3
 	STX &82
 	LDX &35
 	STX &83
-	LDX &2B
+	LDX beta1
 	EOR &7C
 	JSR addr27C8
 	JSR addr28FF
@@ -3301,7 +3305,7 @@ ORG &11E3
 	STX &82
 	LDA #&00
 	STA &1B
-	LDA &8D
+	LDA shiptype
 	JSR addr1907
 	LDA &25
 	STA &0F5C,Y
@@ -3321,9 +3325,9 @@ ORG &11E3
 	BEQ addr272D
 	JMP addr268A
 .addr272D
-	LDA &8D
+	LDA shiptype
 	EOR &99
-	STA &8D
+	STA shiptype
 	LDA &32
 	EOR &99
 	STA &32
@@ -3973,7 +3977,7 @@ ORG &11E3
 	LDA &03BF
 	ORA &03C0
 	BNE addr2B46
-	INC &2D
+	INC text_cursor_y
 	RTS
 .addr2B46
 	LDA #&BF
@@ -3986,7 +3990,7 @@ ORG &11E3
 .addr2B57
 	JSR addr339A
 .addr2B5A
-	INC &2D
+	INC text_cursor_y
 .addr2B5C
 	LDA #&80
 	STA &72
@@ -4004,12 +4008,12 @@ ORG &11E3
 	LDA #&01
 	JSR addr54C8
 	LDA #&09
-	STA &2C
+	STA text_cursor_x
 	LDA #&A3
 	JSR addr339A
 	JSR addr184E
 	JSR addr2B5A
-	INC &2D
+	INC text_cursor_y
 	JSR addr2B3B
 	LDA #&C2
 	JSR addr3395
@@ -4186,7 +4190,7 @@ ORG &11E3
 	LDA #&40
 	JSR addr54C8
 	LDA #&07
-	STA &2C
+	STA text_cursor_x
 	JSR addr2F6A
 	LDA #&C7
 	JSR addr339A
@@ -4333,7 +4337,7 @@ ORG &11E3
 	ADC #&D0
 	JSR addr339A
 	LDA #&0E
-	STA &2C
+	STA text_cursor_x
 	PLA
 	TAX
 	CLC
@@ -4349,7 +4353,7 @@ ORG &11E3
 	LDA #&08
 	JSR addr54C8
 	LDA #&0B
-	STA &2C
+	STA text_cursor_x
 	LDA #&A4
 	JSR addr2B57
 	JSR addr184A
@@ -4442,7 +4446,7 @@ ORG &11E3
 	LDA #&80
 	JSR addr54C8
 	LDA #&07
-	STA &2C
+	STA text_cursor_x
 	LDA #&BE
 	JSR addr1847
 	JSR addr2DA1
@@ -4484,8 +4488,8 @@ ORG &11E3
 	LSR A
 	LSR A
 	LSR A
-	STA &2C
-	INC &2C
+	STA text_cursor_x
+	INC text_cursor_x
 	LDA &6D
 	SEC
 	SBC &035A
@@ -4506,7 +4510,7 @@ ORG &11E3
 	LDX &46,Y
 	BNE addr2F43
 .addr2F31
-	STY &2D
+	STY text_cursor_y
 	CPY #&03
 	BCC addr2F60
 	LDA #&FF
@@ -4629,7 +4633,7 @@ ORG &11E3
 	STA &03BF
 	JMP addr2C78
 .addr3011
-	LDA &2F
+	LDA hyperspace_countdown_hi
 	ORA &8E
 	BNE addr3085
 	JSR addr4437
@@ -4644,9 +4648,9 @@ ORG &11E3
 	ORA &03C0
 	BEQ addr3085
 	LDA #&07
-	STA &2C
+	STA text_cursor_x
 	LDA #&17
-	STA &2D
+	STA text_cursor_y
 	LDA #&00
 	STA &72
 	LDA #&BD
@@ -4661,8 +4665,8 @@ ORG &11E3
 	JSR addr330A
 .addr3054
 	LDA #&0F
-	STA &2F
-	STA &2E
+	STA hyperspace_countdown_hi
+	STA hyperspace_countdown_lo
 	TAX
 	JMP addr30AC
 .addr305E
@@ -4701,8 +4705,8 @@ ORG &11E3
 	RTS
 .addr30AC
 	LDY #&01
-	STY &2C
-	STY &2D
+	STY text_cursor_x
+	STY text_cursor_y
 	DEY
 .addr30B3
 	CLC
@@ -4724,12 +4728,12 @@ ORG &11E3
 	ASL A
 	STA &73
 	LDA #&01
-	STA &2C
+	STA text_cursor_x
 	PLA
 	ADC #&D0
 	JSR addr339A
 	LDA #&0E
-	STA &2C
+	STA text_cursor_x
 	LDX &73
 	LDA &461A,X
 	STA &74
@@ -4765,9 +4769,9 @@ ORG &11E3
 	JSR addr1E3A
 	JMP addr3135
 .addr312B
-	LDA &2C
+	LDA text_cursor_x
 	ADC #&04
-	STA &2C
+	STA text_cursor_x
 	LDA #&2D
 	BNE addr3144
 .addr3135
@@ -4793,18 +4797,18 @@ ORG &11E3
 	JMP addr1EFC
 .addr3158
 	LDA #&11
-	STA &2C
+	STA text_cursor_x
 	LDA #&FF
 	BNE addr3144
 .addr3160
 	LDA #&10
 	JSR addr54C8
 	LDA #&05
-	STA &2C
+	STA text_cursor_x
 	LDA #&A7
 	JSR addr1847
 	LDA #&03
-	STA &2D
+	STA text_cursor_y
 	JSR addr3158
 	LDA #&00
 	STA &03AD
@@ -4812,7 +4816,7 @@ ORG &11E3
 	LDX #&80
 	STX &72
 	JSR addr30C9
-	INC &2D
+	INC text_cursor_y
 	INC &03AD
 	LDA &03AD
 	CMP #&11
@@ -5160,7 +5164,7 @@ ORG &11E3
 	BNE addr342D
 .addr33FB
 	LDA #&15
-	STA &2C
+	STA text_cursor_x
 	BNE addr3398
 .addr3401
 	CPX #&FF
@@ -5192,43 +5196,43 @@ ORG &11E3
 .addr342D
 	TAX
 	LDA #&00
-	STA &22
+	STA vertices_ptr_lo
 	LDA #&04
-	STA &23
+	STA vertices_ptr_hi
 	LDY #&00
 	TXA
 	BEQ addr344E
 .addr343B
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	BEQ addr3446
 	INY
 	BNE addr343B
-	INC &23
+	INC vertices_ptr_hi
 	BNE addr343B
 .addr3446
 	INY
 	BNE addr344B
-	INC &23
+	INC vertices_ptr_hi
 .addr344B
 	DEX
 	BNE addr343B
 .addr344E
 	TYA
 	PHA
-	LDA &23
+	LDA vertices_ptr_hi
 	PHA
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	EOR #&23
 	JSR addr339A
 	PLA
-	STA &23
+	STA vertices_ptr_hi
 	PLA
 	TAY
 	INY
 	BNE addr3464
-	INC &23
+	INC vertices_ptr_hi
 .addr3464
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	BNE addr344E
 .addr3468
 	RTS
@@ -5314,7 +5318,7 @@ ORG &11E3
 	INY
 	LDA (&67),Y
 	STA &8F
-	LDA &01
+	LDA rand1
 	PHA
 	LDY #&06
 .addr34F1
@@ -5360,9 +5364,9 @@ ORG &11E3
 	CPY &8F
 	BCC addr34F1
 	PLA
-	STA &01
+	STA rand1
 	LDA &0906
-	STA &03
+	STA rand3
 	RTS
 .addr3545
 	JSR addr3F85
@@ -5449,7 +5453,7 @@ ORG &11E3
 	JSR addr3732
 	LDY #&1F
 .addr35E8
-	LDA (&20),Y
+	LDA (inf_pointer),Y
 	STA &0046,Y
 	DEY
 	BPL addr35E8
@@ -5457,9 +5461,9 @@ ORG &11E3
 	JSR addr5558
 	LDX &84
 	LDY #&1F
-	LDA (&20),Y
+	LDA (inf_pointer),Y
 	AND #&A7
-	STA (&20),Y
+	STA (inf_pointer),Y
 .addr35FF
 	INX
 	BNE addr35DA
@@ -5573,10 +5577,10 @@ ORG &11E3
 	LSR A
 	LSR A
 	ORA #&60
-	STA &08
+	STA screen_hi
 	LDA &34
 	AND #&F8
-	STA &07
+	STA screen_lo
 	TYA
 	AND #&07
 	TAY
@@ -5586,24 +5590,24 @@ ORG &11E3
 	TAX
 	LDA addr16BF,X
 	AND &91
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	LDA &16C0,X
 	BPL addr36DD
-	LDA &07
+	LDA screen_lo
 	ADC #&08
-	STA &07
+	STA screen_lo
 	LDA &16C0,X
 .addr36DD
 	AND &91
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	RTS
 .addr36E4
 	STA &D1
 	LDX #&00
 	LDY #&08
-	LDA (&20),Y
+	LDA (inf_pointer),Y
 	BMI addr36FE
 	LDA &03A5
 	SBC &D1
@@ -5647,9 +5651,9 @@ ORG &11E3
 	ASL A
 	TAY
 	LDA addr1695,Y
-	STA &20
+	STA inf_pointer_lo
 	LDA addr1695+1,Y
-	STA &21
+	STA inf_pointer_hi
 	RTS
 .addr3740
 	JSR addr3821
@@ -5691,13 +5695,13 @@ ORG &11E3
 	TAY
 	LDA &55FF,Y
 	BEQ addr3776
-	STA &1F
+	STA hull_pointer_hi
 	LDA &55FE,Y
-	STA &1E
+	STA hull_pointer_lo
 	CPY #&04
 	BEQ addr37C1
 	LDY #&05
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	STA &06
 	LDA &03B0
 	SEC
@@ -5707,10 +5711,10 @@ ORG &11E3
 	SBC #&00
 	STA &68
 	LDA &67
-	SBC &20
+	SBC inf_pointer_lo
 	TAY
 	LDA &68
-	SBC &21
+	SBC inf_pointer_hi
 	BCC addr3777
 	BNE addr37B7
 	CPY #&25
@@ -5722,10 +5726,10 @@ ORG &11E3
 	STA &03B1
 .addr37C1
 	LDY #&0E
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	STA &69
 	LDY #&13
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	AND #&07
 	STA &65
 	LDA &D1
@@ -5749,7 +5753,7 @@ ORG &11E3
 	LDY #&24
 .addr37F2
 	LDA &0046,Y
-	STA (&20),Y
+	STA (inf_pointer),Y
 	DEY
 	BPL addr37F2
 	SEC
@@ -5771,7 +5775,7 @@ ORG &11E3
 	RTS
 .addr3813
 	LDA #&20
-	STA &30
+	STA ecm_on
 	ASL A
 	JSR addr43F3
 .addr381B
@@ -5783,7 +5787,7 @@ ORG &11E3
 	LDX #&35
 .addr3825
 	LDY #&38
-	STA &07
+	STA screen_lo
 	STX &1C
 	STY &1D
 	LDA #&7D
@@ -5799,13 +5803,13 @@ ORG &11E3
 	STA &D1
 	LDA #&31
 	SBC &D1
-	STA &07
+	STA screen_lo
 	LDA #&7E
-	STA &08
+	STA screen_hi
 	TYA
 	LDY #&05
 .addr3850
-	STA (&07),Y
+	STA (screen),Y
 	DEY
 	BNE addr3850
 	RTS
@@ -6127,17 +6131,17 @@ ORG &11E3
 	LDX &40
 	LDA #&00
 .addr3A99
-	STX &22
-	STA &23
+	STX vertices_ptr_lo
+	STA vertices_ptr_hi
 	LDA &40
 	JSR addr280D
 	STA &9C
 	LDA &1B
 	STA &9B
 	LDY #&BF
-	LDA &28
+	LDA sunx
 	STA &26
-	LDA &29
+	LDA sunx1
 	STA &27
 .addr3AB2
 	CPY &8F
@@ -6149,7 +6153,7 @@ ORG &11E3
 	DEY
 	BNE addr3AB2
 .addr3AC1
-	LDA &22
+	LDA vertices_ptr_lo
 	JSR addr280D
 	STA &D1
 	LDA &9B
@@ -6172,9 +6176,9 @@ ORG &11E3
 	LDX &0E00,Y
 	STA &0E00,Y
 	BEQ addr3B3A
-	LDA &28
+	LDA sunx
 	STA &26
-	LDA &29
+	LDA sunx1
 	STA &27
 	TXA
 	JSR addr3C4F
@@ -6204,11 +6208,11 @@ ORG &11E3
 .addr3B2A
 	DEY
 	BEQ addr3B6C
-	LDA &23
+	LDA vertices_ptr_hi
 	BNE addr3B4E
-	DEC &22
+	DEC vertices_ptr_lo
 	BNE addr3AC1
-	DEC &23
+	DEC vertices_ptr_hi
 .addr3B37
 	JMP addr3AC1
 .addr3B3A
@@ -6222,15 +6226,15 @@ ORG &11E3
 	STA &0E00,Y
 	BEQ addr3B2A
 .addr3B4E
-	LDX &22
+	LDX vertices_ptr_lo
 	INX
-	STX &22
+	STX vertices_ptr_lo
 	CPX &40
 	BCC addr3B37
 	BEQ addr3B37
-	LDA &28
+	LDA sunx
 	STA &26
-	LDA &29
+	LDA sunx1
 	STA &27
 .addr3B61
 	LDA &0E00,Y
@@ -6242,9 +6246,9 @@ ORG &11E3
 .addr3B6C
 	CLC
 	LDA &D2
-	STA &28
+	STA sunx
 	LDA &D3
-	STA &29
+	STA sunx1
 .addr3B75
 	RTS
 .addr3B76
@@ -6356,9 +6360,9 @@ ORG &11E3
 .addr3C30
 	LDA &0E00
 	BMI addr3C2F
-	LDA &28
+	LDA sunx
 	STA &26
-	LDA &29
+	LDA sunx1
 	STA &27
 	LDY #&BF
 .addr3C3F
@@ -6586,11 +6590,11 @@ ORG &11E3
 	ASL A
 	TAY
 	LDA addr1695,Y
-	STA &07
+	STA screen_lo
 	LDA addr1695+1,Y
-	STA &08
+	STA screen_hi
 	LDY #&20
-	LDA (&07),Y
+	LDA (screen),Y
 	BPL addr3DA3
 	AND #&7F
 	LSR A
@@ -6600,11 +6604,11 @@ ORG &11E3
 	SBC #&01
 	ASL A
 	ORA #&80
-	STA (&07),Y
+	STA (screen),Y
 	BNE addr3DA3
 .addr3DD2
 	LDA #&00
-	STA (&07),Y
+	STA (screen),Y
 	BEQ addr3DA3
 .addr3DD8
 	STX &96
@@ -6634,13 +6638,13 @@ ORG &11E3
 	DEC &031E,X
 	LDX &96
 	LDY #&05
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	LDY #&21
 	CLC
-	ADC (&20),Y
+	ADC (inf_pointer),Y
 	STA &1B
 	INY
-	LDA (&20),Y
+	LDA (inf_pointer),Y
 	ADC #&00
 	STA &1C
 .addr3E1F
@@ -6653,11 +6657,11 @@ ORG &11E3
 	ASL A
 	TAY
 	LDA &55FE,Y
-	STA &07
+	STA screen_lo
 	LDA &55FF,Y
-	STA &08
+	STA screen_hi
 	LDY #&05
-	LDA (&07),Y
+	LDA (screen),Y
 	STA &D1
 	LDA &1B
 	SEC
@@ -6670,35 +6674,35 @@ ORG &11E3
 	ASL A
 	TAY
 	LDA addr1695,Y
-	STA &07
+	STA screen_lo
 	LDA addr1695+1,Y
-	STA &08
+	STA screen_hi
 	LDY #&24
-	LDA (&07),Y
-	STA (&20),Y
+	LDA (screen),Y
+	STA (inf_pointer),Y
 	DEY
-	LDA (&07),Y
-	STA (&20),Y
+	LDA (screen),Y
+	STA (inf_pointer),Y
 	DEY
-	LDA (&07),Y
+	LDA (screen),Y
 	STA &41
 	LDA &1C
-	STA (&20),Y
+	STA (inf_pointer),Y
 	DEY
-	LDA (&07),Y
+	LDA (screen),Y
 	STA &40
 	LDA &1B
-	STA (&20),Y
+	STA (inf_pointer),Y
 	DEY
 .addr3E75
-	LDA (&07),Y
-	STA (&20),Y
+	LDA (screen),Y
+	STA (inf_pointer),Y
 	DEY
 	BPL addr3E75
-	LDA &07
-	STA &20
-	LDA &08
-	STA &21
+	LDA screen_lo
+	STA inf_pointer_lo
+	LDA screen_hi
+	STA inf_pointer_hi
 	LDY &D1
 .addr3E86
 	DEY
@@ -6738,7 +6742,7 @@ ORG &11E3
 	JSR addr4296
 	LDX #&08
 .addr3ED3
-	STA &2A,X
+	STA beta,X
 	DEX
 	BPL addr3ED3
 	TXA
@@ -6759,14 +6763,14 @@ ORG &11E3
 	STA &034D
 	ASL A
 	STA &8A
-	STA &2F
+	STA hyperspace_countdown_hi
 	LDA #&03
 	STA &7D
 	LDA &0320
 	BEQ addr3F09
 	JSR addr3821
 .addr3F09
-	LDA &30
+	LDA ecm_on
 	BEQ addr3F10
 	JSR addr43A3
 .addr3F10
@@ -6834,17 +6838,17 @@ ORG &11E3
 .addr3F85
 	CLC
 .addr3F86
-	LDA &00
+	LDA rand0
 	ROL A
 	TAX
-	ADC &02
-	STA &00
-	STX &02
-	LDA &01
+	ADC rand2
+	STA rand0
+	STX rand2
+	LDA rand1
 	TAX
-	ADC &03
-	STA &01
-	STX &03
+	ADC rand3
+	STA rand1
+	STX rand3
 	RTS
 .addr3F9A
 	JSR addr3F86
@@ -7074,7 +7078,7 @@ ORG &11E3
 	LDA &87
 	AND #&C0
 	BEQ addr416C
-	LDA &2F
+	LDA hyperspace_countdown_hi
 	BNE addr416C
 	LDA &06
 	CMP #&36
@@ -7085,18 +7089,18 @@ ORG &11E3
 .addr4169
 	JSR addr2E38
 .addr416C
-	LDA &2F
+	LDA hyperspace_countdown_hi
 	BEQ addr418A
-	DEC &2E
+	DEC hyperspace_countdown_lo
 	BNE addr418A
-	LDX &2F
+	LDX hyperspace_countdown_hi
 	DEX
 	JSR addr30AC
 	LDA #&05
-	STA &2E
-	LDX &2F
+	STA hyperspace_countdown_lo
+	LDX hyperspace_countdown_hi
 	JSR addr30AC
-	DEC &2F
+	DEC hyperspace_countdown_hi
 	BNE addr418A
 	JMP addr3254
 .addr418A
@@ -7111,8 +7115,8 @@ ORG &11E3
 	LDA #&80
 	STA &72
 	LDA #&01
-	STA &2C
-	INC &2D
+	STA text_cursor_x
+	INC text_cursor_y
 	JMP addr2B3B
 .addr41A6
 	LDA &0372
@@ -7147,8 +7151,8 @@ ORG &11E3
 	JSR addr54EB
 	JSR addr35B5
 	LDA #&0C
-	STA &2D
-	STA &2C
+	STA text_cursor_y
+	STA text_cursor_x
 	LDA #&92
 	JSR addr342D
 .addr41E9
@@ -7185,7 +7189,7 @@ ORG &11E3
 	JSR addr3F86
 	AND #&80
 	LDY #&1F
-	STA (&20),Y
+	STA (inf_pointer),Y
 	LDA &0315
 	BEQ addr41E9
 	JSR addr44A4
@@ -7248,13 +7252,13 @@ ORG &11E3
 	BPL addr429A
 	RTS
 .addr42A1
-	STX &08
+	STX screen_hi
 .addr42A3
 	LDA #&00
-	STA &07
+	STA screen_lo
 	TAY
 .addr42A8
-	STA (&07),Y
+	STA (screen),Y
 	DEY
 	BNE addr42A8
 	RTS
@@ -7387,7 +7391,7 @@ ORG &11E3
 	BNE addr43F3
 .addr43A3
 	LDA #&00
-	STA &30
+	STA ecm_on
 	STA &0340
 	JSR addr381B
 	LDA #&48
@@ -7681,9 +7685,9 @@ ORG &11E3
 	LDX #&00
 	STX &72
 	LDY #&09
-	STY &2C
+	STY text_cursor_x
 	LDY #&16
-	STY &2D
+	STY text_cursor_y
 	CPX &034A
 	BNE addr45B5
 	STY &034A
@@ -8077,15 +8081,15 @@ ORG &11E3
 	STA &65
 	LDA #&00
 	LDY #&1C
-	STA (&20),Y
+	STA (inf_pointer),Y
 	LDY #&1E
-	STA (&20),Y
+	STA (inf_pointer),Y
 	JSR addr48DE
 	LDY #&01
 	LDA #&12
 	STA (&67),Y
 	LDY #&07
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	LDY #&02
 	STA (&67),Y
 .addr48C1
@@ -8129,7 +8133,7 @@ ORG &11E3
 	SBC &4D
 	BCS addr48CF
 	LDY #&06
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	TAX
 	LDA #&FF
 	STA &0100,X
@@ -8154,7 +8158,7 @@ ORG &11E3
 	BPL addr4940
 .addr492F
 	LDY #&0D
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	CMP &4D
 	BCS addr4940
 	LDA #&20
@@ -8198,7 +8202,7 @@ ORG &11E3
 	LDA &65
 	AND #&20
 	BEQ addr4991
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	LSR A
 	LSR A
 	TAX
@@ -8212,11 +8216,11 @@ ORG &11E3
 .addr498E
 	JMP addr4B04
 .addr4991
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	BEQ addr498E
 	STA &97
 	LDY #&12
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	TAX
 	LDA &79
 	TAY
@@ -8259,17 +8263,17 @@ ORG &11E3
 	LDA &3F
 	STA &7A
 	LDY #&04
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	CLC
-	ADC &1E
-	STA &22
+	ADC hull_pointer_lo
+	STA vertices_ptr_lo
 	LDY #&11
-	LDA (&1E),Y
-	ADC &1F
-	STA &23
+	LDA (hull_pointer),Y
+	ADC hull_pointer_hi
+	STA vertices_ptr_hi
 	LDY #&00
 .addr49F8
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &3B
 	AND #&1F
 	CMP &96
@@ -8291,13 +8295,13 @@ ORG &11E3
 	ASL A
 	STA &3F
 	INY
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &3A
 	INY
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &3C
 	INY
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &3E
 	LDX &86
 	CPX #&04
@@ -8442,35 +8446,35 @@ ORG &11E3
 	STY &17
 	STX &18
 	LDY #&08
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	STA &97
-	LDA &1E
+	LDA hull_pointer_lo
 	CLC
 	ADC #&14
-	STA &22
-	LDA &1F
+	STA vertices_ptr_lo
+	LDA hull_pointer_hi
 	ADC #&00
-	STA &23
+	STA vertices_ptr_hi
 	LDY #&00
 	STY &93
 .addr4B4B
 	STY &86
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &34
 	INY
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &36
 	INY
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &38
 	INY
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &D1
 	AND #&1F
 	CMP &96
 	BCC addr4B94
 	INY
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &1B
 	AND #&0F
 	TAX
@@ -8485,7 +8489,7 @@ ORG &11E3
 	LDA &D2,X
 	BNE addr4B97
 	INY
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &1B
 	AND #&0F
 	TAX
@@ -8741,7 +8745,7 @@ ORG &11E3
 	ORA &65
 	STA &65
 	LDY #&09
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	STA &97
 	LDY #&00
 	STY &80
@@ -8753,7 +8757,7 @@ ORG &11E3
 	AND #&BF
 	STA &65
 	LDY #&06
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	TAY
 	LDX &0100,Y
 	STX &34
@@ -8796,23 +8800,23 @@ ORG &11E3
 .addr4DA5
 	LDY #&03
 	CLC
-	LDA (&1E),Y
-	ADC &1E
-	STA &22
+	LDA (hull_pointer),Y
+	ADC hull_pointer_lo
+	STA vertices_ptr_lo
 	LDY #&10
-	LDA (&1E),Y
-	ADC &1F
-	STA &23
+	LDA (hull_pointer),Y
+	ADC hull_pointer_hi
+	STA vertices_ptr_hi
 	LDY #&05
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 	STA &06
 	LDY &86
 .addr4DBE
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	CMP &96
 	BCC addr4DDC
 	INY
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	INY
 	STA &1B
 	AND #&0F
@@ -8830,10 +8834,10 @@ ORG &11E3
 .addr4DDC
 	JMP addr4F5B
 .addr4DDF
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	TAX
 	INY
-	LDA (&22),Y
+	LDA (vertices_ptr),Y
 	STA &81
 	LDA &0101,X
 	STA &35
@@ -9050,11 +9054,11 @@ ORG &11E3
 	CPY &97
 	BCS addr4F72
 	LDY #&00
-	LDA &22
+	LDA vertices_ptr_lo
 	ADC #&04
-	STA &22
+	STA vertices_ptr_lo
 	BCC addr4F6F
-	INC &23
+	INC vertices_ptr_hi
 .addr4F6F
 	JMP addr4DBE
 .addr4F72
@@ -9312,9 +9316,9 @@ ORG &11E3
 	LDA #&00
 .addr510D
 	LDY #&0F
-	CMP (&1E),Y
+	CMP (hull_pointer),Y
 	BCC addr5115
-	LDA (&1E),Y
+	LDA (hull_pointer),Y
 .addr5115
 	STA &61
 	LDA #&00
@@ -9337,7 +9341,7 @@ ORG &11E3
 	STA &1B
 	LDA &1D
 	STA &9D
-	LDX &2B
+	LDX beta1
 	JSR addr2877
 	STA &1D
 	LDA &9E
@@ -9520,7 +9524,7 @@ ORG &11E3
 .addr52A0
 	RTS
 .addr52A1
-	LDA &8D
+	LDA shiptype
 	STA &81
 	LDX &48,Y
 	STX &82
@@ -9543,7 +9547,7 @@ ORG &11E3
 	STA &0047,Y
 	STX &46,Y
 	STX &1B
-	LDA &2A
+	LDA beta
 	STA &81
 	LDX &48,Y
 	STX &82
@@ -9601,7 +9605,7 @@ ORG &11E3
 	TYA
 	RTS
 .addr533D
-	LDA &8D
+	LDA shiptype
 	EOR #&80
 	STA &81
 	LDA &46
@@ -9618,7 +9622,7 @@ ORG &11E3
 	LDA &42
 	STA &9D
 	STA &1C
-	LDA &2A
+	LDA beta
 	STA &81
 	LDA &43
 	STA &9E
@@ -9682,7 +9686,7 @@ ORG &11E3
 .addr53DB
 	EOR &D1
 	STA &4B
-	LDA &8D
+	LDA shiptype
 	STA &81
 	LDA &49
 	STA &1B
@@ -9812,16 +9816,16 @@ ORG &11E3
 	INX
 	CPX #&78
 	BNE addr54DC
-	LDX &2F
+	LDX hyperspace_countdown_hi
 	BEQ addr54EB
 	JSR addr30AC
 .addr54EB
 	LDY #&01
-	STY &2D
+	STY text_cursor_y
 	LDA &87
 	BNE addr5507
 	LDY #&0B
-	STY &2C
+	STY text_cursor_x
 	LDA &0345
 	ORA #&60
 	JSR addr339A
@@ -9857,21 +9861,21 @@ ORG &11E3
 	RTS
 .addr5537
 	LDA #&14
-	STA &2D
+	STA text_cursor_y
 	LDA #&75
-	STA &08
+	STA screen_hi
 	LDA #&07
-	STA &07
+	STA screen_lo
 	JSR addr2B60
 	LDA #&00
 	JSR addr5550
-	INC &08
+	INC screen_hi
 	INY
-	STY &2C
+	STY text_cursor_x
 .addr5550
 	LDY #&E9
 .addr5552
-	STA (&07),Y
+	STA (screen),Y
 	DEY
 	BNE addr5552
 .addr5557
@@ -9913,7 +9917,7 @@ ORG &11E3
 .addr5591
 	ADC #&23
 	EOR #&FF
-	STA &07
+	STA screen_lo
 	LDA &4A
 	LSR A
 	CLC
@@ -9922,7 +9926,7 @@ ORG &11E3
 	EOR #&FF
 	SEC
 .addr55A2
-	ADC &07
+	ADC screen_lo
 	BPL addr55B0
 	CMP #&C2
 	BCS addr55AC
@@ -9935,7 +9939,7 @@ ORG &11E3
 .addr55B2
 	STA &35
 	SEC
-	SBC &07
+	SBC screen_lo
 	PHP
 	PHA
 	JSR addr36A7
@@ -9951,11 +9955,11 @@ ORG &11E3
 	DEY
 	BPL addr55D1
 	LDY #&07
-	DEC &08
+	DEC screen_hi
 .addr55D1
 	LDA &34
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	DEX
 	BNE addr55CA
 .addr55DA
@@ -9965,17 +9969,17 @@ ORG &11E3
 	CPY #&08
 	BNE addr55E4
 	LDY #&00
-	INC &08
+	INC screen_hi
 .addr55E4
 	INY
 	CPY #&08
 	BNE addr55ED
 	LDY #&00
-	INC &08
+	INC screen_hi
 .addr55ED
 	LDA &34
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	INX
 	BNE addr55E4
 	RTS
