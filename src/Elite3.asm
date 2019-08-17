@@ -72,7 +72,7 @@ ORG &1900
 ; -----------------------------------------------------------------------------
 ; Start of code
 ; -----------------------------------------------------------------------------
-.codestart
+.startcode
 	JSR addr1B72
 	LDA #&90
 	LDX #&FF
@@ -279,29 +279,32 @@ ORG &1900
 	JMP &11E6                       ; Start the docked code
 
 .str_load_t_code
-	EUQS "L.T.CODE", &0D
+	EQUS "L.T.CODE", &0D
 .str_easteregg
 	EQUS "Does your mother know you do this?"
 
-	DEC &0D9A
-	DEC &0D94
+.addr0D7A
+	DEC &0D9A                       ; Sector
+	DEC &0D94                       ; Address MSB
 	JSR addr0D89
-	INC &0D9A
-	INC &0D94
+	INC &0D9A                       ; Sector
+	INC &0D94                       ; Address MSB
+.addr0D89
 	LDA #&7F
 	LDX #&92
 	LDY #&0D
 	JMP osword
-	BRK
-	BRK
-	...
-	BRK
-	BRK
-	...
-	...
-	BRK
-	ORA (&21,X)
-	BRK
+
+.osword7Fblock
+	EQUB &00                        ; Drive
+	EQUW &00000F00                  ; Address
+	EQUB &03                        ; Number of parameters
+	EQUB &53                        ; Command &53: Read data
+	EQUB &00                        ; Track
+	EQUB &01                        ; Sector
+	EQUB &21                        ; 256 bytes per sector, 1 sector in total
+	EQUB &00                        ; Result
+
 .addr1B72
 	LDA #&09
 	NOP
