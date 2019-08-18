@@ -12,13 +12,13 @@
 	EQUW &1900                      ; Area for missile lock
 	EQUB &56                        ; Edges data info offset lo
 	EQUB &BE                        ; Faces data info offset lo
-	EQUB &55                        ; Ship lines stack (4*maxlines+1)
-	EQUB &00                        ; Gun vertex*4
-	EQUB &2A                        ; Explosion count (4*n+6)
-	EQUB &42                        ; 11 Vertices (11*6)
-	EQUB &1A                        ; 
+	EQUB &55                        ; Ship lines stack = 21 (4*maxlines+1)
+	EQUB &00                        ; Gun vertex = 0 (vertex*4)
+	EQUB &2A                        ; Explosion count = 9 (4*n+6)
+	EQUB &42                        ; 11 Vertices (n*6)
+	EQUB &1A                        ; 26 Edges
 	EQUW &0000                      ; Bounty
-	EQUB &34                        ; Faces*4
+	EQUB &34                        ; 13 Faces (n*4)
 	EQUB &28                        ; Dot beyond distance
 	EQUB &FA                        ; Energy
 	EQUB &14                        ; Speed
@@ -43,8 +43,9 @@
 	EQUB &00, &18, &70, &7E, &BA, &CC
 
 ; -----------------------------------------------------------------------------
-; Edges and face data
+; Edges data
 ; -----------------------------------------------------------------------------
+.ship_python_edges
 	EQUB &1E, &32, &00, &20, &1F, &20, &00, &0C
 	EQUB &1F, &31, &00, &08, &1E, &10, &00, &04
 	EQUB &1D, &59, &08, &10, &1D, &51, &04, &08
@@ -58,6 +59,11 @@
 	EQUB &1D, &AC, &1C, &28, &1D, &CB, &18, &28
 	EQUB &1D, &98, &10, &14, &1D, &BA, &24, &28
 	EQUB &1D, &54, &04, &10, &1D, &76, &20, &24
+
+; -----------------------------------------------------------------------------
+; Faces data
+; -----------------------------------------------------------------------------
+.ship_python_faces
 	EQUB &9E, &1B, &28, &0B, &1E, &1B, &28, &0B
 	EQUB &DE, &1B, &28, &0B, &5E, &1B, &28, &0B
 	EQUB &9E, &13, &26, &00, &1E, &13, &26, &00
