@@ -3,11 +3,7 @@
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; -----------------------------------------------------------------------------
 
-
-
-ORG &0000
-
-.start
+.ship_constrictor_start
 
 ; -----------------------------------------------------------------------------
 ; Hull data header info
@@ -73,4 +69,4 @@ ORG &0000
 	EQUB &1F, &00, &35, &00, &1F, &2C, &4B, &00
 	EQUB &3F, &00, &00, &A0, &5F, &00, &1B, &00
 
-.end
+.ship_constrictor_end
