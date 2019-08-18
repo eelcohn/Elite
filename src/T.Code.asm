@@ -14,7 +14,11 @@ screen_hi                = &08                    ; Pointer to screen memory MSB
 crtc_register            = &FE00
 crtc_data                = &FE01
 systemvia_irb            = &FE40
+systemvia_orb            = &FE40
+systemvia_ddra           = &FE43
 systemvia_ier            = &FE4E
+systemvia_ira_nh         = &FE4F
+systemvia_ora_nh         = &FE4F
 
 osfile                   = &FFDD
 oswrch                   = &FFEE
@@ -23,6 +27,9 @@ osbyte                   = &FFF4
 oscli                    = &FFF7
 
 
+; tmp
+addr0A0C = &0A0C
+addr11D5 = &11D5
 
 ORG &11E3
 
@@ -41,7 +48,7 @@ ORG &11E3
 	JMP addr11D5
 
 .addr11EF
-	EQUW &11D5
+	EQUW addr11D5
 
 .addr11F1
 	LDX #&00
@@ -55,7 +62,7 @@ ORG &11E3
 ; -----------------------------------------------------------------------------
 ; 
 ; -----------------------------------------------------------------------------
-.decscramble
+.descramble
 	LDY #&00
 	STY screen_lo
 	LDX #&13
@@ -146,8 +153,11 @@ ORG &11E3
 	LDA #&38
 	STA &11F0
 	RTS
+.addr12B1
 	LDA #&D9
-	BIT &DCA9
+	EQUB &2C
+.addr12B4
+	LDA #&DC
 	CLC
 	ADC &0367
 	BNE &12CE
@@ -301,17 +311,22 @@ ORG &11E3
 	ADC &5565,X
 	JSR &12CE
 	JMP &1376
+.addr13A8
 	LDA #&00
-	BIT &20A9
+	EQUB &2C
+.addr13AB
+	LDA #&00
 	STA &1C83
 	LDA #&00
 	STA &1C88
 	RTS
+.addr13B6
 	LDA #&06
 	STA &2C
 	LDA #&FF
 	STA &1C84
 	RTS
+.addr13C0
 	LDA #&01
 	STA &2C
 	JMP &2537
@@ -321,19 +336,25 @@ ORG &11E3
 	LDA #&20
 	STA &1C83
 	RTS
+.addr13D2
 	LDA #&80
 	STA &72
 	LDA #&FF
-	BIT &00A9
+	EQUB &2C
+.addr13D9
+	LDA #&00
 	STA &1C85
 	RTS
 .addr13DF
 	LDA #&80
-	BIT &00A9
+	EQUB &2C
+.addr13E2
+	LDA #&00
 	STA &1C86
 	ASL A
 	STA &1C87
 	RTS
+.addr13EC
 	LDA &72
 	AND #&BF
 	STA &72
@@ -347,6 +368,7 @@ ORG &11E3
 .addr1405
 	LDA #&99
 	JMP &12CE
+.addr140A
 	JSR &1429
 	JSR &3736
 	AND #&03
@@ -386,8 +408,8 @@ ORG &11E3
 .addr1447
 	EQUW addr13A8                   ; &01 - Leave docked tokens Upper case
 	EQUW addr13AB                   ; &02 - Prepare to lower case but flag not set yet
-	EQUW addr13AC                   ; &03 - Planet name
-	EQUW addr13AC                   ; &04 - Commander name
+	EQUW &13AC                   ; &03 - Planet name
+	EQUW &13AC                   ; &04 - Commander name
 	EQUW addr13D9                   ; &05 - Back to Docked tokens
 	EQUW addr13D2                   ; &06 - switch back to flight tokens
 	EQUW addr1C8F                   ; &07 - Bell
@@ -1558,7 +1580,9 @@ ORG &11E3
 
 .addr1C8A
 	LDA #&0C
-	BIT &41A9
+	EQUB &2C
+.addr1C8D
+	LDA #&41
 .addr1C8F
 	STX &07
 	LDX #&FF
@@ -2806,8 +2830,11 @@ ORG &11E3
 	LDA #&01
 	JSR &2537
 	JSR &400F
+.addr24ED
 	LDA #&0A
-	BIT &06A9
+	EQUB &2C
+.addr24F0
+	LDA #&06
 	STA &2D
 	JMP &13C7
 .addr24F7
@@ -7855,7 +7882,7 @@ MAPCHAR &7D, &7D EOR &57
 MAPCHAR &7E, &7E EOR &57
 
 .tokens
-INCBIN "data/T.Code-tokens.bin"
+INCBIN "src/data/T.Code-tokens.bin"
 
 .addr55C0                               ; Table used for 5 choices
 	EQUB &10, &15, &1A, &1F, &9B, &A0, &2E, &A5   ; build offsets in steps in 5, called with indices &5B...&62 (tokens above 'Z')
@@ -7873,102 +7900,108 @@ INCBIN "data/T.Code-tokens.bin"
 	EQUB &49, &53, &00
 	EQUB &8E, &13, &34, &B3
 
+; -----------------------------------------------------------------------------
+; Ship data
+; -----------------------------------------------------------------------------
 
-.addr5600
-	EQUW &7F00                      ; Ship type 01: 
-	EQUW &0000                      ; Ship type 02: Space station
-	EQUW &0000                      ; Ship type 03: Esacape pod
-	EQUW &0000                      ; Ship type 04: 
+ship_none = &0000
+
+.tbl_ships
+	EQUW &7F00                      ; Ship type 01: Missile
+	EQUW ship_none                  ; Ship type 02: Space station
+	EQUW ship_none                  ; Ship type 03: Esacape pod
+	EQUW ship_none                  ; Ship type 04: Plate/Alloy
 	EQUW ship_cargo_cannister       ; Ship type 05: Cargo cannister
-	EQUW &0000                      ; Ship type 06: 
-	EQUW &0000                      ; Ship type 07: Asteroid
-	EQUW &0000                      ; Ship type 08: 
+	EQUW ship_none                  ; Ship type 06: Boulder
+	EQUW ship_none                  ; Ship type 07: Asteroid
+	EQUW ship_none                  ; Ship type 08: Splinter
 	EQUW ship_shuttle               ; Ship type 09: Shuttle
 	EQUW ship_transporter           ; Ship type 10: Transporter
 	EQUW ship_cobra_mk3             ; Ship type 11: Cobra Mk3
 	EQUW ship_python                ; Ship type 12: Python
-	EQUW &0000                      ; Ship type 13: 
-	EQUW &0000                      ; Ship type 14: 
-	EQUW &0000                      ; Ship type 15: 
+	EQUW ship_none                  ; Ship type 13: Anaconda/Boa ??
+	EQUW ship_none                  ; Ship type 14: Anaconda/Boa ??
+	EQUW ship_none                  ; Ship type 15: 
 	EQUW ship_viper                 ; Ship type 16: Viper
-	EQUW &0000                      ; Ship type 17: 
-	EQUW &0000                      ; Ship type 18: 
+	EQUW ship_none                  ; Ship type 17: Sidewinder
+	EQUW ship_none                  ; Ship type 18: 
 	EQUW ship_krait                 ; Ship type 19: Krait
-	EQUW &0000                      ; Ship type 20: Adder
-	EQUW &0000                      ; Ship type 21: 
-	EQUW &0000                      ; Ship type 22: 
-	EQUW &0000                      ; Ship type 23: 
-	EQUW &0000                      ; Ship type 24: 
-	EQUW &0000                      ; Ship type 25: Asp Mk2
-	EQUW &0000                      ; Ship type 26: Fer de Lance
-	EQUW &0000                      ; Ship type 27: 
-	EQUW &0000                      ; Ship type 28: 
-	EQUW &0000                      ; Ship type 29: Thargoid
-	EQUW &0000                      ; Ship type 30: Thargon
+	EQUW ship_none                  ; Ship type 20: Adder
+	EQUW ship_none                  ; Ship type 21: Mamba
+	EQUW ship_none                  ; Ship type 22: Krait
+	EQUW ship_none                  ; Ship type 23: Adder
+	EQUW ship_none                  ; Ship type 24: Gecko
+	EQUW ship_none                  ; Ship type 25: Asp MkII
+	EQUW ship_none                  ; Ship type 26: Fer de Lance ??
+	EQUW ship_none                  ; Ship type 27: Fer de Lance ??
+	EQUW ship_none                  ; Ship type 28: Moray
+	EQUW ship_none                  ; Ship type 29: Thargoid
+	EQUW ship_none                  ; Ship type 30: Thargon
 	EQUW ship_constrictor           ; Ship type 31: Constrictor
 
-.addr563E                               ; Hull NEWB bits are escpod, cop, inno, ?, pirate, angry, hunter, trader
-	EQUB %00000000                  ; Ship type 01: 
+.addr563E                               ; Hull NEWB bits are 7=escpod, 6=cop, 5=protected by spacestation, 4=docking, 3=pirate, 2=angry, 1=bountyhunter, 0=trader
+	EQUB %00000000                  ; Ship type 01: Missile
 	EQUB %00000000                  ; Ship type 02: Space station
 	EQUB %00000000                  ; Ship type 03: Escape pod
-	EQUB %00000000                  ; Ship type 04: 
+	EQUB %00000000                  ; Ship type 04: Plate/alloy
 	EQUB %00000000                  ; Ship type 05: Cargo cannister
-	EQUB %00000000                  ; Ship type 06: 
+	EQUB %00000000                  ; Ship type 06: Boulder
 	EQUB %00000000                  ; Ship type 07: Asteroid
-	EQUB %00000000                  ; Ship type 08: 
+	EQUB %00000000                  ; Ship type 08: Splinter
 	EQUB %00100001                  ; Ship type 09: Shuttle
 	EQUB %01100001                  ; Ship type 10: Transporter
-	EQUB %10100000                  ; Ship type 11: Cobra Mk3
+	EQUB %10100000                  ; Ship type 11: Cobra MkIII
 	EQUB %10100000                  ; Ship type 12: Python
-	EQUB %00000000                  ; Ship type 13: 
-	EQUB %00000000                  ; Ship type 14: 
+	EQUB %00000000                  ; Ship type 13: Anaconda/Boa ??
+	EQUB %00000000                  ; Ship type 14: Anaconda/Boa ??
 	EQUB %00000000                  ; Ship type 15: 
 	EQUB %11000010                  ; Ship type 16: Viper
-	EQUB %00000000                  ; Ship type 17: 
-	EQUB %00000000                  ; Ship type 18: 
+	EQUB %00000000                  ; Ship type 17: Sidewinder
+	EQUB %00000000                  ; Ship type 18: Mamba
 	EQUB %10001100                  ; Ship type 19: Krait
 	EQUB %00000000                  ; Ship type 20: Adder
-	EQUB %00000000                  ; Ship type 21: 
-	EQUB %00000000                  ; Ship type 22: 
-	EQUB %00000000                  ; Ship type 23: 
+	EQUB %00000000                  ; Ship type 21: Gecko
+	EQUB %00000000                  ; Ship type 22: Cobra MkI ??
+	EQUB %00000000                  ; Ship type 23: Worm
 	EQUB %00000000                  ; Ship type 24: 
-	EQUB %00000000                  ; Ship type 25: Asp Mk2
-	EQUB %00000000                  ; Ship type 26: Fer de Lance
-	EQUB %00000000                  ; Ship type 27: 
-	EQUB %00000000                  ; Ship type 28: 
+	EQUB %00000000                  ; Ship type 25: Asp MkII
+	EQUB %00000000                  ; Ship type 26: Fer de Lance ??
+	EQUB %00000000                  ; Ship type 27: Fer de Lance ??
+	EQUB %00000000                  ; Ship type 28: Moray
 	EQUB %00000000                  ; Ship type 29: Thargoid
 	EQUB %00000000                  ; Ship type 30: Thargon
 	EQUB %10001100                  ; Ship type 31: Constrictor
 
 .ship_cargo_cannister
-INCLUDE "ships/cargo_cannister.asm"
+INCLUDE "src/ships/cargo_cannister.asm"
 
 .ship_shuttle
-INCLUDE "ships/shuttle.asm"
+INCLUDE "src/ships/shuttle.asm"
 
 .ship_transporter
-INCLUDE "ships/transporter.asm"
+INCLUDE "src/ships/transporter.asm"
 
 .ship_cobra_mk3
-INCLUDE "ship/cobra_mk3.asm"
+INCLUDE "src/ships/cobra_mk3.asm"
 
 .ship_python
-INCLUDE "ships/python.asm"
+INCLUDE "src/ships/python.asm"
 
 .ship_viper
-INCLUDE "ships/viper.asm"
+INCLUDE "src/ships/viper.asm"
 
 .ship_krait
-INCLUDE "ships/krait.asm"
+INCLUDE "src/ships/krait.asm"
 
 .ship_constrictor
-INCLUDE "ships/constrictor.asm"
+INCLUDE "src/ships/constrictor.asm"
 
 .addr5F55
-	FOR n, *, (&5600 - *)
+	FOR n, *, (&6000 - P%)
 		EQUB &00
 	NEXT
 
 .end
 
 SAVE "bin/T.Code", start, end, startcode, start
+

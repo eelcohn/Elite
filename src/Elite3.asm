@@ -1,6 +1,7 @@
 ; -----------------------------------------------------------------------------
 ; Elite - Third stage loader
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
+; rewritten for BeebAsm by Eelco Huininga 2019
 ; Filename       : $.Elite3
 ; Load address   : 00001900
 ; Exec address   : 0000197B
@@ -616,26 +617,27 @@ ORG &1900
 	EQUS "*DIR E", &0D
 
 .img_scanner
-	INCBIN "data/scanner.bin"
+	INCBIN "src/data/scanner.bin"
 
 .bin_0400code
-	INCBIN "data/Elite3-0400code.bin"
+	INCBIN "src/data/Elite3-0400code.bin"
 
 .bin_unknown1
-	INCBIN "data/Elite3-unknown1.bin"
+	INCBIN "src/data/Elite3-unknown1.bin"
 
 .img_logo_elite
-	INCBIN "data/elite.bin"
+	INCBIN "src/data/elite.bin"
 
 .img_logo_acornsoft
-	INCBIN "data/acornsoft.bin"
+	INCBIN "src/data/acornsoft.bin"
 
 .img_logo_copyright
-	INCBIN "data/copyright.bin"
+	INCBIN "src/data/copyright.bin"
 
 .bin_unknown2
-	INCBIN "data/Elite3-unknown2.bin"
+	INCBIN "src/data/Elite3-unknown2.bin"
 
 .end
 
-SAVE "$.Elite3", start, end, startcode, start
+SAVE "bin/$.Elite3", start, end, startcode, start
+

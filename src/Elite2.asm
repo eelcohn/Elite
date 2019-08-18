@@ -1,6 +1,12 @@
-; ------------------------------------------------------------------------------
-; $.Elite2
-; ------------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
+; Elite - Second stage loader
+; written by David Braben and Ian Bell (c) Acornsoft 1984
+; rewritten for BeebAsm by Eelco Huininga 2019
+; Filename       : $.Elite3
+; Load address   : 00001900
+; Exec address   : 0000197B
+; Length         : 00001500
+; -----------------------------------------------------------------------------
 
 machinetype = &70
 
@@ -17,6 +23,7 @@ ORG &1900
 ; Start of code
 ; ------------------------------------------------------------------------------
 .start
+.startcode
 	BIT bytev+1                  ; OSBYTE indirect vector MSB
 .osbyte_lockloop
 	BPL osbyte_lockloop
@@ -211,13 +218,13 @@ ORG &1900
 .addr0174
 	LDX #&26               ; 38 characters to print per line
 	BIT machinetype 
-	BMI &1D67              ; Skip teletext characters when machinetype is Electron
+	BMI addr0187           ; Skip teletext characters when machinetype is Electron
 	LDA &76                ; Teletext graphics colour
 	JSR oswrch
 	LDA #&9A               ; Separated graphics
 	JSR oswrch
 	CLC
-	BCC &1D6C              ; Skip next instructions when machinetype is BBC
+	BCC addr018C              ; Skip next instructions when machinetype is BBC
 .addr0187
 	LDA #&20
 	JSR oswrch
@@ -238,14 +245,14 @@ ORG &1900
 	CPY #&FF
 	BEQ print_logos_exit
 	DEX
-	BNE &1D6C
+	BNE addr018C
 	BIT machinetype 
-	BPL &1D91
+	BPL addr01B1
 	LDA #&20
 	JSR oswrch
-.addr01b1
+.addr01B1
 	CLC
-	BCC &1D54              ; Always jump back to loop
+	BCC addr0174              ; Always jump back to loop
 .print_logos_exit
 	INC &76                ; Increase teletext graphics colour
 	RTS
@@ -260,16 +267,16 @@ ORG &1900
 	STA &75
 .printchars1
 	INC &74
-	BNE &1DA3
+	BNE printchars2
 	INC &75
 .printchars2
 	LDY #&00
 	LDA (&74),Y
 	CMP #&EA
-	BEQ &1DB1
+	BEQ printchars3
 	JSR oswrch
 	CLC
-	BCC &1D9D
+	BCC printchars1
 .printchars3
 	JMP (&0074)
 
@@ -277,31 +284,32 @@ ORG &1900
 ; Acornsoft logo in teletext graphics
 ; ------------------------------------------------------------------------------
 .acornsoft_logo
-	EQUB &91, &9A, &A0, &A0, &A0, &FC, &B4, &E0, &FC, &FC, &B0, &A0, &F8, &FC, &F4, &A0, &FC, &FC, &FC, &B0, &E8, &F4, &A0, &E8, &B4, &F8, &FC, &FC, &B0, &A0, &FE, &FF, &B4, &A0, &FC, &FC, &FC, &FC, &FC, &FC,
-	EQUB &91, 9A, A0, A0, FA, FF, B5, FF, A7, AB, FF, EA, BF, A3, EF, B5, FF, A3, EB, B5, EA, FF, B4, EA, B5, FF, B1, AB, A5, EA, FF, FF, FF, A0, FF, A3, A3, A3, FF, A3, 91, 9A, A0, E8, BF, EB, B5, FF, A0, A0 A0 EA B5 A0 EA B5          
- 6C60  FF FC FE A5 EA BF FF FA          
- 6C68  B5 AB FF FD B0 FF FF FF          
- 6C70  FF B5 FF FF FF A0 FF A0          
+	EQUB &91, &9A, &A0, &A0, &A0, &FC, &B4, &E0, &FC, &FC, &B0, &A0, &F8, &FC, &F4, &A0, &FC, &FC, &FC, &B0, &E8, &F4, &A0, &E8, &B4, &F8, &FC, &FC, &B0, &A0, &FE, &FF, &B4, &A0, &FC, &FC, &FC, &FC, &FC, &FC
+	EQUB &91, &9A, &A0, &A0, &FA, &FF, &B5, &FF, &A7, &AB, &FF, &EA, &BF, &A3, &EF, &B5, &FF, &A3, &EB, &B5, &EA, &FF, &B4, &EA, &B5, &FF, &B1, &AB, &A5, &EA, &FF, &FF, &FF, &A0, &FF, &A3, &A3, &A3, &FF, &A3
+	EQUB &91, &9A, &A0, &E8, &BF, &EB, &B5, &FF, &A0, &A0, &A0, &EA, &B5, &A0, &EA, &B5          
+; 6C60  FF FC FE A5 EA BF FF FA          
+; 6C68  B5 AB FF FD B0 FF FF FF          
+; 6C70  FF B5 FF FF FF A0 FF A0          
  
- 6C78  91 9A E0 FF FD FE B5 FF
- 6C80  B0 E0 FC EA F5 A0 FA B5
- 6C88  FF AB FD A0 EA B5 EB FF
- 6C90  B5 F0 A0 EB FF F3 F3 F3
- 6C98  F3 B1 FF A0 A0 A0 FF A0
+; 6C78  91 9A E0 FF FD FE B5 FF
+; 6C80  B0 E0 FC EA F5 A0 FA B5
+; 6C88  FF AB FD A0 EA B5 EB FF
+; 6C90  B5 F0 A0 EB FF F3 F3 F3
+; 6C98  F3 B1 FF A0 A0 A0 FF A0
  
- 6CA0  91 9A FE B7 A0 EA B5 AB
- 6CA8  FF FF A7 A2 EF FF BF A1
- 6CB0  FF A0 EB F5 EA B5 A0 EF
- 6CB8  B5 EF FF FF A5 EF FF FF
- 6CC0  FF A5 FF A0 A0 A0 FF A0
+; 6CA0  91 9A FE B7 A0 EA B5 AB
+; 6CA8  FF FF A7 A2 EF FF BF A1
+; 6CB0  FF A0 EB F5 EA B5 A0 EF
+; 6CB8  B5 EF FF FF A5 EF FF FF
+; 6CC0  FF A5 FF A0 A0 A0 FF A0
  
- 6CC8  91 9A A0 A0 A0 A0 A0 A0
- 6CD0  A0 A0 A0 A0 A0 A0 A0 A0
- 6CD8  A0 A0 A0 A0 A0 A0 A0 A0
- 6CE0  A0 A0 A0 A0 A0 A0 A2 A3
- 6CE8  A0 A0 A0 A0 A0 A0 A0 20
- 6CF0  92 9A A0 A0 A0 FC B4 E0
- 6CF8  FC FC B0 A0 F8 FC F4 A0
+; 6CC8  91 9A A0 A0 A0 A0 A0 A0
+; 6CD0  A0 A0 A0 A0 A0 A0 A0 A0
+; 6CD8  A0 A0 A0 A0 A0 A0 A0 A0
+; 6CE0  A0 A0 A0 A0 A0 A0 A2 A3
+; 6CE8  A0 A0 A0 A0 A0 A0 A0 20
+; 6CF0  92 9A A0 A0 A0 FC B4 E0
+; 6CF8  FC FC B0 A0 F8 FC F4 A0
 
 ; ------------------------------------------------------------------------------
 ; Character definitions for Acornsoft logo for Electron
@@ -314,7 +322,7 @@ ORG &1900
 
 .nextstage_src
 
-ORG &0400
+;ORG &0400
 
 .nextstage
 	LDX #str_load_elite3 MOD 256 ; *Load Elite3
@@ -346,4 +354,5 @@ ORG &0400
 
 .end
 
-SAVE "$.Elite2", start, end
+SAVE "bin/$.Elite2", start, end, startcode, start
+
