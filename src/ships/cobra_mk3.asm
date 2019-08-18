@@ -12,7 +12,7 @@
 	EQUW &2341                      ; Area for missile lock
 	EQUB &BC                        ; Edges data info offset lo
 	EQUB &54                        ; Faces data info offset lo
-	EQUB &99                        ; Ship lines stack  = 38 (4*maxlines+1)
+	EQUB &99                        ; Ship lines stack = 38 (4*maxlines+1)
 	EQUB &54                        ; Gun vertex = 21 (vertex*4)
 	EQUB &2A                        ; Explosion count = 9 (4*n+6)
 	EQUB &A8                        ; 28 Vertices (n*6)
