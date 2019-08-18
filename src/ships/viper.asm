@@ -12,13 +12,13 @@
 	EQUW &15F9                      ; Area for missile lock
 	EQUB &6E                        ; Edges data info offset lo
 	EQUB &BE                        ; Faces data info offset lo
-	EQUB &4D                        ; Ship lines stack (4*maxlines+1)
-	EQUB &00                        ; Gun vertex*4
-	EQUB &2A                        ; Explosion count (4*n+6)
-	EQUB &5A                        ; 15 Vertices (15*6)
-	EQUB &14                        ; 
+	EQUB &4D                        ; Ship lines stack = 19 (4*maxlines+1)
+	EQUB &00                        ; Gun vertex = 0 (vertex*4)
+	EQUB &2A                        ; Explosion count = 9 (4*n+6)
+	EQUB &5A                        ; 15 Vertices (n*6)
+	EQUB &14                        ; 20 Edges
 	EQUW &0000                      ; Bounty
-	EQUB &1C                        ; Faces*4
+	EQUB &1C                        ; 7 Faces (n*4)
 	EQUB &17                        ; Dot beyond distance
 	EQUB &64                        ; Energy
 	EQUB &20                        ; Speed
@@ -47,8 +47,9 @@
 	EQUB &08, &08, &18, &72, &66, &66
 
 ; -----------------------------------------------------------------------------
-; Edges and face data
+; Edges data
 ; -----------------------------------------------------------------------------
+.ship_viper_edges
 	EQUB &1F, &42, &00, &0C, &1E, &21, &00, &04
 	EQUB &1E, &43, &00, &08, &1F, &31, &00, &10
 	EQUB &1E, &20, &04, &1C, &1E, &10, &04, &20
@@ -59,6 +60,11 @@
 	EQUB &13, &66, &24, &30, &12, &66, &24, &34
 	EQUB &13, &66, &28, &2C, &12, &66, &28, &38
 	EQUB &10, &66, &2C, &38, &10, &66, &30, &34
+
+; -----------------------------------------------------------------------------
+; Faces data
+; -----------------------------------------------------------------------------
+.ship_viper_faces
 	EQUB &1F, &00, &20, &00, &9F, &16, &21, &0B
 	EQUB &1F, &16, &21, &0B, &DF, &16, &21, &0B
 	EQUB &5F, &16, &21, &0B, &5F, &00, &20, &00
