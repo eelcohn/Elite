@@ -383,106 +383,46 @@ ORG &11E3
 	RTS
 
 .addr1447
-1447  A8                 .    TAY
-1448  13                 .    ...
-1449  AB                 .    ...
-144A  13                 .    ...
-144B  AC 31 AC           .1.  LDY &AC31
-144E  31 D9              1.   AND (&D9),Y
-1450  13                 .    ...
-1451  D2                 .    ...
-1452  13                 .    ...
-1453  8F                 .    ...
-1454  1C                 .    ...
-1455  B6 13              ..   LDX &13,Y
-1457  C0 13              ..   CPY #&13
-1459  8F                 .    ...
-145A  1C                 .    ...
-145B  F5 18              ..   SBC &18,X
-145D  8F                 .    ...
-145E  1C                 .    ...
-145F  C7                 .    ...
-1460  13                 .    ...
-1461  DF                 .    ...
-1462  13                 .    ...
-1463  E2                 .    ...
-1464  13                 .    ...
-1465  8D 1C EC           ...  STA &EC1C
-1468  13                 .    ...
-1469  0A                 .    ASL A
-146A  14                 .    ...
-146B  29 14              ).   AND #&14
-146D  8F                 .    ...
-146E  1C                 .    ...
-146F  A3                 .    ...
-1470  25 D7              %.   AND &D7
-1472  24 ED              $.   BIT &ED
-1474  24 0E              $.   BIT &0E
-1476  25 CD              %.   AND &CD
-1478  24 CC              $.   BIT &CC
-147A  39 B1 12           9..  AND &12B1,Y
-147D  B4 12              ..   LDY &12
-147F  F0 24              .$   BEQ &14A5
-1481  8F                 .    ...
-1482  1C                 .    ...
-1483  8F                 .    ...
-1484  1C                 .    ...
-1485  8F                 .    ...
-1486  1C                 .    ...
-1487  0C                 .    ...
-1488  0A                 .    ASL A
-1489  41 42              AB   EOR (&42,X)
-148B  4F                 O    ...
-148C  55 53              US   EOR &53,X
-148E  45 49              EI   EOR &49
-1490  54                 T    ...
-1491  49 4C              IL   EOR #&4C
-1493  45 54              ET   EOR &54
-1495  53                 S    ...
-1496  54                 T    ...
-1497  4F                 O    ...
-1498  4E 4C 4F           NLO  LSR &4F4C
-149B  4E 55 54           NUT  LSR &5455
-149E  48                 H    PHA
-149F  4E 4F 41           NOA  LSR &414F
-14A2  4C 4C 45           LLE  JMP &454C
-14A5  58                 X    CLI
-14A6  45 47              EG   EOR &47
-14A8  45 5A              EZ   EOR &5A
-14AA  41 43              AC   EOR (&43,X)
-14AC  45 42              EB   EOR &42
-14AE  49 53              IS   EOR #&53
-14B0  4F                 O    ...
-14B1  55 53              US   EOR &53,X
-14B3  45 53              ES   EOR &53
-14B5  41 52              AR   EOR (&52,X)
-14B7  4D 41 49           MAI  EOR &4941
-14BA  4E 44 49           NDI  LSR &4944
-14BD  52                 R    ...
-14BE  45 41              EA   EOR &41
-14C0  3F                 ?    ...
-14C1  45 52              ER   EOR &52
-14C3  41 54              AT   EOR (&54,X)
-14C5  45 4E              EN   EOR &4E
-14C7  42                 B    ...
-14C8  45 52              ER   EOR &52
-14CA  41 4C              AL   EOR (&4C,X)
-14CC  41 56              AV   EOR (&56,X)
-14CE  45 54              ET   EOR &54
-14D0  49 45              IE   EOR #&45
-14D2  44                 D    ...
-14D3  4F                 O    ...
-14D4  52                 R    ...
-14D5  51 55              QU   EOR (&55),Y
-14D7  41 4E              AN   EOR (&4E,X)
-14D9  54                 T    ...
-14DA  45 49              EI   EOR &49
-14DC  53                 S    ...
-14DD  52                 R    ...
-14DE  49 4F              IO   EOR #&4F
-14E0  4E A5 65           N.e  LSR &65A5
+	EQUW addr13A8                   ; &01 - Leave docked tokens Upper case
+	EQUW addr13AB                   ; &02 - Prepare to lower case but flag not set yet
+	EQUW addr13AC                   ; &03 - Planet name
+	EQUW addr13AC                   ; &04 - Commander name
+	EQUW addr13D9                   ; &05 - Back to Docked tokens
+	EQUW addr13D2                   ; &06 - switch back to flight tokens
+	EQUW addr1C8F                   ; &07 - Bell
+	EQUW addr13B6                   ; &08 - Indent, set flag to use Upper mask
+	EQUW addr13C0                   ; &09 - Start new text box
+	EQUW addr1C8F                   ; &0A - down to next row
+	EQUW addr18F5                   ; &0B - draw horizontal line at Y = #19
+	EQUW addr1C8F                   ; &0C - start next row
+	EQUW addr13C7                   ; &0D - all Docked tokens Lower case
+	EQUW addr13DF                   ; &0E - Store Acc in flushed buffer
+	EQUW addr13E2                   ; &0F - Clear buffer, print to screen from now on
+	EQUW addr1C8D                   ; &10 - DTW7 into TT26 print character
+	EQUW addr13EC                   ; &11 - Current planet name-ian current planet-ian = small token 17
+	EQUW addr140A                   ; &12 - Random name 8 chars
+	EQUW addr1429                   ; &13 - Upper case for one letter
+	EQUW addr1C8F                   ; &14 - Print character
+	EQUW addr25A3                   ; &15 - Clear bottom screen lines
+	EQUW addr24D7                   ; &16 - wait for key press
+	EQUW addr24ED                   ; &17 - set YC = #10 docked tokens lower case
+	EQUW addr250E                   ; &18 - wait for key presses
+	EQUW addr24CD                   ; &19 - Briefing Start (incoming message etc.)
+	EQUW addr39CC                   ; &1A - Receive string, update Y flag
+	EQUW addr12B1                   ; &1B - add galaxy to token #&D9 Curruthers
+	EQUW addr12B4                   ; &1C - add galaxy to token #&DC was last seen at Reesdice/jumped to this galaxy
+	EQUW addr24F0                   ; &1D - set YC = #6 Docked tokens lower case
+	EQUW addr1C8F                   ; &1E - Print character
+	EQUW addr1C8F                   ; &1F - Print character
+	EQUW addr1C8F                   ; &20 - Print space
+
+	EQUW addr0A0C                   ; 
+
+	EQUS "ABOUSEITILETSTONLONUTHNO" ; 12 digrams for docked random names
+	EQUS "ALLEXEGEZACEBISOUSESARMAINDIREA?ERATENBERALAVETIEDORQUANTEISRION" ; 32 diagrams
 
 ; -----------------------------------------------------------------------------
+; 
 ; -----------------------------------------------------------------------------
 .addr14E1
 	LDA &65
@@ -802,37 +742,28 @@ ORG &11E3
 	STA &1D
 	TYA
 	RTS
+
 .addr1741
-1741  00                 .    BRK
-1742  09 25              .%   ORA #&25
-1744  09 4A              .J   ORA #&4A
-1746  09 6F              .o   ORA #&6F
-1748  09 94              ..   ORA #&94
-174A  09 B9              ..   ORA #&B9
-174C  09 DE              ..   ORA #&DE
-174E  09 03              ..   ORA #&03
-1750  0A                 .    ASL A
-1751  28                 (    PLP
-1752  0A                 .    ASL A
-1753  4D 0A 72           M.r  EOR &720A
-1756  0A                 .    ASL A
-1757  97                 .    ...
-1758  0A                 .    ASL A
-1759  BC 0A 80           ...  LDY &800A,X
-175C  40                 @    RTI
-175D  20 10 08            ..  JSR &0810
-1760  04                 .    ...
-1761  02                 .    ...
-1762  01 C0              ..   ORA (&C0,X)
-1764  60                 `    RTS
-1765  30 18              0.   BMI &177F
-1767  0C                 .    ...
-1768  06 03              ..   ASL &03
-176A  03                 .    ...
-176B  88                 .    DEY
-176C  44                 D    ...
-176D  22                 "    ...
-176E  11                 EQUB &11
+	EQUW &0900
+	EQUW &0925
+	EQUW &094A
+	EQUW &096F
+	EQUW &0994
+	EQUW &09B9
+	EQUW &09DE
+	EQUW &0A03
+	EQUW &0A28
+	EQUW &0A4D
+	EQUW &0A72
+	EQUW &0A97
+	EQUW &0ABC
+.addr175B
+	EQUB &80, &40, &20, &10, &08, &04, &02, &01
+.addr1763
+	EQUB &C0, &60, &30, &18, &0C, &06, &03, &03
+.addr176B
+	EQUB &88, &44, &22, &11
+
 .addr176F
 	STY &85
 	LDA #&80
@@ -1187,19 +1118,11 @@ ORG &11E3
 	RTS
 
 .addr1999
-1999  80                 .    ...
-199A  C0 E0              ..   CPY #&E0
-199C  F0 F8              ..   BEQ &1996
-199E  FC                 .    ...
-199F  FE FF 7F           ..  INC &7FFF,X
-19A2  3F                 ?    ...
-19A3  1F                 .    ...
-19A4  0F                 .    ...
-19A5  07                 .    ...
-19A6  03                 .    ...
-19A7  01                 .    EQUB &01
+	EQUB &80, &C0, &E0, &F0, &F8, &FC, &FE
+.addr19A0
+	EQUB &FF, &7F, &3F, &1F, &0F, &07, &03, &01
 
-.addr19A6
+.addr19A8
 	LDA &175B,X
 	EOR (&07),Y
 	STA (&07),Y
@@ -1365,26 +1288,22 @@ ORG &11E3
 	BNE &1AB3
 	RTS
 
-.addr1AD0
-1AD0  01 00              ..   ORA (&00,X)
-1AD2  2C 01 A0           ,..  BIT &A001
-1AD5  0F                 .    ...
-1AD6  70 17              p.   BVS &1AEF
-1AD8  A0 0F              ..   LDY #&0F
-1ADA  10 27              .'   BPL &1B03
-1ADC  82                 .    ...
-1ADD  14                 .    ...
-1ADE  10 27              .'   BPL &1B07
-1AE0  28                 (    PLP
-1AE1  23                 #    ...
-1AE2  98                 .    TYA
-1AE3  3A                 :    ...
-1AE4  10 27              .'   BPL &1B0D
-1AE6  50 C3              P.   BVC &1AAB
-1AE8  60                 `    RTS
-1AE9  EA                 .    NOP
-1AEA  40                 @    RTI
-1AEB  1F                 .    ...
+.tbl_equipment_prices                   ; Equipment prices
+	EQUW     1                      ; PRXS(0) used for 2*fuel_needed, max 140
+	EQUW   300                      ; Missile                     30.0 Cr
+	EQUW  4000                      ; Large Cargo Bay            400.0 Cr
+	EQUW  6000                      ; E.C.M. System (item 4)     600.0 Cr
+	EQUW  4000                      ; Extra Pulse Lasers         400.0 Cr
+	EQUW 10000                      ; Extra Beam Lasers         1000.0 Cr
+	EQUW  5250                      ; Fuel Scoops  (item 7)      525.0 Cr
+	EQUW 10000                      ; Escape Pod                1000.0 Cr
+	EQUW  9000                      ; Energy Bomb                900.0 Cr
+	EQUW 15000                      ; Energy Unit               1500.0 Cr
+	EQUW 10000                      ; Docking Computer          1000.0 Cr
+	EQUW 50000                      ; Galactic Hyperspace       5000.0 Cr
+	EQUW 60000                      ; Military Laser (item 13)  6000.0 Cr
+	EQUW  8000                      ; Mining Laster (item 14)    800.0 Cr
+
 .addr1AEC
 	LDX #&09
 	CMP #&19
@@ -1626,12 +1545,16 @@ ORG &11E3
 	JMP &1BED
 .addr1C82
 	RTS
+
 .addr1C83
-1C83  20 FF 00            ..  JSR &00FF
-1C86  00                 .    BRK
-1C87  00                 .    BRK
-1C88  00                 .    BRK
-1C89  FF                 .    ...
+	EQUB &20
+	EQUB &FF
+	EQUB &00
+	EQUB &00
+	EQUB &00
+	EQUB &00
+	EQUB &FF
+
 .addr1C8A
 	LDA #&0C
 	BIT &41A9
@@ -2079,33 +2002,30 @@ ORG &11E3
 	JMP &3845
 
 .addr1F99
-1F99  02                 .    ...
-1F9A  54                 T    ...
-1F9B  3B                 ;    ...
-1F9C  03                 .    ...
-1F9D  82                 .    ...
-1F9E  B0 00              ..   BCS &1FA0
-1FA0  00                 .    BRK
-1FA1  00                 .    BRK
-1FA2  01 50              .P   ORA (&50,X)
-1FA4  11 01              ..   ORA (&01),Y
-1FA6  D1 28              .(   CMP (&28),Y
-1FA8  01 40              .@   ORA (&40,X)
-1FAA  06 03              ..   ASL &03
-1FAC  60                 `    RTS
-1FAD  90 04              ..   BCC &1FB3
-1FAF  10 D1              ..   BPL &1F82
-1FB1  00                 .    BRK
-1FB2  00                 .    BRK
-.addr1FB3
-1FB3  00                 .    BRK
-1FB4  06 51              .Q   ASL &51
-1FB6  F8                 .    SED
-1FB7  07                 .    ...
-1FB8  60                 `    RTS
-1FB9  75 00              u.   ADC &00,X
-1FBB  00                 .    BRK
-1FBC  00                 .    BRK
+	EQUB &02                        ; &02 = Shuttle
+	EQUW &3B54
+	EQUB &03                        ; &03 = Transporter
+	EQUW &B082
+	EQUB &00
+	EQUW &0000
+	EQUB &01                        ; &01 = Cargo
+	EQUW &1150
+	EQUB &01                        ; &01 = Cargo
+	EQUW &28D1
+	EQUB &01                        ; &01 = Cargo
+	EQUW &0640
+	EQUB &03                        ; &03 = Transporter
+	EQUW &9060
+	EQUB &04                        ; &04 = Cobra Mk3
+	EQUW &D110
+	EQUB &00
+	EQUW &0000
+	EQUB &06                        ; &06 = Viper
+	EQUW &F851
+	EQUB &07                        ; &07 = Krait
+	EQUW &7560
+	EQUB &00
+	EQUW &0000
 
 ; -----------------------------------------------------------------------------
 ; 
@@ -2375,30 +2295,25 @@ ORG &11E3
 	RTS
 
 .addr2192
-2192  8C E7 8D           ...  STY &8DE7
-2195  ED 8A E6           ...  SBC &E68A
-2198  C1 C8              ..   CMP (&C8,X)
-219A  C8                 .    INY
-219B  8B                 .    ...
-219C  E0 8A              ..   CPX #&8A
-219E  E6 D6              ..   INC &D6
-21A0  C5 C6              ..   CMP &C6
-21A2  C1 CA              ..   CMP (&CA,X)
-21A4  95 9D              ..   STA &9D,X
-21A6  9C                 .    ...
-21A7  97                 .    ...
-21A8  85 40              .@   STA &40
-21AA  85 41              .A   STA &41
-21AC  85 42              .B   STA &42
-21AE  85 43              .C   STA &43
-21B0  18                 .    CLC
-21B1  60                 `    RTS
-21B2  A6 24              .$   LDX &24
-21B4  86 82              ..   STX &82
-21B6  A6 25              .%   LDX &25
-21B8  86 83              ..   STX &83
-21BA  A6 31              .1   LDX &31
-21BC  86 1B              ..   STX &1B
+	EQUB &8C, &E7, &8D, &ED, &8A, &E6, &C1, &C8
+	EQUB &C8, &8B, &E0, &8A, &E6, &D6, &C5, &C6
+	EQUB &C1, &CA, &95, &9D, &9C, &97
+
+.addr21A8
+	STA &40
+	STA &41
+	STA &42
+	STA &43
+	CLC
+	RTS
+
+.addr21B2
+	LDX &24
+	STX &82
+	LDX &25
+	STX &83
+	LDX &31
+	STX &1B
 
 ; -----------------------------------------------------------------------------
 ; 
@@ -5326,35 +5241,17 @@ ORG &11E3
 .addr3659
 	RTS
 
-.addr365A
-365A  12                 .    ...
-365B  01 00              ..   ORA (&00,X)
-365D  10 12              ..   BPL &3671
-365F  02                 .    ...
-3660  2C 08 11           ,..  BIT &1108
-3663  03                 .    ...
-3664  F0 18              ..   BEQ &367E
-3666  10 F1              ..   BPL &3659
-3668  07                 .    ...
-3669  1A                 .    ...
-366A  03                 .    ...
-366B  F1 BC              ..   SBC (&BC),Y
-366D  01 13              ..   ORA (&13,X)
-366F  F4                 .    ...
-3670  0C                 .    ...
-3671  08                 .    PHP
-3672  10 F1              ..   BPL &3665
-3674  06 0C              ..   ASL &0C
-3676  10 02              ..   BPL &367A
-3678  60                 `    RTS
-3679  10 13              ..   BPL &368E
-367B  04                 .    ...
-367C  C2                 .    ...
-367D  FF                 .    ...
-367E  13                 .    ...
-367F  00                 .    BRK
-3680  00                 .    BRK
-3681  00                 .    BRK
+.tbl_sounddata
+	EQUD &10000112                  ; Laser you fired  Flush2 uses Envelope #1 Acc= 0
+	EQUD &082C0212                  ; Laset hit you    Flush2 uses Envelope #2 Acc= 4
+	EQUD &18F00311                  ; Death_initial    Flush1 uses Envelope #3 Acc= 8
+	EQUD &1A07F110                  ; Death_later or   Kill Flush07            Acc=12
+	EQUD &01BCF103                  ; Beep, high short NoFlush3                Acc=16
+	EQUD &080CF413                  ; Beep, low long   Flush3                  Acc=20
+	EQUD &0C06F110                  ; Missile/Launch   Flush06                 Acc=24
+	EQUD &10600210                  ; Hyperspace       Flush0 uses Envelope #2 Acc=28
+	EQUD &FFC20413                  ; ECM_ON           Flush3 uses Envelope #4 Acc=32
+	EQUD &00000013                  ; ECM_OFF                                  Acc=36
 
 ; -----------------------------------------------------------------------------
 ; 
@@ -5815,8 +5712,8 @@ ORG &11E3
 	LDA #%10000001
 	STA systemvia_ier
 	JSR &18EC
-	LDX #&E9
-	LDY #&39
+	LDX #osword00_ctrlblock MOD 256
+	LDY #osword00_ctrlblock DIV 256
 	LDA #&00
 	JSR osword
 	BCC &39E1
@@ -5826,11 +5723,11 @@ ORG &11E3
 	STA systemvia_ier
 	JMP &1C8A
 
-.addr39E9
-39E9  4B                 K    ...
-39EA  00                 .    BRK
-39EB  09 21              .!   ORA #&21
-39ED  7B                 {    ...
+.osword00_ctrlblock
+	EQUW &004B                      ; inkw+5
+	EQUB &09                        ; Max length
+	EQUB &21                        ; Min ASCII value
+	EQUB &7B                        ; Max ASCII value
 
 .addr39EE
 	LDX #&3A
@@ -6324,51 +6221,24 @@ ORG &11E3
 	LDA #&FD
 	JMP &31AC
 
-.addr3DA6
-3DA6  13                 .    ...
-3DA7  82                 .    ...
-3DA8  06 01              ..   ASL &01
-3DAA  14                 .    ...
-3DAB  81 0A              ..   STA (&0A,X)
-3DAD  03                 .    ...
-3DAE  41 83              A.   EOR (&83,X)
-3DB0  02                 .    ...
-3DB1  07                 .    ...
-3DB2  28                 (    PLP
-3DB3  85 E2              ..   STA &E2
-3DB5  1F                 .    ...
-3DB6  53                 S    ...
-3DB7  85 FB              ..   STA &FB
-3DB9  0F                 .    ...
-3DBA  C4 08              ..   CPY &08
-3DBC  36 03              6.   ROL &03,X
-3DBE  EB                 .    ...
-3DBF  1D 08 78           ..x  ORA &7808,X
-3DC2  9A                 .    TXS
-3DC3  0E 38 03           .8.  ASL &0338
-3DC6  75 06              u.   ADC &06,X
-3DC8  28                 (    PLP
-3DC9  07                 .    ...
-3DCA  4E 01 11           N..  LSR &1101
-3DCD  1F                 .    ...
-3DCE  7C                 |    ...
-3DCF  0D 1D 07           ...  ORA &071D
-3DD2  B0 89              ..   BCS &3D5D
-3DD4  DC                 .    ...
-3DD5  3F                 ?    ...
-3DD6  20 81 35            .5  JSR &3581
-3DD9  03                 .    ...
-3DDA  61 A1              a.   ADC (&A1,X)
-3DDC  42                 B    ...
-3DDD  07                 .    ...
-3DDE  AB                 .    ...
-3DDF  A2 37              .7   LDX #&37
-3DE1  1F                 .    ...
-3DE2  2D C1 FA           -..  AND &FAC1
-3DE5  0F                 .    ...
-3DE6  35 0F              5.   AND &0F,X
-3DE8  C0 07              ..   CPY #&07
-
+.tbl_market_prices                      ; Market prices: base_price, gradient sign+5bits, base_quantity, mask, units 2bits 
+	EQUD &01068213                  ; Food         13 82 06 01
+	EQUD &030A8114                  ; Textiles     14 81 0A 03
+	EQUD &07028341                  ; Radioactives 41 83 02 07 
+	EQUD &1FE28528                  ; Slaves       28 85 E2 1F
+	EQUD &0FFB8553                  ; Liquor/Wines 53 85 FB 0F
+	EQUD &033608C4                  ; Luxuries     C4 08 36 03
+	EQUD &78081DEB                  ; Narcotics    EB 1D 08 78
+	EQUD &03380E9A                  ; Computers    9A 0E 38 03
+	EQUD &07280675                  ; Machinery    75 06 28 07
+	EQUD &1F11014E                  ; Alloys       4E 01 11 1F
+	EQUD &071D0D7C                  ; Firearms     7C 0D 1D 07
+	EQUD &3FDC89B0                  ; Furs         B0 89 DC 3F
+	EQUD &03358120                  ; Minerals     20 81 35 03
+	EQUD &0742A161                  ; Gold         61 A1 42 07
+	EQUD &1F37A2AB                  ; Platinum     AB A2 37 1F
+	EQUD &0FFAC12D                  ; Gem-Stones   2D C1 FA 0F
+	EQUD &07C00F35                  ; Alien Items  35 0F C0 07
 
 .addr3DEA
 	TYA
@@ -7281,609 +7151,618 @@ ORG &11E3
 	ROR &D1
 	JMP &4404
 .addr441B
-441B  A5 D1              ..   LDA &D1
-441D  85 81              ..   STA &81
-441F  A5 34              .4   LDA &34
-4421  C5 81              ..   CMP &81
-4423  90 06              ..   BCC &442B
-4425  20 AB 43            .C  JSR &43AB
-4428  4C 2E 44           L.D  JMP &442E
+	LDA &D1
+	STA &81
+	LDA &34
+	CMP &81
+	BCC &442B
+	JSR &43AB
+	JMP &442E
 .addr442B
-442B  20 75 3F            u?  JSR &3F75
+	JSR &3F75
 .addr442E
-442E  A6 93              ..   LDX &93
-4430  A5 36              .6   LDA &36
-4432  30 9E              0.   BMI &43D2
-4434  A5 82              ..   LDA &82
-4436  18                 .    CLC
-4437  69 80              i.   ADC #&80
-4439  9D 00 01           ...  STA &0100,X
-443C  E8                 .    INX
-443D  A5 80              ..   LDA &80
-443F  69 00              i.   ADC #&00
-4441  9D 00 01           ...  STA &0100,X
+	LDX &93
+	LDA &36
+	BMI &43D2
+	LDA &82
+	CLC
+	ADC #&80
+	STA &0100,X
+	INX
+	LDA &80
+	ADC #&00
+	STA &0100,X
 .addr4444
-4444  8A                 .    TXA
-4445  48                 H    PHA
-4446  A9 00              ..   LDA #&00
-4448  85 80              ..   STA &80
-444A  A5 D1              ..   LDA &D1
-444C  85 81              ..   STA &81
-444E  A5 37              .7   LDA &37
-4450  C5 81              ..   CMP &81
-4452  90 19              ..   BCC &446D
-4454  20 AB 43            .C  JSR &43AB
-4457  4C 70 44           LpD  JMP &4470
+	TXA
+	PHA
+	LDA #&00
+	STA &80
+	LDA &D1
+	STA &81
+	LDA &37
+	CMP &81
+	BCC &446D
+	JSR &43AB
+	JMP &4470
 .addr445A
-445A  A9 60              .`   LDA #&60
-445C  18                 .    CLC
-445D  65 82              e.   ADC &82
-445F  9D 00 01           ...  STA &0100,X
-4462  E8                 .    INX
-4463  A9 00              ..   LDA #&00
-4465  65 80              e.   ADC &80
-4467  9D 00 01           ...  STA &0100,X
-446A  4C 87 44           L.D  JMP &4487
+	LDA #&60
+	CLC
+	ADC &82
+	STA &0100,X
+	INX
+	LDA #&00
+	ADC &80
+	STA &0100,X
+	JMP &4487
 .addr446D
-446D  20 75 3F            u?  JSR &3F75
+	JSR &3F75
 .addr4470
-4470  68                 h    PLA
-4471  AA                 .    TAX
-4472  E8                 .    INX
-4473  A5 39              .9   LDA &39
-4475  30 E3              0.   BMI &445A
-4477  A9 60              .`   LDA #&60
-4479  38                 8    SEC
-447A  E5 82              ..   SBC &82
-447C  9D 00 01           ...  STA &0100,X
-447F  E8                 .    INX
-4480  A9 00              ..   LDA #&00
-4482  E5 80              ..   SBC &80
-4484  9D 00 01           ...  STA &0100,X
+	PLA
+	TAX
+	INX
+	LDA &39
+	BMI &445A
+	LDA #&60
+	SEC
+	SBC &82
+	STA &0100,X
+	INX
+	LDA #&00
+	SBC &80
+	STA &0100,X
 .addr4487
-4487  18                 .    CLC
-4488  A5 93              ..   LDA &93
-448A  69 04              i.   ADC #&04
-448C  85 93              ..   STA &93
-448E  A5 86              ..   LDA &86
-4490  69 06              i.   ADC #&06
-4492  A8                 .    TAY
-4493  B0 07              ..   BCS &449C
-4495  C5 97              ..   CMP &97
-4497  B0 03              ..   BCS &449C
-4499  4C C6 42           L.B  JMP &42C6
+	CLC
+	LDA &93
+	ADC #&04
+	STA &93
+	LDA &86
+	ADC #&06
+	TAY
+	BCS &449C
+	CMP &97
+	BCS &449C
+	JMP &42C6
 .addr449C
-449C  A5 65              .e   LDA &65
-449E  29 20              )    AND #&20
-44A0  F0 09              ..   BEQ &44AB
-44A2  A5 65              .e   LDA &65
-44A4  09 08              ..   ORA #&08
-44A6  85 65              .e   STA &65
-44A8  4C 82 32           L.2  JMP &3282
+	LDA &65
+	AND #&20
+	BEQ &44AB
+	LDA &65
+	ORA #&08
+	STA &65
+	JMP &3282
 .addr44AB
-44AB  A9 08              ..   LDA #&08
-44AD  24 65              $e   BIT &65
-44AF  F0 05              ..   BEQ &44B6
-44B1  20 F3 46            .F  JSR &46F3
-44B4  A9 08              ..   LDA #&08
+	LDA #&08
+	BIT &65
+	BEQ &44B6
+	JSR &46F3
+	LDA #&08
 .addr44B6
-44B6  05 65              .e   ORA &65
-44B8  85 65              .e   STA &65
-44BA  A0 09              ..   LDY #&09
-44BC  B1 1E              ..   LDA (&1E),Y
-44BE  85 97              ..   STA &97
-44C0  A0 00              ..   LDY #&00
-44C2  84 80              ..   STY &80
-44C4  84 86              ..   STY &86
-44C6  E6 80              ..   INC &80
-44C8  24 65              $e   BIT &65
-44CA  50 54              PT   BVC &4520
-44CC  A5 65              .e   LDA &65
-44CE  29 BF              ).   AND #&BF
-44D0  85 65              .e   STA &65
-44D2  A0 06              ..   LDY #&06
-44D4  B1 1E              ..   LDA (&1E),Y
-44D6  A8                 .    TAY
-44D7  BE 00 01           ...  LDX &0100,Y
-44DA  86 34              .4   STX &34
-44DC  E8                 .    INX
-44DD  F0 41              .A   BEQ &4520
-44DF  BE 01 01           ...  LDX &0101,Y
-44E2  86 35              .5   STX &35
-44E4  E8                 .    INX
-44E5  F0 39              .9   BEQ &4520
-44E7  BE 02 01           ...  LDX &0102,Y
-44EA  86 36              .6   STX &36
-44EC  BE 03 01           ...  LDX &0103,Y
-44EF  86 37              .7   STX &37
-44F1  A9 00              ..   LDA #&00
-44F3  85 38              .8   STA &38
-44F5  85 39              .9   STA &39
-44F7  85 3B              .;   STA &3B
-44F9  A5 4C              .L   LDA &4C
-44FB  85 3A              .:   STA &3A
-44FD  A5 48              .H   LDA &48
-44FF  10 02              ..   BPL &4503
-4501  C6 38              .8   DEC &38
+	ORA &65
+	STA &65
+	LDY #&09
+	LDA (&1E),Y
+	STA &97
+	LDY #&00
+	STY &80
+	STY &86
+	INC &80
+	BIT &65
+	BVC &4520
+	LDA &65
+	AND #&BF
+	STA &65
+	LDY #&06
+	LDA (&1E),Y
+	TAY
+	LDX &0100,Y
+	STX &34
+	INX
+	BEQ &4520
+	LDX &0101,Y
+	STX &35
+	INX
+	BEQ &4520
+	LDX &0102,Y
+	STX &36
+	LDX &0103,Y
+	STX &37
+	LDA #&00
+	STA &38
+	STA &39
+	STA &3B
+	LDA &4C
+	STA &3A
+	LDA &48
+	BPL &4503
+	DEC &38
 .addr4503
-4503  20 94 45            .E  JSR &4594
-4506  B0 18              ..   BCS &4520
-4508  A4 80              ..   LDY &80
-450A  A5 34              .4   LDA &34
-450C  91 67              .g   STA (&67),Y
-450E  C8                 .    INY
-450F  A5 35              .5   LDA &35
-4511  91 67              .g   STA (&67),Y
-4513  C8                 .    INY
-4514  A5 36              .6   LDA &36
-4516  91 67              .g   STA (&67),Y
-4518  C8                 .    INY
-4519  A5 37              .7   LDA &37
-451B  91 67              .g   STA (&67),Y
-451D  C8                 .    INY
-451E  84 80              ..   STY &80
+	JSR &4594
+	BCS &4520
+	LDY &80
+	LDA &34
+	STA (&67),Y
+	INY
+	LDA &35
+	STA (&67),Y
+	INY
+	LDA &36
+	STA (&67),Y
+	INY
+	LDA &37
+	STA (&67),Y
+	INY
+	STY &80
 .addr4520
-4520  A0 03              ..   LDY #&03
-4522  18                 .    CLC
-4523  B1 1E              ..   LDA (&1E),Y
-4525  65 1E              e.   ADC &1E
-4527  85 22              ."   STA &22
-4529  A0 10              ..   LDY #&10
-452B  B1 1E              ..   LDA (&1E),Y
-452D  65 1F              e.   ADC &1F
-452F  85 23              .#   STA &23
-4531  A0 05              ..   LDY #&05
-4533  B1 1E              ..   LDA (&1E),Y
-4535  85 06              ..   STA &06
-4537  A4 86              ..   LDY &86
+	LDY #&03
+	CLC
+	LDA (&1E),Y
+	ADC &1E
+	STA &22
+	LDY #&10
+	LDA (&1E),Y
+	ADC &1F
+	STA &23
+	LDY #&05
+	LDA (&1E),Y
+	STA &06
+	LDY &86
 .addr4539
-4539  B1 22              ."   LDA (&22),Y
-453B  C5 96              ..   CMP &96
-453D  90 18              ..   BCC &4557
-453F  C8                 .    INY
-4540  B1 22              ."   LDA (&22),Y
-4542  C8                 .    INY
-4543  85 1B              ..   STA &1B
-4545  29 0F              ).   AND #&0F
-4547  AA                 .    TAX
-4548  B5 D2              ..   LDA &D2,X
-454A  D0 0E              ..   BNE &455A
+	LDA (&22),Y
+	CMP &96
+	BCC &4557
+	INY
+	LDA (&22),Y
+	INY
+	STA &1B
+	AND #&0F
+	TAX
+	LDA &D2,X
+	BNE &455A
 .addr454C
-454C  A5 1B              ..   LDA &1B
-454E  4A                 J    LSR A
-454F  4A                 J    LSR A
-4550  4A                 J    LSR A
-4551  4A                 J    LSR A
-4552  AA                 .    TAX
-4553  B5 D2              ..   LDA &D2,X
-4555  D0 03              ..   BNE &455A
+	LDA &1B
+	LSR A
+	LSR A
+	LSR A
+	LSR A
+	TAX
+	LDA &D2,X
+	BNE &455A
 .addr4557
-4557  4C D6 46           L.F  JMP &46D6
+	JMP &46D6
 .addr455A
-455A  B1 22              ."   LDA (&22),Y
-455C  AA                 .    TAX
-455D  C8                 .    INY
-455E  B1 22              ."   LDA (&22),Y
-4560  85 81              ..   STA &81
-4562  BD 01 01           ...  LDA &0101,X
-4565  85 35              .5   STA &35
-4567  BD 00 01           ...  LDA &0100,X
-456A  85 34              .4   STA &34
-456C  BD 02 01           ...  LDA &0102,X
-456F  85 36              .6   STA &36
-4571  BD 03 01           ...  LDA &0103,X
-4574  85 37              .7   STA &37
-4576  A6 81              ..   LDX &81
-4578  BD 00 01           ...  LDA &0100,X
-457B  85 38              .8   STA &38
-457D  BD 03 01           ...  LDA &0103,X
-4580  85 3B              .;   STA &3B
-4582  BD 02 01           ...  LDA &0102,X
-4585  85 3A              .:   STA &3A
-4587  BD 01 01           ...  LDA &0101,X
-458A  85 39              .9   STA &39
-458C  20 9A 45            .E  JSR &459A
-458F  B0 C6              ..   BCS &4557
-4591  4C BA 46           L.F  JMP &46BA
+	LDA (&22),Y
+	TAX
+	INY
+	LDA (&22),Y
+	STA &81
+	LDA &0101,X
+	STA &35
+	LDA &0100,X
+	STA &34
+	LDA &0102,X
+	STA &36
+	LDA &0103,X
+	STA &37
+	LDX &81
+	LDA &0100,X
+	STA &38
+	LDA &0103,X
+	STA &3B
+	LDA &0102,X
+	STA &3A
+	LDA &0101,X
+	STA &39
+	JSR &459A
+	BCS &4557
+	JMP &46BA
 .addr4594
-4594  A9 00              ..   LDA #&00
-4596  85 90              ..   STA &90
-4598  A5 39              .9   LDA &39
+	LDA #&00
+	STA &90
+	LDA &39
 .addr459A
-459A  A2 BF              ..   LDX #&BF
-459C  05 3B              .;   ORA &3B
-459E  D0 06              ..   BNE &45A6
-45A0  E4 3A              .:   CPX &3A
-45A2  90 02              ..   BCC &45A6
-45A4  A2 00              ..   LDX #&00
+	LDX #&BF
+	ORA &3B
+	BNE &45A6
+	CPX &3A
+	BCC &45A6
+	LDX #&00
 .addr45A6
-45A6  86 89              ..   STX &89
-45A8  A5 35              .5   LDA &35
-45AA  05 37              .7   ORA &37
-45AC  D0 1C              ..   BNE &45CA
-45AE  A9 BF              ..   LDA #&BF
-45B0  C5 36              .6   CMP &36
-45B2  90 16              ..   BCC &45CA
-45B4  A5 89              ..   LDA &89
-45B6  D0 10              ..   BNE &45C8
+	STX &89
+	LDA &35
+	ORA &37
+	BNE &45CA
+	LDA #&BF
+	CMP &36
+	BCC &45CA
+	LDA &89
+	BNE &45C8
 .addr45B8
-45B8  A5 36              .6   LDA &36
-45BA  85 35              .5   STA &35
-45BC  A5 38              .8   LDA &38
-45BE  85 36              .6   STA &36
-45C0  A5 3A              .:   LDA &3A
-45C2  85 37              .7   STA &37
-45C4  18                 .    CLC
-45C5  60                 `    RTS
+	LDA &36
+	STA &35
+	LDA &38
+	STA &36
+	LDA &3A
+	STA &37
+	CLC
+	RTS
 .addr45C6
-45C6  38                 8    SEC
-45C7  60                 `    RTS
+	SEC
+	RTS
 .addr45C8
-45C8  46 89              F.   LSR &89
+	LSR &89
 .addr45CA
-45CA  A5 89              ..   LDA &89
-45CC  10 2F              ./   BPL &45FD
-45CE  A5 35              .5   LDA &35
-45D0  25 39              %9   AND &39
-45D2  30 F2              0.   BMI &45C6
-45D4  A5 37              .7   LDA &37
-45D6  25 3B              %;   AND &3B
-45D8  30 EC              0.   BMI &45C6
-45DA  A6 35              .5   LDX &35
-45DC  CA                 .    DEX
-45DD  8A                 .    TXA
-45DE  A6 39              .9   LDX &39
-45E0  CA                 .    DEX
-45E1  86 3C              .<   STX &3C
-45E3  05 3C              .<   ORA &3C
-45E5  10 DF              ..   BPL &45C6
-45E7  A5 36              .6   LDA &36
-45E9  C9 C0              ..   CMP #&C0
-45EB  A5 37              .7   LDA &37
-45ED  E9 00              ..   SBC #&00
-45EF  85 3C              .<   STA &3C
-45F1  A5 3A              .:   LDA &3A
-45F3  C9 C0              ..   CMP #&C0
-45F5  A5 3B              .;   LDA &3B
-45F7  E9 00              ..   SBC #&00
-45F9  05 3C              .<   ORA &3C
-45FB  10 C9              ..   BPL &45C6
+	LDA &89
+	BPL &45FD
+	LDA &35
+	AND &39
+	BMI &45C6
+	LDA &37
+	AND &3B
+	BMI &45C6
+	LDX &35
+	DEX
+	TXA
+	LDX &39
+	DEX
+	STX &3C
+	ORA &3C
+	BPL &45C6
+	LDA &36
+	CMP #&C0
+	LDA &37
+	SBC #&00
+	STA &3C
+	LDA &3A
+	CMP #&C0
+	LDA &3B
+	SBC #&00
+	ORA &3C
+	BPL &45C6
 .addr45FD
-45FD  98                 .    TYA
-45FE  48                 H    PHA
-45FF  A5 38              .8   LDA &38
-4601  38                 8    SEC
-4602  E5 34              .4   SBC &34
-4604  85 3C              .<   STA &3C
-4606  A5 39              .9   LDA &39
-4608  E5 35              .5   SBC &35
-460A  85 3D              .=   STA &3D
-460C  A5 3A              .:   LDA &3A
-460E  38                 8    SEC
-460F  E5 36              .6   SBC &36
-4611  85 3E              .>   STA &3E
-4613  A5 3B              .;   LDA &3B
-4615  E5 37              .7   SBC &37
-4617  85 3F              .?   STA &3F
-4619  45 3D              E=   EOR &3D
-461B  85 83              ..   STA &83
-461D  A5 3F              .?   LDA &3F
-461F  10 0D              ..   BPL &462E
-4621  A9 00              ..   LDA #&00
-4623  38                 8    SEC
-4624  E5 3E              .>   SBC &3E
-4626  85 3E              .>   STA &3E
-4628  A9 00              ..   LDA #&00
-462A  E5 3F              .?   SBC &3F
-462C  85 3F              .?   STA &3F
+	TYA
+	PHA
+	LDA &38
+	SEC
+	SBC &34
+	STA &3C
+	LDA &39
+	SBC &35
+	STA &3D
+	LDA &3A
+	SEC
+	SBC &36
+	STA &3E
+	LDA &3B
+	SBC &37
+	STA &3F
+	EOR &3D
+	STA &83
+	LDA &3F
+	BPL &462E
+	LDA #&00
+	SEC
+	SBC &3E
+	STA &3E
+	LDA #&00
+	SBC &3F
+	STA &3F
 .addr462E
-462E  A5 3D              .=   LDA &3D
-4630  10 0B              ..   BPL &463D
-4632  38                 8    SEC
-4633  A9 00              ..   LDA #&00
-4635  E5 3C              .<   SBC &3C
-4637  85 3C              .<   STA &3C
-4639  A9 00              ..   LDA #&00
-463B  E5 3D              .=   SBC &3D
+	LDA &3D
+	BPL &463D
+	SEC
+	LDA #&00
+	SBC &3C
+	STA &3C
+	LDA #&00
+	SBC &3D
 .addr463D
-463D  AA                 .    TAX
-463E  D0 04              ..   BNE &4644
-4640  A6 3F              .?   LDX &3F
-4642  F0 0A              ..   BEQ &464E
+	TAX
+	BNE &4644
+	LDX &3F
+	BEQ &464E
 .addr4644
-4644  4A                 J    LSR A
-4645  66 3C              f<   ROR &3C
-4647  46 3F              F?   LSR &3F
-4649  66 3E              f>   ROR &3E
-464B  4C 3D 46           L=F  JMP &463D
+	LSR A
+	ROR &3C
+	LSR &3F
+	ROR &3E
+	JMP &463D
 .addr464E
-464E  86 D1              ..   STX &D1
-4650  A5 3C              .<   LDA &3C
-4652  C5 3E              .>   CMP &3E
-4654  90 0A              ..   BCC &4660
-4656  85 81              ..   STA &81
-4658  A5 3E              .>   LDA &3E
-465A  20 75 3F            u?  JSR &3F75
-465D  4C 6B 46           LkF  JMP &466B
+	STX &D1
+	LDA &3C
+	CMP &3E
+	BCC &4660
+	STA &81
+	LDA &3E
+	JSR &3F75
+	JMP &466B
 .addr4660
-4660  A5 3E              .>   LDA &3E
-4662  85 81              ..   STA &81
-4664  A5 3C              .<   LDA &3C
-4666  20 75 3F            u?  JSR &3F75
-4669  C6 D1              ..   DEC &D1
+	LDA &3E
+	STA &81
+	LDA &3C
+	JSR &3F75
+	DEC &D1
 .addr466B
-466B  A5 82              ..   LDA &82
-466D  85 3C              .<   STA &3C
-466F  A5 83              ..   LDA &83
-4671  85 3D              .=   STA &3D
-4673  A5 89              ..   LDA &89
-4675  F0 02              ..   BEQ &4679
-4677  10 13              ..   BPL &468C
+	LDA &82
+	STA &3C
+	LDA &83
+	STA &3D
+	LDA &89
+	BEQ &4679
+	BPL &468C
 .addr4679
-4679  20 1A 47            .G  JSR &471A
-467C  A5 89              ..   LDA &89
-467E  10 31              .1   BPL &46B1
-4680  A5 35              .5   LDA &35
-4682  05 37              .7   ORA &37
-4684  D0 30              .0   BNE &46B6
-4686  A5 36              .6   LDA &36
-4688  C9 C0              ..   CMP #&C0
-468A  B0 2A              .*   BCS &46B6
+	JSR &471A
+	LDA &89
+	BPL &46B1
+	LDA &35
+	ORA &37
+	BNE &46B6
+	LDA &36
+	CMP #&C0
+	BCS &46B6
 .addr468C
-468C  A6 34              .4   LDX &34
-468E  A5 38              .8   LDA &38
-4690  85 34              .4   STA &34
-4692  86 38              .8   STX &38
-4694  A5 39              .9   LDA &39
-4696  A6 35              .5   LDX &35
-4698  86 39              .9   STX &39
-469A  85 35              .5   STA &35
-469C  A6 36              .6   LDX &36
-469E  A5 3A              .:   LDA &3A
-46A0  85 36              .6   STA &36
-46A2  86 3A              .:   STX &3A
-46A4  A5 3B              .;   LDA &3B
-46A6  A6 37              .7   LDX &37
-46A8  86 3B              .;   STX &3B
-46AA  85 37              .7   STA &37
-46AC  20 1A 47            .G  JSR &471A
-46AF  C6 90              ..   DEC &90
+	LDX &34
+	LDA &38
+	STA &34
+	STX &38
+	LDA &39
+	LDX &35
+	STX &39
+	STA &35
+	LDX &36
+	LDA &3A
+	STA &36
+	STX &3A
+	LDA &3B
+	LDX &37
+	STX &3B
+	STA &37
+	JSR &471A
+	DEC &90
 .addr46B1
-46B1  68                 h    PLA
-46B2  A8                 .    TAY
-46B3  4C B8 45           L.E  JMP &45B8
+	PLA
+	TAY
+	JMP &45B8
 .addr46B6
-46B6  68                 h    PLA
-46B7  A8                 .    TAY
-46B8  38                 8    SEC
-46B9  60                 `    RTS
+	PLA
+	TAY
+	SEC
+	RTS
 .addr46BA
-46BA  A4 80              ..   LDY &80
-46BC  A5 34              .4   LDA &34
-46BE  91 67              .g   STA (&67),Y
-46C0  C8                 .    INY
-46C1  A5 35              .5   LDA &35
-46C3  91 67              .g   STA (&67),Y
-46C5  C8                 .    INY
-46C6  A5 36              .6   LDA &36
-46C8  91 67              .g   STA (&67),Y
-46CA  C8                 .    INY
-46CB  A5 37              .7   LDA &37
-46CD  91 67              .g   STA (&67),Y
-46CF  C8                 .    INY
-46D0  84 80              ..   STY &80
-46D2  C4 06              ..   CPY &06
-46D4  B0 17              ..   BCS &46ED
+	LDY &80
+	LDA &34
+	STA (&67),Y
+	INY
+	LDA &35
+	STA (&67),Y
+	INY
+	LDA &36
+	STA (&67),Y
+	INY
+	LDA &37
+	STA (&67),Y
+	INY
+	STY &80
+	CPY &06
+	BCS &46ED
 .addr46D6
-46D6  E6 86              ..   INC &86
-46D8  A4 86              ..   LDY &86
-46DA  C4 97              ..   CPY &97
-46DC  B0 0F              ..   BCS &46ED
-46DE  A0 00              ..   LDY #&00
-46E0  A5 22              ."   LDA &22
-46E2  69 04              i.   ADC #&04
-46E4  85 22              ."   STA &22
-46E6  90 02              ..   BCC &46EA
-46E8  E6 23              .#   INC &23
+	INC &86
+	LDY &86
+	CPY &97
+	BCS &46ED
+	LDY #&00
+	LDA &22
+	ADC #&04
+	STA &22
+	BCC &46EA
+	INC &23
 .addr46EA
-46EA  4C 39 45           L9E  JMP &4539
+	JMP &4539
 .addr46ED
-46ED  A5 80              ..   LDA &80
+	LDA &80
 .addr46EF
-46EF  A0 00              ..   LDY #&00
-46F1  91 67              .g   STA (&67),Y
+	LDY #&00
+	STA (&67),Y
 .addr46F3
-46F3  A0 00              ..   LDY #&00
-46F5  B1 67              .g   LDA (&67),Y
-46F7  85 97              ..   STA &97
-46F9  C9 04              ..   CMP #&04
-46FB  90 1C              ..   BCC &4719
-46FD  C8                 .    INY
+	LDY #&00
+	LDA (&67),Y
+	STA &97
+	CMP #&04
+	BCC &4719
+	INY
 .addr46FE
-46FE  B1 67              .g   LDA (&67),Y
-4700  85 34              .4   STA &34
-4702  C8                 .    INY
-4703  B1 67              .g   LDA (&67),Y
-4705  85 35              .5   STA &35
-4707  C8                 .    INY
-4708  B1 67              .g   LDA (&67),Y
-470A  85 36              .6   STA &36
-470C  C8                 .    INY
-470D  B1 67              .g   LDA (&67),Y
-470F  85 37              .7   STA &37
-4711  20 6F 17            o.  JSR &176F
-4714  C8                 .    INY
-4715  C4 97              ..   CPY &97
-4717  90 E5              ..   BCC &46FE
+	LDA (&67),Y
+	STA &34
+	INY
+	LDA (&67),Y
+	STA &35
+	INY
+	LDA (&67),Y
+	STA &36
+	INY
+	LDA (&67),Y
+	STA &37
+	JSR &176F
+	INY
+	CPY &97
+	BCC &46FE
 .addr4719
-4719  60                 `    RTS
+	RTS
 .addr471A
-471A  A5 35              .5   LDA &35
-471C  10 17              ..   BPL &4735
-471E  85 83              ..   STA &83
-4720  20 94 47            .G  JSR &4794
-4723  8A                 .    TXA
-4724  18                 .    CLC
-4725  65 36              e6   ADC &36
-4727  85 36              .6   STA &36
-4729  98                 .    TYA
-472A  65 37              e7   ADC &37
-472C  85 37              .7   STA &37
-472E  A9 00              ..   LDA #&00
-4730  85 34              .4   STA &34
-4732  85 35              .5   STA &35
-4734  AA                 .    TAX
+	LDA &35
+	BPL &4735
+	STA &83
+	JSR &4794
+	TXA
+	CLC
+	ADC &36
+	STA &36
+	TYA
+	ADC &37
+	STA &37
+	LDA #&00
+	STA &34
+	STA &35
+	TAX
 .addr4735
-4735  F0 19              ..   BEQ &4750
-4737  85 83              ..   STA &83
-4739  C6 83              ..   DEC &83
-473B  20 94 47            .G  JSR &4794
-473E  8A                 .    TXA
-473F  18                 .    CLC
-4740  65 36              e6   ADC &36
-4742  85 36              .6   STA &36
-4744  98                 .    TYA
-4745  65 37              e7   ADC &37
-4747  85 37              .7   STA &37
-4749  A2 FF              ..   LDX #&FF
-474B  86 34              .4   STX &34
-474D  E8                 .    INX
-474E  86 35              .5   STX &35
+	BEQ &4750
+	STA &83
+	DEC &83
+	JSR &4794
+	TXA
+	CLC
+	ADC &36
+	STA &36
+	TYA
+	ADC &37
+	STA &37
+	LDX #&FF
+	STX &34
+	INX
+	STX &35
 .addr4750
-4750  A5 37              .7   LDA &37
-4752  10 1A              ..   BPL &476E
-4754  85 83              ..   STA &83
-4756  A5 36              .6   LDA &36
-4758  85 82              ..   STA &82
-475A  20 C3 47            .G  JSR &47C3
-475D  8A                 .    TXA
-475E  18                 .    CLC
-475F  65 34              e4   ADC &34
-4761  85 34              .4   STA &34
-4763  98                 .    TYA
-4764  65 35              e5   ADC &35
-4766  85 35              .5   STA &35
-4768  A9 00              ..   LDA #&00
-476A  85 36              .6   STA &36
-476C  85 37              .7   STA &37
+	LDA &37
+	BPL &476E
+	STA &83
+	LDA &36
+	STA &82
+	JSR &47C3
+	TXA
+	CLC
+	ADC &34
+	STA &34
+	TYA
+	ADC &35
+	STA &35
+	LDA #&00
+	STA &36
+	STA &37
 .addr476E
-476E  A5 36              .6   LDA &36
-4770  38                 8    SEC
-4771  E9 C0              ..   SBC #&C0
-4773  85 82              ..   STA &82
-4775  A5 37              .7   LDA &37
-4777  E9 00              ..   SBC #&00
-4779  85 83              ..   STA &83
-477B  90 16              ..   BCC &4793
-477D  20 C3 47            .G  JSR &47C3
-4780  8A                 .    TXA
-4781  18                 .    CLC
-4782  65 34              e4   ADC &34
-4784  85 34              .4   STA &34
-4786  98                 .    TYA
-4787  65 35              e5   ADC &35
-4789  85 35              .5   STA &35
-478B  A9 BF              ..   LDA #&BF
-478D  85 36              .6   STA &36
-478F  A9 00              ..   LDA #&00
-4791  85 37              .7   STA &37
+	LDA &36
+	SEC
+	SBC #&C0
+	STA &82
+	LDA &37
+	SBC #&00
+	STA &83
+	BCC &4793
+	JSR &47C3
+	TXA
+	CLC
+	ADC &34
+	STA &34
+	TYA
+	ADC &35
+	STA &35
+	LDA #&BF
+	STA &36
+	LDA #&00
+	STA &37
 .addr4793
-4793  60                 `    RTS
+	RTS
 .addr4794
-4794  A5 34              .4   LDA &34
-4796  85 82              ..   STA &82
-4798  20 FF 47            .G  JSR &47FF
-479B  48                 H    PHA
-479C  A6 D1              ..   LDX &D1
-479E  D0 2B              .+   BNE &47CB
+	LDA &34
+	STA &82
+	JSR &47FF
+	PHA
+	LDX &D1
+	BNE &47CB
 .addr47A0
-47A0  A9 00              ..   LDA #&00
-47A2  AA                 .    TAX
-47A3  A8                 .    TAY
-47A4  46 83              F.   LSR &83
-47A6  66 82              f.   ROR &82
-47A8  06 81              ..   ASL &81
-47AA  90 09              ..   BCC &47B5
+	LDA #&00
+	TAX
+	TAY
+	LSR &83
+	ROR &82
+	ASL &81
+	BCC &47B5
 .addr47AC
-47AC  8A                 .    TXA
-47AD  18                 .    CLC
-47AE  65 82              e.   ADC &82
-47B0  AA                 .    TAX
-47B1  98                 .    TYA
-47B2  65 83              e.   ADC &83
-47B4  A8                 .    TAY
+	TXA
+	CLC
+	ADC &82
+	TAX
+	TYA
+	ADC &83
+	TAY
 .addr47B5
-47B5  46 83              F.   LSR &83
-47B7  66 82              f.   ROR &82
-47B9  06 81              ..   ASL &81
-47BB  B0 EF              ..   BCS &47AC
-47BD  D0 F6              ..   BNE &47B5
-47BF  68                 h    PLA
-47C0  10 30              .0   BPL &47F2
-47C2  60                 `    RTS
+	LSR &83
+	ROR &82
+	ASL &81
+	BCS &47AC
+	BNE &47B5
+	PLA
+	BPL &47F2
+	RTS
 .addr47C3
-47C3  20 FF 47            .G  JSR &47FF
-47C6  48                 H    PHA
-47C7  A6 D1              ..   LDX &D1
-47C9  D0 D5              ..   BNE &47A0
+	JSR &47FF
+	PHA
+	LDX &D1
+	BNE &47A0
 .addr47CB
-47CB  A9 FF              ..   LDA #&FF
-47CD  A8                 .    TAY
-47CE  0A                 .    ASL A
-47CF  AA                 .    TAX
+	LDA #&FF
+	TAY
+	ASL A
+	TAX
 .addr47D0
-47D0  06 82              ..   ASL &82
-47D2  26 83              &.   ROL &83
-47D4  A5 83              ..   LDA &83
-47D6  B0 04              ..   BCS &47DC
-47D8  C5 81              ..   CMP &81
-47DA  90 0B              ..   BCC &47E7
+	ASL &82
+	ROL &83
+	LDA &83
+	BCS &47DC
+	CMP &81
+	BCC &47E7
 .addr47DC
-47DC  E5 81              ..   SBC &81
-47DE  85 83              ..   STA &83
-47E0  A5 82              ..   LDA &82
-47E2  E9 00              ..   SBC #&00
-47E4  85 82              ..   STA &82
-47E6  38                 8    SEC
+	SBC &81
+	STA &83
+	LDA &82
+	SBC #&00
+	STA &82
+	SEC
 .addr47E7
-47E7  8A                 .    TXA
-47E8  2A                 *    ROL A
-47E9  AA                 .    TAX
-47EA  98                 .    TYA
-47EB  2A                 *    ROL A
-47EC  A8                 .    TAY
-47ED  B0 E1              ..   BCS &47D0
-47EF  68                 h    PLA
-47F0  30 0C              0.   BMI &47FE
+	TXA
+	ROL A
+	TAX
+	TYA
+	ROL A
+	TAY
+	BCS &47D0
+	PLA
+	BMI &47FE
 .addr47F2
-47F2  8A                 .    TXA
-47F3  49 FF              I.   EOR #&FF
-47F5  69 01              i.   ADC #&01
-47F7  AA                 .    TAX
-47F8  98                 .    TYA
-47F9  49 FF              I.   EOR #&FF
-47FB  69 00              i.   ADC #&00
-47FD  A8                 .    TAY
+	TXA
+	EOR #&FF
+	ADC #&01
+	TAX
+	TYA
+	EOR #&FF
+	ADC #&00
+	TAY
 .addr47FE
-47FE  60                 `    RTS
+	RTS
 .addr47FF
-47FF  A6 3C              .<   LDX &3C
-4801  86 81              ..   STX &81
-4803  A5 83              ..   LDA &83
-4805  10 11              ..   BPL &4818
-4807  A9 00              ..   LDA #&00
-4809  38                 8    SEC
-480A  E5 82              ..   SBC &82
-480C  85 82              ..   STA &82
-480E  A5 83              ..   LDA &83
-4810  48                 H    PHA
-4811  49 FF              I.   EOR #&FF
-4813  69 00              i.   ADC #&00
-4815  85 83              ..   STA &83
-4817  68                 h    PLA
+	LDX &3C
+	STX &81
+	LDA &83
+	BPL &4818
+	LDA #&00
+	SEC
+	SBC &82
+	STA &82
+	LDA &83
+	PHA
+	EOR #&FF
+	ADC #&00
+	STA &83
+	PLA
 .addr4818
-4818  45 3D              E=   EOR &3D
-481A  60                 `    RTS
+	EOR &3D
+	RTS
+
+; -----------------------------------------------------------------------------
+; Tokens
+; -----------------------------------------------------------------------------
+.tokens
+	EQUB &57                        ; Descramble byte: all tokens below are descrambled with &57
+
+MAPCHAR &01, &56
+	
 481B  57                 W    ...
 481C  5E 5C 56           ^\V  LSR &565C,Y
 481F  5F                 _    ...
@@ -7914,14 +7793,12 @@ ORG &11E3
 4848  10 02              ..   BPL &484C
 484A  12                 .    ...
 484B  80                 .    ...
-.addr484C
 484C  63                 c    ...
 484D  79 77 13           yw.  ADC &1377,Y
 4850  12                 .    ...
 4851  1B                 .    ...
 4852  8A                 .    TXA
 4853  12                 .    ...
-.addr4854
 4854  87                 .    ...
 4855  11 1E              ..   ORA (&1E),Y
 4857  B2                 .    ...
@@ -8099,7 +7976,6 @@ ORG &11E3
 4952  77                 w    ...
 4953  A0 A1              ..   LDY #&A1
 4955  77                 w    ...
-.addr4956
 4956  89                 .    ...
 4957  18                 .    CLC
 4958  1B                 .    ...
@@ -8235,7 +8111,6 @@ ORG &11E3
 4A20  77                 w    ...
 4A21  A2 03              ..   LDX #&03
 4A23  A1 AC              ..   LDA (&AC,X)
-.addr4A25
 4A25  88                 .    DEY
 4A26  82                 .    ...
 4A27  79 77 44           ywD  ADC &4477,Y
@@ -8285,11 +8160,9 @@ ORG &11E3
 4A71  AB                 .    ...
 4A72  9B                 .    ...
 4A73  1E 11 77           ..w  ASL &7711,Y
-.addr4A76
 4A76  04                 .    ...
 4A77  02                 .    ...
 4A78  14                 .    ...
-.addr4A79
 4A79  BE 04 04           ...  LDX &0404,Y
 4A7C  11 02              ..   ORA (&02),Y
 4A7E  1B                 .    ...
@@ -8367,7 +8240,6 @@ ORG &11E3
 4AE4  A0 87              ..   LDY #&87
 4AE6  07                 .    ...
 4AE7  AE BE 77           ..w  LDX &77BE
-.addr4AEA
 4AEA  11 AA              ..   ORA (&AA),Y
 4AEC  77                 w    ...
 4AED  E4 77              .w   CPX &77
@@ -8481,7 +8353,6 @@ ORG &11E3
 4B80  A6 AC              ..   LDX &AC
 4B82  88                 .    DEY
 4B83  04                 .    ...
-.addr4B84
 4B84  57                 W    ...
 4B85  B7                 .    ...
 4B86  A2 1F              ..   LDX #&1F
@@ -10296,1880 +10167,119 @@ ORG &11E3
 55BD  1A                 .    ...
 55BE  12                 .    ...
 55BF  57                 W    ...
-55C0  10 15              ..   BPL &55D7
-55C2  1A                 .    ...
-55C3  1F                 .    ...
-55C4  9B                 .    ...
-55C5  A0 2E              ..   LDY #&2E
-55C7  A5 24              .$   LDA &24
-55C9  29 3D              )=   AND #&3D
-55CB  33                 3    ...
-55CC  38                 8    SEC
-55CD  AA                 .    TAX
-55CE  42                 B    ...
-55CF  47                 G    ...
-55D0  4C 51 56           LQV  JMP &5651
-.addr55D3
-55D3  8C 60 65           .`e  STY &6560
-55D6  87                 .    ...
-.addr55D7
-55D7  82                 .    ...
-55D8  5B                 [    ...
-55D9  6A                 j    ROR A
-55DA  B4 B9              ..   LDY &B9
-55DC  BE E1 E6           ...  LDX &E6E1,Y
-55DF  EB                 .    ...
-55E0  F0 F5              ..   BEQ &55D7
-55E2  FA                 .    ...
-55E3  73                 s    ...
-55E4  78                 x    SEI
-55E5  7D 45 4E           }EN  ADC &4E45,X
-55E8  44                 D    ...
-55E9  2D 45 4E           -EN  AND &4E45
-55EC  44                 D    ...
-55ED  2D 45 4E           -EN  AND &4E45
-55F0  44                 D    ...
-55F1  8E 13 1C           ...  STX &1C13
-55F4  00                 .    BRK
-55F5  00                 .    BRK
-55F6  73                 s    ...
-55F7  56 52              VR   LSR &52,X
-55F9  49 53              IS   EOR #&53
-55FB  00                 .    BRK
-55FC  8E 13 34           ..4  STX &3413
-55FF  B3                 .    ...
-5600  00                 .    BRK
-5601  7F                     ...
-5602  00                 .    BRK
-5603  00                 .    BRK
-5604  00                 .    BRK
-5605  00                 .    BRK
-5606  00                 .    BRK
-5607  00                 .    BRK
-5608  5D 56 00           ]V.  EOR &0056,X
-560B  00                 .    BRK
-560C  00                 .    BRK
-560D  00                 .    BRK
-560E  00                 .    BRK
-560F  00                 .    BRK
-5610  05 57              .W   ORA &57
-5612  37                 7    ...
-5613  58                 X    CLI
-5614  19 5A A1           .Z.  ORA &A15A,Y
-5617  5B                 [    ...
-5618  00                 .    BRK
-5619  00                 .    BRK
-561A  00                 .    BRK
-561B  00                 .    BRK
-561C  00                 .    BRK
-561D  00                 .    BRK
-561E  93                 .    ...
-.addr561F
-561F  5C                 \    ...
-5620  00                 .    BRK
-5621  00                 .    BRK
-5622  00                 .    BRK
-5623  00                 .    BRK
-5624  6D 5D 00           m].  ADC &005D
-5627  00                 .    BRK
-5628  00                 .    BRK
-5629  00                 .    BRK
-562A  00                 .    BRK
-562B  00                 .    BRK
-562C  00                 .    BRK
-562D  00                 .    BRK
-562E  00                 .    BRK
-562F  00                 .    BRK
-5630  00                 .    BRK
-5631  00                 .    BRK
-5632  00                 .    BRK
-5633  00                 .    BRK
-5634  00                 .    BRK
-5635  00                 .    BRK
-5636  00                 .    BRK
-5637  00                 .    BRK
-5638  00                 .    BRK
-5639  00                 .    BRK
-563A  00                 .    BRK
-563B  00                 .    BRK
-563C  53                 S    ...
-563D  5E 00 00           ^..  LSR &0000,Y
-5640  00                 .    BRK
-5641  00                 .    BRK
-5642  00                 .    BRK
-5643  00                 .    BRK
-5644  00                 .    BRK
-5645  00                 .    BRK
-5646  21 61              !a   AND (&61,X)
-5648  A0 A0              ..   LDY #&A0
-564A  00                 .    BRK
-564B  00                 .    BRK
-564C  00                 .    BRK
-564D  C2                 .    ...
-564E  00                 .    BRK
-564F  00                 .    BRK
-5650  8C 00 00           ...  STY &0000
-5653  00                 .    BRK
-5654  00                 .    BRK
-5655  00                 .    BRK
-5656  00                 .    BRK
-5657  00                 .    BRK
-5658  00                 .    BRK
-5659  00                 .    BRK
-565A  00                 .    BRK
-565B  00                 .    BRK
-565C  8C 00 90           ...  STY &9000
-565F  01 50              .P   ORA (&50,X)
-5661  8C 31 00           .1.  STY &0031
-5664  12                 .    ...
-5665  3C                 <    ...
-5666  0F                 .    ...
-5667  00                 .    BRK
-5668  00                 .    BRK
-5669  1C                 .    ...
-566A  0C                 .    ...
-566B  11 0F              ..   ORA (&0F),Y
-566D  00                 .    BRK
-566E  00                 .    BRK
-566F  02                 .    ...
-5670  00                 .    BRK
-5671  18                 .    CLC
-5672  10 00              ..   BPL &5674
-.addr5674
-5674  1F                 .    ...
-5675  10 55              .U   BPL &56CC
-5677  18                 .    CLC
-5678  05 0F              ..   ORA &0F
-567A  1F                 .    ...
-567B  10 22              ."   BPL &569F
-567D  18                 .    CLC
-567E  0D 09 5F           .._  ORA &5F09
-5681  20 33 18            3.  JSR &1833
-5684  0D 09 7F           ..  ORA &7F09
-5687  30 44              0D   BMI &56CD
-5689  18                 .    CLC
-568A  05 0F              ..   ORA &0F
-568C  3F                 ?    ...
-568D  40                 @    RTI
-568E  55 18              U.   EOR &18,X
-5690  10 00              ..   BPL &5692
-.addr5692
-5692  9F                 .    ...
-5693  51 66              Qf   EOR (&66),Y
-5695  18                 .    CLC
-5696  05 0F              ..   ORA &0F
-5698  9F                 .    ...
-5699  21 66              !f   AND (&66,X)
-569B  18                 .    CLC
-569C  0D 09 DF           ...  ORA &DF09
-.addr569F
-569F  32                 2    ...
-56A0  66 18              f.   ROR &18
-56A2  0D 09 FF           ...  ORA &FF09
-56A5  43                 C    ...
-56A6  66 18              f.   ROR &18
-56A8  05 0F              ..   ORA &0F
-56AA  BF                 .    ...
-56AB  54                 T    ...
-56AC  66 1F              f.   ROR &1F
-56AE  10 00              ..   BPL &56B0
-.addr56B0
-56B0  04                 .    ...
-56B1  1F                 .    ...
-56B2  20 04 08            ..  JSR &0804
-56B5  1F                 .    ...
-56B6  30 08              0.   BMI &56C0
-56B8  0C                 .    ...
-56B9  1F                 .    ...
-56BA  40                 @    RTI
-56BB  0C                 .    ...
-56BC  10 1F              ..   BPL &56DD
-56BE  50 00              P.   BVC &56C0
-.addr56C0
-56C0  10 1F              ..   BPL &56E1
-56C2  51 00              Q.   EOR (&00),Y
-56C4  14                 .    ...
-56C5  1F                 .    ...
-56C6  21 04              !.   AND (&04,X)
-56C8  18                 .    CLC
-56C9  1F                 .    ...
-56CA  32                 2    ...
-56CB  08                 .    PHP
-.addr56CC
-56CC  1C                 .    ...
-.addr56CD
-56CD  1F                 .    ...
-56CE  43                 C    ...
-56CF  0C                 .    ...
-56D0  20 1F 54            .T  JSR &541F
-56D3  10 24              .$   BPL &56F9
-56D5  1F                 .    ...
-56D6  61 14              a.   ADC (&14,X)
-56D8  18                 .    CLC
-56D9  1F                 .    ...
-56DA  62                 b    ...
-56DB  18                 .    CLC
-56DC  1C                 .    ...
-.addr56DD
-56DD  1F                 .    ...
-56DE  63                 c    ...
-56DF  1C                 .    ...
-56E0  20 1F 64            .d  JSR &641F
-56E3  20 24 1F            $.  JSR &1F24
-56E6  65 24              e$   ADC &24
-56E8  14                 .    ...
-56E9  1F                 .    ...
-56EA  60                 `    RTS
-56EB  00                 .    BRK
-56EC  00                 .    BRK
-.addr56ED
-56ED  1F                 .    ...
-56EE  00                 .    BRK
-56EF  29 1E              ).   AND #&1E
-56F1  5F                 _    ...
-56F2  00                 .    BRK
-56F3  12                 .    ...
-56F4  30 5F              0_   BMI &5755
-56F6  00                 .    BRK
-56F7  33                 3    ...
-56F8  00                 .    BRK
-.addr56F9
-56F9  7F                     ...
-56FA  00                 .    BRK
-56FB  12                 .    ...
-56FC  30 3F              0?   BMI &573D
-56FE  00                 .    BRK
-56FF  29 1E              ).   AND #&1E
-5701  9F                 .    ...
-5702  60                 `    RTS
-5703  00                 .    BRK
-5704  00                 .    BRK
-5705  0F                 .    ...
-5706  C4 09              ..   CPY &09
-5708  86 FE              ..   STX &FE
-570A  6D 00 26           m.&  ADC &2600
-570D  72                 r    ...
-570E  1E 00 00           ...  ASL &0000,Y
-5711  34                 4    ...
-5712  16 20              .    ASL &20,X
-5714  08                 .    PHP
-5715  00                 .    BRK
-5716  00                 .    BRK
-5717  02                 .    ...
-5718  00                 .    BRK
-5719  00                 .    BRK
-571A  23                 #    ...
-571B  2F                 /    ...
-571C  5F                 _    ...
-571D  FF                 .    ...
-571E  FF                 .    ...
-571F  23                 #    ...
-5720  00                 .    BRK
-5721  2F                 /    ...
-5722  9F                 .    ...
-5723  FF                 .    ...
-5724  FF                 .    ...
-5725  00                 .    BRK
-5726  23                 #    ...
-5727  2F                 /    ...
-5728  1F                 .    ...
-5729  FF                 .    ...
-572A  FF                 .    ...
-572B  23                 #    ...
-572C  00                 .    BRK
-572D  2F                 /    ...
-572E  1F                 .    ...
-572F  FF                 .    ...
-5730  FF                 .    ...
-5731  28                 (    PLP
-5732  28                 (    PLP
-5733  35 FF              5.   AND &FF,X
-5735  12                 .    ...
-5736  39 28 28           9((  AND &2828,Y
-5739  35 BF              5.   AND &BF,X
-573B  34                 4    ...
-573C  59 28 28           Y((  EOR &2828,Y
-573F  35 3F              5?   AND &3F,X
-5741  56 79              Vy   LSR &79,X
-5743  28                 (    PLP
-5744  28                 (    PLP
-5745  35 7F              5   AND &7F,X
-5747  17                 .    ...
-5748  89                 .    ...
-5749  0A                 .    ASL A
-574A  00                 .    BRK
-574B  35 30              50   AND &30,X
-574D  99 99 00           ...  STA &0099,Y
-5750  05 35              .5   ORA &35
-5752  70 99              p.   BVS &56ED
-5754  99 0A 00           ...  STA &000A,Y
-5757  35 A8              5.   AND &A8,X
-5759  99 99 00           ...  STA &0099,Y
-575C  05 35              .5   ORA &35
-575E  28                 (    PLP
-575F  99 99 00           ...  STA &0099,Y
-5762  11 47              .G   ORA (&47),Y
-5764  50 0A              P.   BVC &5770
-5766  BC 05 02           ...  LDY &0205,X
-5769  3D 46 FF           =F.  AND &FF46,X
-576C  02                 .    ...
-576D  07                 .    ...
-576E  17                 .    ...
-576F  31 07              1.   AND (&07),Y
-5771  01 F4              ..   ORA (&F4,X)
-5773  15 09              ..   ORA &09,X
-5775  31 07              1.   AND (&07),Y
-5777  A1 3F              .?   LDA (&3F,X)
-5779  05 02              ..   ORA &02
-577B  3D C6 6B           =.k  AND &6BC6,X
-577E  23                 #    ...
-577F  07                 .    ...
-5780  17                 .    ...
-5781  31 87              1.   AND (&87),Y
-5783  F8                 .    SED
-5784  C0 15              ..   CPY #&15
-5786  09 31              .1   ORA #&31
-5788  87                 .    ...
-5789  4F                 O    ...
-578A  18                 .    CLC
-578B  1F                 .    ...
-578C  02                 .    ...
-578D  00                 .    BRK
-578E  04                 .    ...
-578F  1F                 .    ...
-5790  4A                 J    LSR A
-5791  04                 .    ...
-5792  08                 .    PHP
-5793  1F                 .    ...
-5794  6B                 k    ...
-5795  08                 .    PHP
-5796  0C                 .    ...
-5797  1F                 .    ...
-5798  8C 00 0C           ...  STY &0C00
-579B  1F                 .    ...
-579C  18                 .    CLC
-579D  00                 .    BRK
-579E  1C                 .    ...
-579F  18                 .    CLC
-57A0  12                 .    ...
-57A1  00                 .    BRK
-57A2  10 1F              ..   BPL &57C3
-57A4  23                 #    ...
-57A5  04                 .    ...
-57A6  10 18              ..   BPL &57C0
-57A8  34                 4    ...
-57A9  04                 .    ...
-57AA  14                 .    ...
-57AB  1F                 .    ...
-57AC  45 08              E.   EOR &08
-57AE  14                 .    ...
-57AF  0C                 .    ...
-57B0  56 08              V.   LSR &08,X
-57B2  18                 .    CLC
-57B3  1F                 .    ...
-57B4  67                 g    ...
-57B5  0C                 .    ...
-57B6  18                 .    CLC
-57B7  18                 .    CLC
-57B8  78                 x    SEI
-57B9  0C                 .    ...
-57BA  1C                 .    ...
-57BB  1F                 .    ...
-57BC  39 10 14           9..  AND &1410,Y
-57BF  1F                 .    ...
-.addr57C0
-57C0  59 14 18           Y..  EOR &1814,Y
-.addr57C3
-57C3  1F                 .    ...
-57C4  79 18 1C           y..  ADC &1C18,Y
-57C7  1F                 .    ...
-57C8  19 10 1C           ...  ORA &1C10,Y
-57CB  10 0C              ..   BPL &57D9
-57CD  00                 .    BRK
-57CE  30 10              0.   BMI &57E0
-57D0  0A                 .    ASL A
-57D1  04                 .    ...
-57D2  30 10              0.   BMI &57E4
-57D4  AB                 .    ...
-57D5  08                 .    PHP
-57D6  30 10              0.   BMI &57E8
-57D8  BC 0C 30           ..0  LDY &300C,X
-57DB  10 99              ..   BPL &5776
-57DD  20 24 06            $.  JSR &0624
-.addr57E0
-57E0  99 24 28           .$(  STA &2824,Y
-57E3  08                 .    PHP
-.addr57E4
-57E4  99 28 2C           .(,  STA &2C28,Y
-57E7  06 99              ..   ASL &99
-57E9  20 2C 04            ,.  JSR &042C
-57EC  BB                 .    ...
-57ED  34                 4    ...
-57EE  38                 8    SEC
-57EF  07                 .    ...
-57F0  BB                 .    ...
-57F1  38                 8    SEC
-57F2  3C                 <    ...
-57F3  06 BB              ..   ASL &BB
-57F5  34                 4    ...
-57F6  3C                 <    ...
-57F7  04                 .    ...
-57F8  AA                 .    TAX
-57F9  40                 @    RTI
-57FA  44                 D    ...
-57FB  07                 .    ...
-57FC  AA                 .    TAX
-57FD  44                 D    ...
-57FE  48                 H    PHA
-57FF  06 AA              ..   ASL &AA
-5801  40                 @    RTI
-5802  48                 H    PHA
-5803  DF                 .    ...
-5804  6E 6E 50           nnP  ROR &506E
-5807  5F                 _    ...
-5808  00                 .    BRK
-5809  95 07              ..   STA &07,X
-580B  DF                 .    ...
-580C  66 66              ff   ROR &66
-580E  2E 9F 95           ...  ROL &959F
-5811  00                 .    BRK
-5812  07                 .    ...
-5813  9F                 .    ...
-5814  66 66              ff   ROR &66
-5816  2E 1F 00           ...  ROL &001F
-5819  95 07              ..   STA &07,X
-581B  1F                 .    ...
-581C  66 66              ff   ROR &66
-581E  2E 1F 95           ...  ROL &951F
-5821  00                 .    BRK
-5822  07                 .    ...
-5823  5F                 _    ...
-5824  66 66              ff   ROR &66
-5826  2E 3F 00           .?.  ROL &003F
-5829  00                 .    BRK
-582A  D5 9F              ..   CMP &9F,X
-582C  51 51              QQ   EOR (&51),Y
-582E  B1 1F              ..   LDA (&1F),Y
-5830  51 51              QQ   EOR (&51),Y
-5832  B1 5F              ._   LDA (&5F),Y
-5834  6E 6E 50           nnP  ROR &506E
-5837  00                 .    BRK
-5838  C4 09              ..   CPY &09
-583A  F2                 .    ...
-583B  AA                 .    TAX
-583C  91 30              .0   STA (&30),Y
-583E  1A                 .    ...
-583F  DE 2E 00           ...  DEC &002E,X
-5842  00                 .    BRK
-5843  38                 8    SEC
-5844  10 20              .    BPL &5866
-5846  0A                 .    ASL A
-5847  00                 .    BRK
-5848  01 01              ..   ORA (&01,X)
-584A  00                 .    BRK
-584B  00                 .    BRK
-584C  13                 .    ...
-584D  33                 3    ...
-584E  3F                 ?    ...
-584F  06 77              .w   ASL &77
-5851  33                 3    ...
-5852  07                 .    ...
-5853  33                 3    ...
-5854  BF                 .    ...
-5855  01 77              .w   ORA (&77,X)
-5857  39 07 33           9.3  AND &3307,Y
-585A  FF                 .    ...
-585B  01 22              ."   ORA (&22,X)
-585D  33                 3    ...
-585E  11 33              .3   ORA (&33),Y
-5860  FF                 .    ...
-5861  02                 .    ...
-5862  33                 3    ...
-5863  33                 3    ...
-5864  11 33              .3   ORA (&33),Y
-.addr5866
-5866  7F                     ...
-5867  03                 .    ...
-5868  44                 D    ...
-5869  39 07 33           9.3  AND &3307,Y
-586C  7F                     ...
-586D  04                 .    ...
-586E  55 33              U3   EOR &33,X
-5870  07                 .    ...
-5871  33                 3    ...
-5872  3F                 ?    ...
-5873  05 66              .f   ORA &66
-5875  00                 .    BRK
-5876  0C                 .    ...
-5877  18                 .    CLC
-5878  12                 .    ...
-5879  FF                 .    ...
-587A  FF                 .    ...
-587B  3C                 <    ...
-587C  02                 .    ...
-587D  18                 .    CLC
-587E  DF                 .    ...
-587F  17                 .    ...
-5880  89                 .    ...
-5881  42                 B    ...
-5882  11 18              ..   ORA (&18),Y
-5884  DF                 .    ...
-5885  12                 .    ...
-5886  39 42 11           9B.  AND &1142,Y
-5889  18                 .    CLC
-588A  5F                 _    ...
-588B  34                 4    ...
-588C  5A                 Z    ...
-588D  3C                 <    ...
-588E  02                 .    ...
-588F  18                 .    CLC
-5890  5F                 _    ...
-5891  56 AB              V.   LSR &AB,X
-5893  16 05              ..   ASL &05,X
-5895  3D DF 89           =..  AND &89DF,X
-5898  CD 1B 11           ...  CMP &111B
-589B  3D DF 39           =.9  AND &39DF,X
-589E  DD 1B 11           ...  CMP &111B,X
-58A1  3D 5F 3A           =_:  AND &3A5F,X
-58A4  DD 16 05           ...  CMP &0516,X
-58A7  3D 5F AB           =_.  AND &AB5F,X
-58AA  CD 0A 0B           ...  CMP &0B0A
-58AD  05 86              ..   ORA &86
-58AF  77                 w    ...
-58B0  77                 w    ...
-58B1  24 05              $.   BIT &05
-58B3  05 86              ..   ORA &86
-58B5  77                 w    ...
-58B6  77                 w    ...
-58B7  0A                 .    ASL A
-58B8  0D 0E A6           ...  ORA &A60E
-58BB  77                 w    ...
-58BC  77                 w    ...
-58BD  24 07              $.   BIT &07
-58BF  0E A6 77           ..w  ASL &77A6
-58C2  77                 w    ...
-58C3  17                 .    ...
-58C4  0C                 .    ...
-58C5  1D A6 77           ..w  ORA &77A6,X
-58C8  77                 w    ...
-58C9  17                 .    ...
-58CA  0A                 .    ASL A
-58CB  0E A6 77           ..w  ASL &77A6
-58CE  77                 w    ...
-58CF  0A                 .    ASL A
-58D0  0F                 .    ...
-58D1  1D 26 66           .&f  ORA &6626,X
-58D4  66 24              f$   ROR &24
-58D6  09 1D              ..   ORA #&1D
-58D8  26 66              &f   ROL &66
-58DA  66 17              f.   ROR &17
-58DC  0A                 .    ASL A
-58DD  0E 26 66           .&f  ASL &6626
-58E0  66 0A              f.   ROR &0A
-58E2  0C                 .    ...
-58E3  06 26              .&   ASL &26
-58E5  66 66              ff   ROR &66
-58E7  24 06              $.   BIT &06
-58E9  06 26              .&   ASL &26
-58EB  66 66              ff   ROR &66
-58ED  17                 .    ...
-58EE  07                 .    ...
-58EF  10 06              ..   BPL &58F7
-58F1  66 66              ff   ROR &66
-58F3  17                 .    ...
-58F4  09 06              ..   ORA #&06
-58F6  26 66              &f   ROL &66
-58F8  66 21              f!   ROR &21
-58FA  11 1A              ..   ORA (&1A),Y
-58FC  E5 33              .3   SBC &33
-58FE  33                 3    ...
-58FF  21 11              !.   AND (&11,X)
-5901  21 C5              !.   AND (&C5,X)
-5903  33                 3    ...
-.addr5904
-5904  33                 3    ...
-5905  21 11              !.   AND (&11,X)
-5907  1A                 .    ...
-5908  65 33              e3   ADC &33
-590A  33                 3    ...
-590B  21 11              !.   AND (&11,X)
-590D  21 45              !E   AND (&45,X)
-590F  33                 3    ...
-5910  33                 3    ...
-5911  19 06 33           ..3  ORA &3306,Y
-5914  E7                 .    ...
-5915  00                 .    BRK
-5916  00                 .    BRK
-5917  1A                 .    ...
-5918  06 33              .3   ASL &33
-591A  67                 g    ...
-591B  00                 .    BRK
-591C  00                 .    BRK
-591D  11 06              ..   ORA (&06),Y
-591F  33                 3    ...
-5920  24 00              $.   BIT &00
-5922  00                 .    BRK
-5923  11 06              ..   ORA (&06),Y
-5925  33                 3    ...
-5926  A4 00              ..   LDY &00
-5928  00                 .    BRK
-5929  1F                 .    ...
-592A  07                 .    ...
-592B  00                 .    BRK
-592C  04                 .    ...
-592D  1F                 .    ...
-592E  01 04              ..   ORA (&04,X)
-5930  08                 .    PHP
-5931  1F                 .    ...
-.addr5932
-5932  02                 .    ...
-5933  08                 .    PHP
-5934  0C                 .    ...
-5935  1F                 .    ...
-5936  03                 .    ...
-5937  0C                 .    ...
-5938  10 1F              ..   BPL &5959
-593A  04                 .    ...
-593B  10 14              ..   BPL &5951
-593D  1F                 .    ...
-593E  05 14              ..   ORA &14
-5940  18                 .    CLC
-5941  1F                 .    ...
-5942  06 00              ..   ASL &00
-5944  18                 .    CLC
-5945  0F                 .    ...
-5946  67                 g    ...
-5947  00                 .    BRK
-5948  1C                 .    ...
-5949  1F                 .    ...
-594A  17                 .    ...
-594B  04                 .    ...
-594C  20 0A 12            ..  JSR &120A
-594F  08                 .    PHP
-5950  24 1F              $.   BIT &1F
-5952  23                 #    ...
-5953  0C                 .    ...
-5954  24 1F              $.   BIT &1F
-5956  34                 4    ...
-5957  10 28              .(   BPL &5981
-.addr5959
-5959  0A                 .    ASL A
-595A  45 14              E.   EOR &14
-595C  28                 (    PLP
-595D  1F                 .    ...
-595E  56 18              V.   LSR &18,X
-5960  2C 10 78           ,.x  BIT &7810
-5963  1C                 .    ...
-5964  20 10 19            ..  JSR &1910
-5967  20 24 10            $.  JSR &1024
-596A  5A                 Z    ...
-596B  28                 (    PLP
-596C  2C 10 6B           ,.k  BIT &6B10
-596F  1C                 .    ...
-5970  2C 12 BC           ,..  BIT &BC12
-5973  1C                 .    ...
-5974  3C                 <    ...
-5975  12                 .    ...
-5976  8C 1C 30           ..0  STY &301C
-5979  10 89              ..   BPL &5904
-597B  20 30 1F            0.  JSR &1F30
-597E  39 24 34           9$4  AND &3424,Y
-.addr5981
-5981  1F                 .    ...
-5982  3A                 :    ...
-5983  28                 (    PLP
-5984  38                 8    SEC
-5985  10 AB              ..   BPL &5932
-5987  2C 3C 1F           ,<.  BIT &1F3C
-598A  9D 30 34           .04  STA &3430,X
-598D  1F                 .    ...
-598E  3D 34 38           =48  AND &3834,X
-5991  1F                 .    ...
-5992  AD 38 3C           .8<  LDA &3C38
-5995  1F                 .    ...
-5996  CD 30 3C           .0<  CMP &3C30
-5999  06 77              .w   ASL &77
-599B  40                 @    RTI
-599C  44                 D    ...
-599D  06 77              .w   ASL &77
-599F  48                 H    PHA
-59A0  4C 06 77           L.w  JMP &7706
-59A3  4C 50 06           LP.  JMP &0650
-59A6  77                 w    ...
-59A7  48                 H    PHA
-59A8  50 06              P.   BVC &59B0
-59AA  77                 w    ...
-59AB  50 54              PT   BVC &5A01
-59AD  06 66              .f   ASL &66
-59AF  58                 X    CLI
-.addr59B0
-59B0  5C                 \    ...
-59B1  06 66              .f   ASL &66
-59B3  5C                 \    ...
-59B4  60                 `    RTS
-59B5  06 66              .f   ASL &66
-59B7  60                 `    RTS
-59B8  58                 X    CLI
-59B9  06 66              .f   ASL &66
-59BB  64                 d    ...
-59BC  68                 h    PLA
-59BD  06 66              .f   ASL &66
-59BF  68                 h    PLA
-59C0  6C 06 66           l.f  JMP (&6606)
-59C3  64                 d    ...
-59C4  6C 06 66           l.f  JMP (&6606)
-59C7  6C 70 05           lp.  JMP (&0570)
-59CA  33                 3    ...
-59CB  74                 t    ...
-59CC  78                 x    SEI
-59CD  05 33              .3   ORA &33
-59CF  7C                 |    ...
-59D0  80                 .    ...
-59D1  07                 .    ...
-59D2  00                 .    BRK
-59D3  84 88              ..   STY &88
-59D5  04                 .    ...
-59D6  00                 .    BRK
-59D7  88                 .    DEY
-59D8  8C 04 00           ...  STY &0004
-59DB  8C 90 04           ...  STY &0490
-59DE  00                 .    BRK
-59DF  90 84              ..   BCC &5965
-59E1  3F                 ?    ...
-59E2  00                 .    BRK
-59E3  00                 .    BRK
-59E4  67                 g    ...
-59E5  BF                 .    ...
-59E6  6F                 o    ...
-59E7  30 07              0.   BMI &59F0
-59E9  FF                 .    ...
-59EA  69 3F              i?   ADC #&3F
-59EC  15 5F              ._   ORA &5F,X
-59EE  00                 .    BRK
-59EF  22                 "    ...
-.addr59F0
-59F0  00                 .    BRK
-59F1  7F                     ...
-59F2  69 3F              i?   ADC #&3F
-59F4  15 3F              .?   ORA &3F,X
-59F6  6F                 o    ...
-59F7  30 07              0.   BMI &5A00
-59F9  1F                 .    ...
-59FA  08                 .    PHP
-59FB  20 03 9F            ..  JSR &9F03
-59FE  08                 .    PHP
-59FF  20 03 92            ..  JSR &9203
-5A02  08                 .    PHP
-5A03  22                 "    ...
-5A04  0B                 .    ...
-5A05  9F                 .    ...
-5A06  4B                 K    ...
-5A07  20 4F 1F            O.  JSR &1F4F
-5A0A  4B                 K    ...
-5A0B  20 4F 12            O.  JSR &124F
-5A0E  08                 .    PHP
-5A0F  22                 "    ...
-5A10  0B                 .    ...
-5A11  1F                 .    ...
-5A12  00                 .    BRK
-5A13  26 11              &.   ROL &11
-5A15  1F                 .    ...
-5A16  00                 .    BRK
-5A17  00                 .    BRK
-5A18  79 03 41           y.A  ADC &4103,Y
-5A1B  23                 #    ...
-5A1C  BC 54 99           .T.  LDY &9954,X
-5A1F  54                 T    ...
-5A20  2A                 *    ROL A
-5A21  A8                 .    TAY
-5A22  26 00              &.   ROL &00
-5A24  00                 .    BRK
-5A25  34                 4    ...
-5A26  32                 2    ...
-5A27  96 1C              ..   STX &1C,Y
-5A29  00                 .    BRK
-5A2A  01 01              ..   ORA (&01,X)
-5A2C  13                 .    ...
-5A2D  20 00 4C            .L  JSR &4C00
-5A30  1F                 .    ...
-5A31  FF                 .    ...
-5A32  FF                 .    ...
-5A33  20 00 4C            .L  JSR &4C00
-5A36  9F                 .    ...
-5A37  FF                 .    ...
-5A38  FF                 .    ...
-5A39  00                 .    BRK
-5A3A  1A                 .    ...
-5A3B  18                 .    CLC
-5A3C  1F                 .    ...
-5A3D  FF                 .    ...
-5A3E  FF                 .    ...
-5A3F  78                 x    SEI
-5A40  03                 .    ...
-5A41  08                 .    PHP
-5A42  FF                 .    ...
-5A43  73                 s    ...
-5A44  AA                 .    TAX
-5A45  78                 x    SEI
-5A46  03                 .    ...
-5A47  08                 .    PHP
-5A48  7F                     ...
-5A49  84 CC              ..   STY &CC
-5A4B  58                 X    CLI
-5A4C  10 28              .(   BPL &5A76
-5A4E  BF                 .    ...
-5A4F  FF                 .    ...
-5A50  FF                 .    ...
-5A51  58                 X    CLI
-5A52  10 28              .(   BPL &5A7C
-5A54  3F                 ?    ...
-5A55  FF                 .    ...
-5A56  FF                 .    ...
-5A57  80                 .    ...
-5A58  08                 .    PHP
-5A59  28                 (    PLP
-5A5A  7F                     ...
-5A5B  98                 .    TYA
-5A5C  CC 80 08           ...  CPY &0880
-5A5F  28                 (    PLP
-5A60  FF                 .    ...
-5A61  97                 .    ...
-5A62  AA                 .    TAX
-5A63  00                 .    BRK
-5A64  1A                 .    ...
-5A65  28                 (    PLP
-5A66  3F                 ?    ...
-5A67  65 99              e.   ADC &99
-5A69  20 18 28            .(  JSR &2818
-.addr5A6C
-5A6C  FF                 .    ...
-5A6D  A9 BB              ..   LDA #&BB
-5A6F  20 18 28            .(  JSR &2818
-5A72  7F                     ...
-5A73  B9 CC 24           ..$  LDA &24CC,Y
-.addr5A76
-5A76  08                 .    PHP
-.addr5A77
-5A77  28                 (    PLP
-5A78  B4 99              ..   LDY &99
-5A7A  99 08 0C           ...  STA &0C08,Y
-5A7D  28                 (    PLP
-5A7E  B4 99              ..   LDY &99
-5A80  99 08 0C           ...  STA &0C08,Y
-5A83  28                 (    PLP
-5A84  34                 4    ...
-5A85  99 99 24           ..$  STA &2499,Y
-5A88  08                 .    PHP
-5A89  28                 (    PLP
-5A8A  34                 4    ...
-5A8B  99 99 24           ..$  STA &2499,Y
-5A8E  0C                 .    ...
-5A8F  28                 (    PLP
-5A90  74                 t    ...
-5A91  99 99 08           ...  STA &0899,Y
-5A94  10 28              .(   BPL &5ABE
-5A96  74                 t    ...
-5A97  99 99 08           ...  STA &0899,Y
-5A9A  10 28              .(   BPL &5AC4
-5A9C  F4                 .    ...
-5A9D  99 99 24           ..$  STA &2499,Y
-5AA0  0C                 .    ...
-5AA1  28                 (    PLP
-5AA2  F4                 .    ...
-5AA3  99 99 00           ...  STA &0099,Y
-5AA6  00                 .    BRK
-5AA7  4C 06 B0           L..  JMP &B006
-5AAA  BB                 .    ...
-5AAB  00                 .    BRK
-5AAC  00                 .    BRK
-5AAD  5A                 Z    ...
-5AAE  1F                 .    ...
-5AAF  B0 BB              ..   BCS &5A6C
-5AB1  50 06              P.   BVC &5AB9
-5AB3  28                 (    PLP
-5AB4  E8                 .    INX
-5AB5  99 99 50           ..P  STA &5099,Y
-5AB8  06 28              .(   ASL &28
-5ABA  A8                 .    TAY
-5ABB  99 99 58           ..X  STA &5899,Y
-.addr5ABE
-5ABE  00                 .    BRK
-5ABF  28                 (    PLP
-5AC0  A6 99              ..   LDX &99
-5AC2  99 50 06           .P.  STA &0650,Y
-5AC5  28                 (    PLP
-5AC6  28                 (    PLP
-5AC7  99 99 58           ..X  STA &5899,Y
-5ACA  00                 .    BRK
-5ACB  28                 (    PLP
-5ACC  26 99              &.   ROL &99
-5ACE  99 50 06           .P.  STA &0650,Y
-5AD1  28                 (    PLP
-5AD2  68                 h    PLA
-5AD3  99 99 1F           ...  STA &1F99,Y
-5AD6  B0 00              ..   BCS &5AD8
-.addr5AD8
-5AD8  04                 .    ...
-5AD9  1F                 .    ...
-5ADA  C4 00              ..   CPY &00
-5ADC  10 1F              ..   BPL &5AFD
-5ADE  A3                 .    ...
-5ADF  04                 .    ...
-5AE0  0C                 .    ...
-5AE1  1F                 .    ...
-5AE2  A7                 .    ...
-5AE3  0C                 .    ...
-5AE4  20 1F C8            ..  JSR &C81F
-5AE7  10 1C              ..   BPL &5B05
-5AE9  1F                 .    ...
-5AEA  98                 .    TYA
-5AEB  18                 .    CLC
-5AEC  1C                 .    ...
-5AED  1F                 .    ...
-5AEE  96 18              ..   STX &18,Y
-5AF0  24 1F              $.   BIT &1F
-5AF2  95 14              ..   STA &14,X
-5AF4  24 1F              $.   BIT &1F
-5AF6  97                 .    ...
-5AF7  14                 .    ...
-5AF8  20 1F 51            .Q  JSR &511F
-5AFB  08                 .    PHP
-5AFC  14                 .    ...
-.addr5AFD
-5AFD  1F                 .    ...
-5AFE  62                 b    ...
-5AFF  08                 .    PHP
-5B00  18                 .    CLC
-5B01  1F                 .    ...
-5B02  73                 s    ...
-5B03  0C                 .    ...
-5B04  14                 .    ...
-.addr5B05
-5B05  1F                 .    ...
-5B06  84 10              ..   STY &10
-5B08  18                 .    CLC
-5B09  1F                 .    ...
-5B0A  10 04              ..   BPL &5B10
-5B0C  08                 .    PHP
-5B0D  1F                 .    ...
-5B0E  20 00 08            ..  JSR &0800
-5B11  1F                 .    ...
-5B12  A9 20              .    LDA #&20
-5B14  28                 (    PLP
-5B15  1F                 .    ...
-5B16  B9 28 2C           .(,  LDA &2C28,Y
-.addr5B19
-5B19  1F                 .    ...
-5B1A  C9 1C              ..   CMP #&1C
-5B1C  2C 1F BA           ,..  BIT &BA1F
-5B1F  04                 .    ...
-5B20  28                 (    PLP
-5B21  1F                 .    ...
-5B22  CB                 .    ...
-5B23  00                 .    BRK
-5B24  2C 1D 31           ,.1  BIT &311D
-5B27  04                 .    ...
-5B28  14                 .    ...
-5B29  1D 42 00           .B.  ORA &0042,X
-5B2C  18                 .    CLC
-5B2D  06 B0              ..   ASL &B0
-5B2F  50 54              PT   BVC &5B85
-5B31  14                 .    ...
-5B32  99 30 34           .04  STA &3430,Y
-5B35  14                 .    ...
-5B36  99 48 4C           .HL  STA &4C48,Y
-5B39  14                 .    ...
-5B3A  99 38 3C           .8<  STA &3C38,Y
-5B3D  14                 .    ...
-5B3E  99 40 44           .@D  STA &4440,Y
-5B41  13                 .    ...
-5B42  99 3C 40           .<@  STA &403C,Y
-5B45  11 99              ..   ORA (&99),Y
-5B47  38                 8    SEC
-5B48  44                 D    ...
-5B49  13                 .    ...
-5B4A  99 34 48           .4H  STA &4834,Y
-5B4D  13                 .    ...
-5B4E  99 30 4C           .0L  STA &4C30,Y
-5B51  1E 65 08           .e.  ASL &0865,Y
-5B54  24 06              $.   BIT &06
-5B56  99 58 60           .X`  STA &6058,Y
-5B59  06 99              ..   ASL &99
-5B5B  5C                 \    ...
-5B5C  60                 `    RTS
-5B5D  08                 .    PHP
-5B5E  99 58 5C           .X\  STA &5C58,Y
-5B61  06 99              ..   ASL &99
-5B63  64                 d    ...
-5B64  68                 h    PLA
-5B65  06 99              ..   ASL &99
-5B67  68                 h    PLA
-5B68  6C 08 99           l..  JMP (&9908)
-5B6B  64                 d    ...
-5B6C  6C 1F 00           l..  JMP (&001F)
-5B6F  3E 1F 9F           >..  ROL &9F1F,X
-5B72  12                 .    ...
-5B73  37                 7    ...
-5B74  10 1F              ..   BPL &5B95
-5B76  12                 .    ...
-5B77  37                 7    ...
-5B78  10 9F              ..   BPL &5B19
-5B7A  10 34              .4   BPL &5BB0
-5B7C  0E 1F 10           ...  ASL &101F
-5B7F  34                 4    ...
-5B80  0E 9F 0E           ...  ASL &0E9F
-5B83  2F                 /    ...
-5B84  00                 .    BRK
-.addr5B85
-5B85  1F                 .    ...
-5B86  0E 2F 00           ./.  ASL &002F
-5B89  9F                 .    ...
-.addr5B8A
-5B8A  3D 66 00           =f.  AND &0066,X
-5B8D  1F                 .    ...
-5B8E  3D 66 00           =f.  AND &0066,X
-5B91  3F                 ?    ...
-5B92  00                 .    BRK
-5B93  00                 .    BRK
-5B94  50 DF              P.   BVC &5B75
-5B96  07                 .    ...
-5B97  2A                 *    ROL A
-5B98  09 5F              ._   ORA #&5F
-5B9A  00                 .    BRK
-5B9B  1E 06 5F           .._  ASL &5F06,Y
-5B9E  07                 .    ...
-5B9F  2A                 *    ROL A
-5BA0  09 05              ..   ORA #&05
-5BA2  00                 .    BRK
-5BA3  19 56 BE           .V.  ORA &BE56,Y
-5BA6  55 00              U.   EOR &00,X
-5BA8  2A                 *    ROL A
-5BA9  42                 B    ...
-5BAA  1A                 .    ...
-5BAB  00                 .    BRK
-5BAC  00                 .    BRK
-5BAD  34                 4    ...
-5BAE  28                 (    PLP
-5BAF  FA                 .    ...
-.addr5BB0
-5BB0  14                 .    ...
-5BB1  00                 .    BRK
-5BB2  00                 .    BRK
-5BB3  00                 .    BRK
-5BB4  1B                 .    ...
-5BB5  00                 .    BRK
-5BB6  00                 .    BRK
-5BB7  E0 1F              ..   CPX #&1F
-5BB9  10 32              .2   BPL &5BED
-5BBB  00                 .    BRK
-5BBC  30 30              00   BMI &5BEE
-5BBE  1E 10 54           ..T  ASL &5410,Y
-5BC1  60                 `    RTS
-5BC2  00                 .    BRK
-5BC3  10 3F              .?   BPL &5C04
-5BC5  FF                 .    ...
-5BC6  FF                 .    ...
-5BC7  60                 `    RTS
-5BC8  00                 .    BRK
-5BC9  10 BF              ..   BPL &5B8A
-5BCB  FF                 .    ...
-5BCC  FF                 .    ...
-5BCD  00                 .    BRK
-5BCE  30 20              0    BMI &5BF0
-5BD0  3E 54 98           >T.  ROL &9854,X
-5BD3  00                 .    BRK
-5BD4  18                 .    CLC
-5BD5  70 3F              p?   BVS &5C16
-5BD7  89                 .    ...
-5BD8  CC 30 00           .0.  CPY &0030
-5BDB  70 BF              p.   BVS &5B9C
-5BDD  B8                 .    CLV
-5BDE  CC 30 00           .0.  CPY &0030
-5BE1  70 3F              p?   BVS &5C22
-5BE3  A9 CC              ..   LDA #&CC
-5BE5  00                 .    BRK
-5BE6  30 30              00   BMI &5C18
-5BE8  5E 32 76           ^2v  LSR &7632,Y
-5BEB  00                 .    BRK
-5BEC  30 20              0    BMI &5C0E
-.addr5BEE
-5BEE  7E 76 BA           ~v.  ROR &BA76,X
-5BF1  00                 .    BRK
-5BF2  18                 .    CLC
-5BF3  70 7E              p~   BVS &5C73
-5BF5  BA                 .    TSX
-5BF6  CC 1E 32           ..2  CPY &321E
-5BF9  00                 .    BRK
-5BFA  20 1F 20            .   JSR &201F
-5BFD  00                 .    BRK
-5BFE  0C                 .    ...
-5BFF  1F                 .    ...
-5C00  31 00              1.   AND (&00),Y
-5C02  08                 .    PHP
-5C03  1E 10 00           ...  ASL &0010,Y
-5C06  04                 .    ...
-5C07  1D 59 08           .Y.  ORA &0859,X
-5C0A  10 1D              ..   BPL &5C29
-5C0C  51 04              Q.   EOR (&04),Y
-.addr5C0E
-5C0E  08                 .    PHP
-5C0F  1D 37 08           .7.  ORA &0837,X
-5C12  20 1D 40            .@  JSR &401D
-5C15  04                 .    ...
-.addr5C16
-5C16  0C                 .    ...
-5C17  1D 62 0C           .b.  ORA &0C62,X
-5C1A  20 1D A7            ..  JSR &A71D
-5C1D  08                 .    PHP
-5C1E  24 1D              $.   BIT &1D
-5C20  84 0C              ..   STY &0C
-.addr5C22
-5C22  10 1D              ..   BPL &5C41
-5C24  B6 0C              ..   LDX &0C,Y
-5C26  24 05              $.   BIT &05
-5C28  88                 .    DEY
-.addr5C29
-5C29  0C                 .    ...
-5C2A  14                 .    ...
-5C2B  05 BB              ..   ORA &BB
-5C2D  0C                 .    ...
-5C2E  28                 (    PLP
-5C2F  05 99              ..   ORA &99
-5C31  08                 .    PHP
-5C32  14                 .    ...
-5C33  05 AA              ..   ORA &AA
-5C35  08                 .    PHP
-5C36  28                 (    PLP
-5C37  1F                 .    ...
-5C38  A9 08              ..   LDA #&08
-5C3A  1C                 .    ...
-5C3B  1F                 .    ...
-5C3C  B8                 .    CLV
-5C3D  0C                 .    ...
-5C3E  18                 .    CLC
-5C3F  1F                 .    ...
-5C40  C8                 .    INY
-.addr5C41
-5C41  14                 .    ...
-5C42  18                 .    CLC
-5C43  1F                 .    ...
-5C44  C9 14              ..   CMP #&14
-5C46  1C                 .    ...
-5C47  1D AC 1C           ...  ORA &1CAC,X
-5C4A  28                 (    PLP
-5C4B  1D CB 18           ...  ORA &18CB,X
-5C4E  28                 (    PLP
-5C4F  1D 98 10           ...  ORA &1098,X
-5C52  14                 .    ...
-5C53  1D BA 24           ..$  ORA &24BA,X
-5C56  28                 (    PLP
-5C57  1D 54 04           .T.  ORA &0454,X
-5C5A  10 1D              ..   BPL &5C79
-5C5C  76 20              v    ROR &20,X
-5C5E  24 9E              $.   BIT &9E
-5C60  1B                 .    ...
-5C61  28                 (    PLP
-5C62  0B                 .    ...
-5C63  1E 1B 28           ..(  ASL &281B,Y
-5C66  0B                 .    ...
-5C67  DE 1B 28           ..(  DEC &281B,X
-5C6A  0B                 .    ...
-5C6B  5E 1B 28           ^.(  LSR &281B,Y
-5C6E  0B                 .    ...
-5C6F  9E                 .    ...
-5C70  13                 .    ...
-5C71  26 00              &.   ROL &00
-.addr5C73
-5C73  1E 13 26           ..&  ASL &2613,Y
-5C76  00                 .    BRK
-5C77  DE 13 26           ..&  DEC &2613,X
-5C7A  00                 .    BRK
-5C7B  5E 13 26           ^.&  LSR &2613,Y
-5C7E  00                 .    BRK
-5C7F  BE 19 25           ..%  LDX &2519,Y
-5C82  0B                 .    ...
-5C83  3E 19 25           >.%  ROL &2519,X
-5C86  0B                 .    ...
-5C87  7E 19 25           ~.%  ROR &2519,X
-5C8A  0B                 .    ...
-5C8B  FE 19 25           ..%  INC &2519,X
-5C8E  0B                 .    ...
-5C8F  3E 00 00           >..  ROL &0000,X
-5C92  70 00              p.   BVS &5C94
-.addr5C94
-5C94  F9 15 6E           ..n  SBC &6E15,Y
-5C97  BE 4D 00           .M.  LDX &004D,Y
-5C9A  2A                 *    ROL A
-5C9B  5A                 Z    ...
-5C9C  14                 .    ...
-5C9D  00                 .    BRK
-5C9E  00                 .    BRK
-5C9F  1C                 .    ...
-5CA0  17                 .    ...
-5CA1  64                 d    ...
-5CA2  20 00 00            ..  JSR &0000
-5CA5  01 11              ..   ORA (&11,X)
-5CA7  00                 .    BRK
-5CA8  00                 .    BRK
-5CA9  48                 H    PHA
-5CAA  1F                 .    ...
-5CAB  21 43              !C   AND (&43,X)
-5CAD  00                 .    BRK
-5CAE  10 18              ..   BPL &5CC8
-5CB0  1E 10 22           .."  ASL &2210,Y
-5CB3  00                 .    BRK
-5CB4  10 18              ..   BPL &5CCE
-5CB6  5E 43 55           ^CU  LSR &5543,Y
-5CB9  30 00              0.   BMI &5CBB
-.addr5CBB
-5CBB  18                 .    CLC
-5CBC  3F                 ?    ...
-5CBD  42                 B    ...
-5CBE  66 30              f0   ROR &30
-5CC0  00                 .    BRK
-5CC1  18                 .    CLC
-5CC2  BF                 .    ...
-5CC3  31 66              1f   AND (&66),Y
-5CC5  18                 .    CLC
-5CC6  10 18              ..   BPL &5CE0
-.addr5CC8
-5CC8  7E 54 66           ~Tf  ROR &6654,X
-5CCB  18                 .    CLC
-5CCC  10 18              ..   BPL &5CE6
-.addr5CCE
-5CCE  FE 35 66           .5f  INC &6635,X
-5CD1  18                 .    CLC
-5CD2  10 18              ..   BPL &5CEC
-5CD4  3F                 ?    ...
-5CD5  20 66 18            f.  JSR &1866
-5CD8  10 18              ..   BPL &5CF2
-5CDA  BF                 .    ...
-5CDB  10 66              .f   BPL &5D43
-5CDD  20 00 18            ..  JSR &1800
-.addr5CE0
-5CE0  B3                 .    ...
-5CE1  66 66              ff   ROR &66
-5CE3  20 00 18            ..  JSR &1800
-.addr5CE6
-5CE6  33                 3    ...
-5CE7  66 66              ff   ROR &66
-5CE9  08                 .    PHP
-5CEA  08                 .    PHP
-5CEB  18                 .    CLC
-.addr5CEC
-5CEC  33                 3    ...
-5CED  66 66              ff   ROR &66
-5CEF  08                 .    PHP
-5CF0  08                 .    PHP
-5CF1  18                 .    CLC
-.addr5CF2
-5CF2  B3                 .    ...
-5CF3  66 66              ff   ROR &66
-5CF5  08                 .    PHP
-5CF6  08                 .    PHP
-5CF7  18                 .    CLC
-5CF8  F2                 .    ...
-5CF9  66 66              ff   ROR &66
-5CFB  08                 .    PHP
-5CFC  08                 .    PHP
-5CFD  18                 .    CLC
-5CFE  72                 r    ...
-5CFF  66 66              ff   ROR &66
-5D01  1F                 .    ...
-5D02  42                 B    ...
-5D03  00                 .    BRK
-5D04  0C                 .    ...
-5D05  1E 21 00           .!.  ASL &0021,Y
-5D08  04                 .    ...
-5D09  1E 43 00           .C.  ASL &0043,Y
-5D0C  08                 .    PHP
-5D0D  1F                 .    ...
-5D0E  31 00              1.   AND (&00),Y
-5D10  10 1E              ..   BPL &5D30
-5D12  20 04 1C            ..  JSR &1C04
-5D15  1E 10 04           ...  ASL &0410,Y
-5D18  20 1E 54            .T  JSR &541E
-5D1B  08                 .    PHP
-5D1C  14                 .    ...
-5D1D  1E 53 08           .S.  ASL &0853,Y
-5D20  18                 .    CLC
-5D21  1F                 .    ...
-5D22  60                 `    RTS
-5D23  1C                 .    ...
-5D24  20 1E 65            .e  JSR &651E
-5D27  14                 .    ...
-5D28  18                 .    CLC
-5D29  1F                 .    ...
-5D2A  61 10              a.   ADC (&10,X)
-5D2C  20 1E 63            .c  JSR &631E
-5D2F  10 18              ..   BPL &5D49
-5D31  1F                 .    ...
-5D32  62                 b    ...
-5D33  0C                 .    ...
-5D34  1C                 .    ...
-5D35  1E 46 0C           .F.  ASL &0C46,Y
-5D38  14                 .    ...
-5D39  13                 .    ...
-5D3A  66 24              f$   ROR &24
-5D3C  30 12              0.   BMI &5D50
-5D3E  66 24              f$   ROR &24
-5D40  34                 4    ...
-5D41  13                 .    ...
-5D42  66 28              f(   ROR &28
-5D44  2C 12 66           ,.f  BIT &6612
-5D47  28                 (    PLP
-5D48  38                 8    SEC
-.addr5D49
-5D49  10 66              .f   BPL &5DB1
-5D4B  2C 38 10           ,8.  BIT &1038
-5D4E  66 30              f0   ROR &30
-.addr5D50
-5D50  34                 4    ...
-5D51  1F                 .    ...
-5D52  00                 .    BRK
-5D53  20 00 9F            ..  JSR &9F00
-5D56  16 21              .!   ASL &21,X
-5D58  0B                 .    ...
-5D59  1F                 .    ...
-5D5A  16 21              .!   ASL &21,X
-5D5C  0B                 .    ...
-5D5D  DF                 .    ...
-5D5E  16 21              .!   ASL &21,X
-5D60  0B                 .    ...
-5D61  5F                 _    ...
-5D62  16 21              .!   ASL &21,X
-5D64  0B                 .    ...
-5D65  5F                 _    ...
-5D66  00                 .    BRK
-5D67  20 00 3F            .?  JSR &3F00
-5D6A  00                 .    BRK
-5D6B  00                 .    BRK
-5D6C  30 01              0.   BMI &5D6F
-5D6E  10 0E              ..   BPL &5D7E
-5D70  7A                 z    ...
-5D71  CE 55 00           .U.  DEC &0055
-5D74  12                 .    ...
-5D75  66 15              f.   ROR &15
-5D77  64                 d    ...
-5D78  00                 .    BRK
-5D79  18                 .    CLC
-5D7A  14                 .    ...
-5D7B  50 1E              P.   BVC &5D9B
-5D7D  00                 .    BRK
-.addr5D7E
-5D7E  00                 .    BRK
-5D7F  02                 .    ...
-5D80  10 00              ..   BPL &5D82
-.addr5D82
-5D82  00                 .    BRK
-5D83  60                 `    RTS
-5D84  1F                 .    ...
-5D85  01 23              .#   ORA (&23,X)
-5D87  00                 .    BRK
-5D88  12                 .    ...
-5D89  30 3F              0?   BMI &5DCA
-5D8B  03                 .    ...
-5D8C  45 00              E.   EOR &00
-5D8E  12                 .    ...
-5D8F  30 7F              0   BMI &5E10
-5D91  12                 .    ...
-5D92  45 5A              EZ   EOR &5A
-5D94  00                 .    BRK
-5D95  03                 .    ...
-5D96  3F                 ?    ...
-5D97  01 44              .D   ORA (&44,X)
-5D99  5A                 Z    ...
-5D9A  00                 .    BRK
-.addr5D9B
-5D9B  03                 .    ...
-5D9C  BF                 .    ...
-5D9D  23                 #    ...
-5D9E  55 5A              UZ   EOR &5A,X
-5DA0  00                 .    BRK
-5DA1  57                 W    ...
-5DA2  1C                 .    ...
-5DA3  01 11              ..   ORA (&11,X)
-5DA5  5A                 Z    ...
-5DA6  00                 .    BRK
-5DA7  57                 W    ...
-5DA8  9C                 .    ...
-5DA9  23                 #    ...
-5DAA  33                 3    ...
-5DAB  00                 .    BRK
-5DAC  05 35              .5   ORA &35
-5DAE  09 00              ..   ORA #&00
-5DB0  33                 3    ...
-.addr5DB1
-5DB1  00                 .    BRK
-5DB2  07                 .    ...
-5DB3  26 06              &.   ROL &06
-5DB5  00                 .    BRK
-5DB6  33                 3    ...
-5DB7  12                 .    ...
-5DB8  07                 .    ...
-5DB9  13                 .    ...
-5DBA  89                 .    ...
-5DBB  33                 3    ...
-5DBC  33                 3    ...
-5DBD  12                 .    ...
-5DBE  07                 .    ...
-5DBF  13                 .    ...
-5DC0  09 00              ..   ORA #&00
-5DC2  00                 .    BRK
-5DC3  12                 .    ...
-5DC4  0B                 .    ...
-5DC5  27                 '    ...
-5DC6  28                 (    PLP
-5DC7  44                 D    ...
-5DC8  44                 D    ...
-5DC9  12                 .    ...
-.addr5DCA
-5DCA  0B                 .    ...
-5DCB  27                 '    ...
-5DCC  68                 h    PLA
-5DCD  44                 D    ...
-5DCE  44                 D    ...
-5DCF  24 00              $.   BIT &00
-5DD1  1E 28 44           .(D  ASL &4428,Y
-5DD4  44                 D    ...
-5DD5  12                 .    ...
-5DD6  0B                 .    ...
-5DD7  27                 '    ...
-5DD8  A8                 .    TAY
-5DD9  55 55              UU   EOR &55,X
-5DDB  12                 .    ...
-5DDC  0B                 .    ...
-5DDD  27                 '    ...
-5DDE  E8                 .    INX
-5DDF  55 55              UU   EOR &55,X
-5DE1  24 00              $.   BIT &00
-5DE3  1E A8 55           ..U  ASL &55A8,Y
-5DE6  55 1F              U.   EOR &1F,X
-5DE8  03                 .    ...
-5DE9  00                 .    BRK
-5DEA  04                 .    ...
-5DEB  1F                 .    ...
-5DEC  12                 .    ...
-5DED  00                 .    BRK
-5DEE  08                 .    PHP
-5DEF  1F                 .    ...
-5DF0  01 00              ..   ORA (&00,X)
-5DF2  0C                 .    ...
-5DF3  1F                 .    ...
-5DF4  23                 #    ...
-5DF5  00                 .    BRK
-5DF6  10 1F              ..   BPL &5E17
-5DF8  35 04              5.   AND &04,X
-5DFA  10 1F              ..   BPL &5E1B
-5DFC  25 10              %.   AND &10
-5DFE  08                 .    PHP
-5DFF  1F                 .    ...
-5E00  14                 .    ...
-5E01  08                 .    PHP
-5E02  0C                 .    ...
-5E03  1F                 .    ...
-5E04  04                 .    ...
-5E05  0C                 .    ...
-5E06  04                 .    ...
-5E07  1C                 .    ...
-5E08  01 0C              ..   ORA (&0C,X)
-5E0A  14                 .    ...
-5E0B  1C                 .    ...
-5E0C  23                 #    ...
-5E0D  10 18              ..   BPL &5E27
-5E0F  05 45              .E   ORA &45
-5E11  04                 .    ...
-5E12  08                 .    PHP
-5E13  09 00              ..   ORA #&00
-5E15  1C                 .    ...
-5E16  28                 (    PLP
-.addr5E17
-5E17  06 00              ..   ASL &00
-5E19  20 28 09            (.  JSR &0928
-5E1C  33                 3    ...
-5E1D  1C                 .    ...
-5E1E  24 06              $.   BIT &06
-5E20  33                 3    ...
-5E21  20 24 08            $.  JSR &0824
-5E24  44                 D    ...
-5E25  2C 34 08           ,4.  BIT &0834
-5E28  44                 D    ...
-5E29  34                 4    ...
-5E2A  30 07              0.   BMI &5E33
-5E2C  44                 D    ...
-5E2D  30 2C              0,   BMI &5E5B
-5E2F  07                 .    ...
-5E30  55 38              U8   EOR &38,X
-5E32  3C                 <    ...
-.addr5E33
-5E33  08                 .    PHP
-5E34  55 3C              U<   EOR &3C,X
-5E36  40                 @    RTI
-5E37  08                 .    PHP
-5E38  55 40              U@   EOR &40,X
-5E3A  38                 8    SEC
-5E3B  1F                 .    ...
-5E3C  07                 .    ...
-5E3D  30 06              0.   BMI &5E45
-5E3F  5F                 _    ...
-5E40  07                 .    ...
-5E41  30 06              0.   BMI &5E49
-5E43  DF                 .    ...
-5E44  07                 .    ...
-.addr5E45
-5E45  30 06              0.   BMI &5E4D
-5E47  9F                 .    ...
-5E48  07                 .    ...
-.addr5E49
-5E49  30 06              0.   BMI &5E51
-5E4B  3F                 ?    ...
-5E4C  4D 00 9A           M..  EOR &9A00
-5E4F  BF                 .    ...
-.addr5E50
-5E50  4D 00 9A           M..  EOR &9A00
-5E53  F3                 .    ...
-5E54  49 26              I&   EOR #&26
-5E56  7A                 z    ...
-5E57  DA                 .    ...
-5E58  4D 00 2E           M..  EOR &2E00
-.addr5E5B
-5E5B  66 18              f.   ROR &18
-5E5D  00                 .    BRK
-5E5E  00                 .    BRK
-5E5F  28                 (    PLP
-5E60  2D C8 37           -.7  AND &37C8
-5E63  00                 .    BRK
-5E64  00                 .    BRK
-5E65  02                 .    ...
-5E66  2F                 /    ...
-5E67  14                 .    ...
-5E68  07                 .    ...
-5E69  50 5F              P_   BVC &5ECA
-5E6B  02                 .    ...
-5E6C  99 14 07           ...  STA &0714,Y
-5E6F  50 DF              P.   BVC &5E50
-5E71  01 99              ..   ORA (&99,X)
-5E73  36 07              6.   ROL &07,X
-5E75  28                 (    PLP
-5E76  DF                 .    ...
-5E77  14                 .    ...
-5E78  99 36 07           .6.  STA &0736,Y
-5E7B  28                 (    PLP
-5E7C  FF                 .    ...
-5E7D  45 89              E.   EOR &89
-5E7F  14                 .    ...
-5E80  0D 28 BF           .(.  ORA &BF28
-5E83  56 88              V.   LSR &88,X
-5E85  14                 .    ...
-5E86  0D 28 3F           .(?  ORA &3F28
-5E89  67                 g    ...
-5E8A  88                 .    DEY
-5E8B  36 07              6.   ROL &07,X
-5E8D  28                 (    PLP
-5E8E  7F                     ...
-5E8F  37                 7    ...
-5E90  89                 .    ...
-5E91  36 07              6.   ROL &07,X
-5E93  28                 (    PLP
-5E94  5F                 _    ...
-5E95  23                 #    ...
-5E96  99 14 0D           ...  STA &0D14,Y
-5E99  05 1F              ..   ORA &1F
-5E9B  FF                 .    ...
-5E9C  FF                 .    ...
-5E9D  14                 .    ...
-5E9E  0D 05 9F           ...  ORA &9F05
-5EA1  FF                 .    ...
-5EA2  FF                 .    ...
-5EA3  14                 .    ...
-5EA4  07                 .    ...
-5EA5  3E 52 99           >R.  ROL &9952,X
-5EA8  99 14 07           ...  STA &0714,Y
-5EAB  3E D2 99           >..  ROL &99D2,X
-5EAE  99 19 07           ...  STA &0719,Y
-5EB1  19 72 99           .r.  ORA &9972,Y
-5EB4  99 19 07           ...  STA &0719,Y
-5EB7  19 F2 99           ...  ORA &99F2,Y
-5EBA  99 0F 07           ...  STA &070F,Y
-5EBD  0F                 .    ...
-5EBE  6A                 j    ROR A
-5EBF  99 99 0F           ...  STA &0F99,Y
-5EC2  07                 .    ...
-5EC3  0F                 .    ...
-5EC4  EA                 .    NOP
-5EC5  99 99 00           ...  STA &0099,Y
-5EC8  07                 .    ...
-5EC9  00                 .    BRK
-.addr5ECA
-5ECA  40                 @    RTI
-5ECB  9F                 .    ...
-5ECC  01 1F              ..   ORA (&1F,X)
-5ECE  09 00              ..   ORA #&00
-5ED0  04                 .    ...
-5ED1  1F                 .    ...
-5ED2  19 04 08           ...  ORA &0804,Y
-5ED5  1F                 .    ...
-5ED6  01 04              ..   ORA (&04,X)
-5ED8  24 1F              $.   BIT &1F
-5EDA  02                 .    ...
-5EDB  00                 .    BRK
-5EDC  20 1F 29            .)  JSR &291F
-5EDF  00                 .    BRK
-5EE0  1C                 .    ...
-5EE1  1F                 .    ...
-5EE2  23                 #    ...
-5EE3  1C                 .    ...
-5EE4  20 1F 14            ..  JSR &141F
-5EE7  08                 .    PHP
-5EE8  24 1F              $.   BIT &1F
-5EEA  49 08              I.   EOR #&08
-5EEC  0C                 .    ...
-5EED  1F                 .    ...
-5EEE  39 18 1C           9..  AND &1C18,Y
-5EF1  1F                 .    ...
-5EF2  37                 7    ...
-5EF3  18                 .    CLC
-5EF4  20 1F 67            .g  JSR &671F
-5EF7  14                 .    ...
-5EF8  20 1F 56            .V  JSR &561F
-5EFB  10 24              .$   BPL &5F21
-5EFD  1F                 .    ...
-5EFE  45 0C              E.   EOR &0C
-5F00  24 1F              $.   BIT &1F
-5F02  58                 X    CLI
-5F03  0C                 .    ...
-5F04  10 1F              ..   BPL &5F25
-5F06  68                 h    PLA
-5F07  10 14              ..   BPL &5F1D
-5F09  1F                 .    ...
-5F0A  78                 x    SEI
-5F0B  14                 .    ...
-5F0C  18                 .    CLC
-5F0D  1F                 .    ...
-5F0E  89                 .    ...
-5F0F  0C                 .    ...
-5F10  18                 .    CLC
-5F11  1F                 .    ...
-5F12  06 20              .    ASL &20
-5F14  24 12              $.   BIT &12
-5F16  99 28 30           .(0  STA &3028,Y
-5F19  05 99              ..   ORA &99
-5F1B  30 38              08   BMI &5F55
-.addr5F1D
-5F1D  0A                 .    ASL A
-5F1E  99 38 28           .8(  STA &2838,Y
-.addr5F21
-5F21  0A                 .    ASL A
-5F22  99 2C 3C           .,<  STA &3C2C,Y
-.addr5F25
-5F25  05 99              ..   ORA &99
-5F27  34                 4    ...
-5F28  3C                 <    ...
-5F29  12                 .    ...
-5F2A  99 2C 34           .,4  STA &342C,Y
-5F2D  1F                 .    ...
-5F2E  00                 .    BRK
-5F2F  37                 7    ...
-5F30  0F                 .    ...
-5F31  9F                 .    ...
-5F32  18                 .    CLC
-5F33  4B                 K    ...
-5F34  14                 .    ...
-5F35  1F                 .    ...
-5F36  18                 .    CLC
-5F37  4B                 K    ...
-5F38  14                 .    ...
-5F39  1F                 .    ...
-5F3A  2C 4B 00           ,K.  BIT &004B
-5F3D  9F                 .    ...
-5F3E  2C 4B 00           ,K.  BIT &004B
-5F41  9F                 .    ...
-5F42  2C 4B 00           ,K.  BIT &004B
-5F45  1F                 .    ...
-5F46  00                 .    BRK
-5F47  35 00              5.   AND &00,X
-5F49  1F                 .    ...
-5F4A  2C 4B 00           ,K.  BIT &004B
-5F4D  3F                 ?    ...
-5F4E  00                 .    BRK
-5F4F  00                 .    BRK
-5F50  A0 5F              ._   LDY #&5F
-5F52  00                 .    BRK
-5F53  1B                 .    ...
-5F54  00                 .    BRK
+
+.addr55C0                               ; Table used for 5 choices
+	EQUB &10, &15, &1A, &1F, &9B, &A0, &2E, &A5   ; build offsets in steps in 5, called with indices &5B...&62 (tokens above 'Z')
+	EQUB &24, &29, &3D, &33, &38, &AA, &42, &47   ; build offsets in steps in 5, called with indices &63...&6A (tokens above 'Z')
+	EQUB &4C, &51, &56, &8C, &60, &65, &87, &82   ; build offsets in steps in 5, called with indices &6B...&72 (tokens above 'Z')
+	EQUB &5B, &6A, &B4, &B9, &BE, &E1, &E6, &EB   ; build offsets in steps in 5, called with indices &73...&7A (tokens above 'Z')
+	EQUB &F0, &F5, &FA, &73, &78, &7D   ; build offsets in steps in 5, called with indices &7B...&80 (tokens above 'Z')
+
+.addr55E6
+	EQUS "END-END-END"
+
+.addr5561
+	EQUB &8E, &13, &1C, &00
+	EQUB &00, &73, &56, &52
+	EQUB &49, &53, &00
+	EQUB &8E, &13, &34, &B3
+
+
+.addr5600
+	EQUW &7F00                      ; Ship type 01: 
+	EQUW &0000                      ; Ship type 02: Space station
+	EQUW &0000                      ; Ship type 03: Esacape pod
+	EQUW &0000                      ; Ship type 04: 
+	EQUW ship_cargo_cannister       ; Ship type 05: Cargo cannister
+	EQUW &0000                      ; Ship type 06: 
+	EQUW &0000                      ; Ship type 07: Asteroid
+	EQUW &0000                      ; Ship type 08: 
+	EQUW ship_shuttle               ; Ship type 09: Shuttle
+	EQUW ship_transporter           ; Ship type 10: Transporter
+	EQUW ship_cobra_mk3             ; Ship type 11: Cobra Mk3
+	EQUW ship_python                ; Ship type 12: Python
+	EQUW &0000                      ; Ship type 13: 
+	EQUW &0000                      ; Ship type 14: 
+	EQUW &0000                      ; Ship type 15: 
+	EQUW ship_viper                 ; Ship type 16: Viper
+	EQUW &0000                      ; Ship type 17: 
+	EQUW &0000                      ; Ship type 18: 
+	EQUW ship_krait                 ; Ship type 19: Krait
+	EQUW &0000                      ; Ship type 20: Adder
+	EQUW &0000                      ; Ship type 21: 
+	EQUW &0000                      ; Ship type 22: 
+	EQUW &0000                      ; Ship type 23: 
+	EQUW &0000                      ; Ship type 24: 
+	EQUW &0000                      ; Ship type 25: Asp Mk2
+	EQUW &0000                      ; Ship type 26: Fer de Lance
+	EQUW &0000                      ; Ship type 27: 
+	EQUW &0000                      ; Ship type 28: 
+	EQUW &0000                      ; Ship type 29: Thargoid
+	EQUW &0000                      ; Ship type 30: Thargon
+	EQUW ship_constrictor           ; Ship type 31: Constrictor
+
+.addr563E                               ; Hull NEWB bits are escpod, cop, inno, ?, pirate, angry, hunter, trader
+	EQUB %00000000                  ; Ship type 01: 
+	EQUB %00000000                  ; Ship type 02: Space station
+	EQUB %00000000                  ; Ship type 03: Escape pod
+	EQUB %00000000                  ; Ship type 04: 
+	EQUB %00000000                  ; Ship type 05: Cargo cannister
+	EQUB %00000000                  ; Ship type 06: 
+	EQUB %00000000                  ; Ship type 07: Asteroid
+	EQUB %00000000                  ; Ship type 08: 
+	EQUB %00100001                  ; Ship type 09: Shuttle
+	EQUB %01100001                  ; Ship type 10: Transporter
+	EQUB %10100000                  ; Ship type 11: Cobra Mk3
+	EQUB %10100000                  ; Ship type 12: Python
+	EQUB %00000000                  ; Ship type 13: 
+	EQUB %00000000                  ; Ship type 14: 
+	EQUB %00000000                  ; Ship type 15: 
+	EQUB %11000010                  ; Ship type 16: Viper
+	EQUB %00000000                  ; Ship type 17: 
+	EQUB %00000000                  ; Ship type 18: 
+	EQUB %10001100                  ; Ship type 19: Krait
+	EQUB %00000000                  ; Ship type 20: Adder
+	EQUB %00000000                  ; Ship type 21: 
+	EQUB %00000000                  ; Ship type 22: 
+	EQUB %00000000                  ; Ship type 23: 
+	EQUB %00000000                  ; Ship type 24: 
+	EQUB %00000000                  ; Ship type 25: Asp Mk2
+	EQUB %00000000                  ; Ship type 26: Fer de Lance
+	EQUB %00000000                  ; Ship type 27: 
+	EQUB %00000000                  ; Ship type 28: 
+	EQUB %00000000                  ; Ship type 29: Thargoid
+	EQUB %00000000                  ; Ship type 30: Thargon
+	EQUB %10001100                  ; Ship type 31: Constrictor
+
+.ship_cargo_cannister
+INCLUDE "ships/cargo_cannister.asm"
+
+.ship_shuttle
+INCLUDE "ships/shuttle.asm"
+
+.ship_transporter
+INCLUDE "ships/transporter.asm"
+
+.ship_cobra_mk3
+INCLUDE "ship/cobra_mk3.asm"
+
+.ship_python
+INCLUDE "ships/python.asm"
+
+.ship_viper
+INCLUDE "ships/viper.asm"
+
+.ship_krait
+INCLUDE "ships/krait.asm"
+
+.ship_constrictor
+INCLUDE "ships/constrictor.asm"
+
 .addr5F55
-5F55  00                 .    BRK
-5F56  00                 .    BRK
-5F57  00                 .    BRK
-5F58  00                 .    BRK
-5F59  00                 .    BRK
-5F5A  00                 .    BRK
-5F5B  00                 .    BRK
-5F5C  00                 .    BRK
-5F5D  00                 .    BRK
-5F5E  00                 .    BRK
-5F5F  00                 .    BRK
-5F60  00                 .    BRK
-5F61  00                 .    BRK
-5F62  00                 .    BRK
-5F63  00                 .    BRK
-5F64  00                 .    BRK
-5F65  00                 .    BRK
-5F66  00                 .    BRK
-5F67  00                 .    BRK
-5F68  00                 .    BRK
-5F69  00                 .    BRK
-5F6A  00                 .    BRK
-5F6B  00                 .    BRK
-5F6C  00                 .    BRK
-5F6D  00                 .    BRK
-5F6E  00                 .    BRK
-5F6F  00                 .    BRK
-5F70  00                 .    BRK
-5F71  00                 .    BRK
-5F72  00                 .    BRK
-5F73  00                 .    BRK
-5F74  00                 .    BRK
-5F75  00                 .    BRK
-5F76  00                 .    BRK
-5F77  00                 .    BRK
-5F78  00                 .    BRK
-5F79  00                 .    BRK
-5F7A  00                 .    BRK
-5F7B  00                 .    BRK
-5F7C  00                 .    BRK
-5F7D  00                 .    BRK
-5F7E  00                 .    BRK
-5F7F  00                 .    BRK
-5F80  00                 .    BRK
-5F81  00                 .    BRK
-5F82  00                 .    BRK
-5F83  00                 .    BRK
-5F84  00                 .    BRK
-5F85  00                 .    BRK
-5F86  00                 .    BRK
-5F87  00                 .    BRK
-5F88  00                 .    BRK
-5F89  00                 .    BRK
-5F8A  00                 .    BRK
-5F8B  00                 .    BRK
-5F8C  00                 .    BRK
-5F8D  00                 .    BRK
-5F8E  00                 .    BRK
-5F8F  00                 .    BRK
-5F90  00                 .    BRK
-5F91  00                 .    BRK
-5F92  00                 .    BRK
-5F93  00                 .    BRK
-5F94  00                 .    BRK
-5F95  00                 .    BRK
-5F96  00                 .    BRK
-5F97  00                 .    BRK
-5F98  00                 .    BRK
-5F99  00                 .    BRK
-5F9A  00                 .    BRK
-5F9B  00                 .    BRK
-5F9C  00                 .    BRK
-5F9D  00                 .    BRK
-5F9E  00                 .    BRK
-5F9F  00                 .    BRK
-5FA0  00                 .    BRK
-5FA1  00                 .    BRK
-5FA2  00                 .    BRK
-5FA3  00                 .    BRK
-5FA4  00                 .    BRK
-5FA5  00                 .    BRK
-5FA6  00                 .    BRK
-5FA7  00                 .    BRK
-5FA8  00                 .    BRK
-5FA9  00                 .    BRK
-5FAA  00                 .    BRK
-5FAB  00                 .    BRK
-5FAC  00                 .    BRK
-5FAD  00                 .    BRK
-5FAE  00                 .    BRK
-5FAF  00                 .    BRK
-5FB0  00                 .    BRK
-5FB1  00                 .    BRK
-5FB2  00                 .    BRK
-5FB3  00                 .    BRK
-5FB4  00                 .    BRK
-5FB5  00                 .    BRK
-5FB6  00                 .    BRK
-5FB7  00                 .    BRK
-5FB8  00                 .    BRK
-5FB9  00                 .    BRK
-5FBA  00                 .    BRK
-5FBB  00                 .    BRK
-5FBC  00                 .    BRK
-5FBD  00                 .    BRK
-5FBE  00                 .    BRK
-5FBF  00                 .    BRK
-5FC0  00                 .    BRK
-5FC1  00                 .    BRK
-5FC2  00                 .    BRK
-5FC3  00                 .    BRK
-5FC4  00                 .    BRK
-5FC5  00                 .    BRK
-5FC6  00                 .    BRK
-5FC7  00                 .    BRK
-5FC8  00                 .    BRK
-5FC9  00                 .    BRK
-5FCA  00                 .    BRK
-5FCB  00                 .    BRK
-5FCC  00                 .    BRK
-5FCD  00                 .    BRK
-5FCE  00                 .    BRK
-5FCF  00                 .    BRK
-5FD0  00                 .    BRK
-5FD1  00                 .    BRK
-5FD2  00                 .    BRK
-5FD3  00                 .    BRK
-5FD4  00                 .    BRK
-5FD5  00                 .    BRK
-5FD6  00                 .    BRK
-5FD7  00                 .    BRK
-5FD8  00                 .    BRK
-5FD9  00                 .    BRK
-5FDA  00                 .    BRK
-5FDB  00                 .    BRK
-5FDC  00                 .    BRK
-5FDD  00                 .    BRK
-5FDE  00                 .    BRK
-5FDF  00                 .    BRK
-5FE0  00                 .    BRK
-5FE1  00                 .    BRK
-5FE2  00                 .    BRK
-5FE3  00                 .    BRK
-5FE4  00                 .    BRK
-5FE5  00                 .    BRK
-5FE6  00                 .    BRK
-5FE7  00                 .    BRK
-5FE8  00                 .    BRK
-5FE9  00                 .    BRK
-5FEA  00                 .    BRK
-5FEB  00                 .    BRK
-5FEC  00                 .    BRK
-5FED  00                 .    BRK
-5FEE  00                 .    BRK
-5FEF  00                 .    BRK
-5FF0  00                 .    BRK
-5FF1  00                 .    BRK
-5FF2  00                 .    BRK
-5FF3  00                 .    BRK
-5FF4  00                 .    BRK
-5FF5  00                 .    BRK
-5FF6  00                 .    BRK
-5FF7  00                 .    BRK
-5FF8  00                 .    BRK
-5FF9  00                 .    BRK
-5FFA  00                 .    BRK
-5FFB  00                 .    BRK
-5FFC  00                 .    BRK
-5FFD  00                 .    BRK
-5FFE  00                 .    BRK
-5FFF  00                 .    BRK
+	FOR n, *, (&5600 - *)
+		EQUB &00
+	NEXT
 
 .end
 
-SAVE "bin/T.Code", start, end, start
+SAVE "bin/T.Code", start, end, start, start
