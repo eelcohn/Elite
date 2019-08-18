@@ -12,13 +12,13 @@
 	EQUW &2649                      ; Area for missile lock
 	EQUB &7A                        ; Edges data info offset lo
 	EQUB &DA                        ; Faces data info offset lo
-	EQUB &4D                        ; Ship lines stack (4*maxlines+1)
-	EQUB &00                        ; Gun vertex*4
-	EQUB &2E                        ; Explosion count (4*n+6)
-	EQUB &66                        ; 17 Vertices (17*6)
-	EQUB &18                        ; 
+	EQUB &4D                        ; Ship lines stack = 13 (4*maxlines+1)
+	EQUB &00                        ; Gun vertex = 0 (vertex*4)
+	EQUB &2E                        ; Explosion count = 10 (4*n+6)
+	EQUB &66                        ; 17 Vertices (n*6)
+	EQUB &18                        ; 24 Edges
 	EQUW &0000                      ; Bounty
-	EQUB &28                        ; Faces*4
+	EQUB &28                        ; 10 Faces (n*4)
 	EQUB &2D                        ; Dot beyond distance
 	EQUB &C8                        ; Energy
 	EQUB &37                        ; Speed
@@ -30,6 +30,7 @@
 ; -----------------------------------------------------------------------------
 ; Vertices data
 ; -----------------------------------------------------------------------------
+.ship_constrictor_vertices
 	EQUB &14, &07, &50, &5F, &02, &99
 	EQUB &14, &07, &50, &DF, &01, &99
 	EQUB &36, &07, &28, &DF, &14, &99
@@ -49,8 +50,9 @@
 	EQUB &00, &07, &00, &40, &9F, &01
 
 ; -----------------------------------------------------------------------------
-; Edges and face data
+; Edges data
 ; -----------------------------------------------------------------------------
+.ship_constrictor_edges
 	EQUB &1F, &09, &00, &04, &1F, &19, &04, &08
 	EQUB &1F, &01, &04, &24, &1F, &02, &00, &20
 	EQUB &1F, &29, &00, &1C, &1F, &23, &1C, &20
@@ -63,6 +65,11 @@
 	EQUB &12, &99, &28, &30, &05, &99, &30, &38
 	EQUB &0A, &99, &38, &28, &0A, &99, &2C, &3C
 	EQUB &05, &99, &34, &3C, &12, &99, &2C, &34
+
+; -----------------------------------------------------------------------------
+; Faces data
+; -----------------------------------------------------------------------------
+.ship_constrictor_faces
 	EQUB &1F, &00, &37, &0F, &9F, &18, &4B, &14
 	EQUB &1F, &18, &4B, &14, &1F, &2C, &4B, &00
 	EQUB &9F, &2C, &4B, &00, &9F, &2C, &4B, &00
