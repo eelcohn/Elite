@@ -25,7 +25,7 @@
 	EQUB &00                        ; Edges data info offset hi
 	EQUB &00                        ; Faces data info offset hi
 	EQUB &02                        ; Scaling of normals to make large objects' normals flare out further away (Q%)
-	EQUB &10                        ; Laser|Missile(=lower 3 bits) 
+	EQUB &10                        ; %00010xxx Laser | %xxxxx000: No missiles
 
 ; -----------------------------------------------------------------------------
 ; Vertices data
