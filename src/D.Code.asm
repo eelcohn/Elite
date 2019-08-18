@@ -46,12 +46,15 @@ znormal                  = &3E                    ; znormal lo / delta_y lo
 znormal_sign             = &3F                    ; xsign / delta_y hi
 laser_power              = &44                    ; Laser power per pulse
 missile_target           = &45                    ; Missile target (&00-&12 = slot number of ship, &FF = no target)
+inkw_x                   = &46                    ; INKW x
 inwk_xlo                 = &46                    ; INWK xlo
 inwk_xhi                 = &47                    ; INWK xhi
 inwk_xsg                 = &48                    ; INWK xsign xship_sign
+inkw_y                   = &46                    ; INKW y
 inwk_ylo                 = &49                    ; INWK ylo
 inwk_yhi                 = &4A                    ; INWK yhi
 inwk_ysg                 = &4B                    ; INWK ysign
+inkw_z                   = &46                    ; INKW z
 inwk_zlo                 = &4C                    ; INWK zlo zship_lo
 inwk_zhi                 = &4D                    ; INWK zhi
 inwk_zsg                 = &4E                    ; INWK zsign
@@ -73,10 +76,13 @@ inwk_ai_attack_univ_ecm  = &66                    ; INWK ai_attack_univ_ecm: bit
 inwk_line_pointer_lo     = &67                    ; INWK 
 inwk_line_pointer_hi     = &68                    ; INWK 
 inwk_energy              = &69                    ; INWK Object's energy
+w0                       = &6C                    ; system seeds w0
 w0_l                     = &6C                    ; system seeds w0_l
 w0_h                     = &6D                    ; system seeds w0_h Economy
+w1                       = &6C                    ; system seeds w1
 w1_l                     = &6E                    ; system seeds w1_l
 w1_h                     = &6F                    ; system seeds w1_h Radius lo / x-coord of star
+w2                       = &6C                    ; system seeds w2
 w2_l                     = &70                    ; system seeds w2_l Star size
 w2_h                     = &71                    ; system seeds w2_h
 my_speed                 = &7D                    ; Player's speed (1=lowest, &28(40)=max for Cobra MkIII)
@@ -85,10 +91,13 @@ shiptype                 = &8D                    ; Ship type (&80=planet_2ring/
 visibility               = &96                    ; visibility
 edges                    = &97                    ; number of edges
 ;                         = &A9                    ; 
+xsub                     = &D3                    ; xsub
 xsublo                   = &D3                    ; xsublo
 xsubhi                   = &D4                    ; xsubhi
+ysub                     = &D3                    ; ysub
 ysublo                   = &D6                    ; ysublo
 ysubhi                   = &D7                    ; ysubhi
+zsub                     = &D3                    ; zsub
 zsublo                   = &D9                    ; zsublo
 zsubhi                   = &DA                    ; zsubhi
 
@@ -232,8 +241,9 @@ planet_cargo_platinum    = &039B                  ; Total ton of platinum availa
 planet_cargo_gemstones   = &039C                  ; Total ton of gem-stones available on this planet
 planet_cargo_alienitems  = &039D                  ; Total ton of alien items available on this planet
 planet_marketprices      = &039E                  ; Current market prices in this system (random for each visit)
-my_kills_lo              = &039F                  ; The player's number of kills
-my_kills_hi              = &03A0                  ; The player's number of kills
+my_kills                 = &039F                  ; The player's number of kills
+my_kills_lo              = &039F                  ; The player's number of kills low byte
+my_kills_hi              = &03A0                  ; The player's number of kills high byte
 my_competition_number    = &03A1                  ; Competition number
                                                   ; &03A1-&03A3 unused
 ;                         = &03A4                  ; Message
@@ -260,8 +270,10 @@ target_economy           = &03B8                  ; (0=Rich Industrial)
 target_government        = &03B9                  ; Government (0=Anarchy)
 target_techlevel         = &03BA                  ; Technology level ()
 planet_population        = &03BB
-planet_productivity_lo   = &03BD
-planet_productivity_hi   = &03BE
+planet_productivity      = &03BD                  ; The planet's productivity
+planet_productivity_lo   = &03BD                  ; The planet's productivity low byte
+planet_productivity_hi   = &03BE                  ; The planet's productivity high byte
+planet_distance          = &03BF                  ; Distance to target planetary system
 planet_distance_lo       = &03BF                  ; Distance to target planetary system lo
 planet_distance_hi       = &03C0                  ; Distance to target planetary system hi
 target_location_x        = &03C1                  ; The player's target X location in the current galaxy
@@ -279,21 +291,27 @@ disccat_fail             = &03CF                  ; Disc catalogue fail flag
                                                   ; &03D0-&03FF unused
 sine_table               = &07C0                  ; &07C0-&07DF = sine table
 ;                         = &07E0                  ; &07E0-&07FF = ACT???
+obj_planet               = &0900                  ; Planet x
 obj_planet_xlo           = &0900                  ; Planet xlo
 obj_planet_xhi           = &0901                  ; Planet xhi
 obj_planet_xsg           = &0902                  ; Planet xsign
+obj_planet_y             = &0903                  ; Planet y
 obj_planet_ylo           = &0903                  ; Planet ylo
 obj_planet_yhi           = &0904                  ; Planet yhi
 obj_planet_ysg           = &0905                  ; Planet ysign
+obj_planet_z             = &0906                  ; Planet z
 obj_planet_zlo           = &0906                  ; Planet zlo
 obj_planet_zhi           = &0907                  ; Planet zhi
 obj_planet_zsg           = &0908                  ; Planet zsign (= distance to planet)
+obj_sun_x                = &0925                  ; Sun / Space Station x
 obj_sun_xlo              = &0925                  ; Sun / Space Station xlo
 obj_sun_xhi              = &0926                  ; Sun / Space Station xhi
 obj_sun_xsg              = &0927                  ; Sun / Space Station xsign
+obj_sun_y                = &0928                  ; Sun / Space Station y
 obj_sun_ylo              = &0928                  ; Sun / Space Station ylo
 obj_sun_yhi              = &0929                  ; Sun / Space Station yhi
 obj_sun_ysg              = &092A                  ; Sun / Space Station ysign
+obj_sun_z                = &092B                  ; Sun / Space Station z
 obj_sun_zlo              = &092B                  ; Sun / Space Station zlo
 obj_sun_zhi              = &092C                  ; Sun / Space Station zhi
 obj_sun_zsg              = &092D                  ; Sun / Space Station zsign
@@ -806,20 +824,20 @@ ORG &11E3
 	LDA &8A
 	AND #&07
 	BNE addr15C2
-	LDX &03A7
+	LDX my_energy
 	BPL addr156C
-	LDX &03A6
+	LDX my_shield_aft
 	JSR addr3626
-	STX &03A6
-	LDX &03A5
+	STX my_shield_aft
+	LDX my_shield_front
 	JSR addr3626
-	STX &03A5
+	STX my_shield_front
 .addr156C
 	SEC
 	LDA &0383
-	ADC &03A7
+	ADC my_energy
 	BCS addr1578
-	STA &03A7
+	STA my_energy
 .addr1578
 	LDA &0341
 	BNE addr15BF
@@ -865,7 +883,7 @@ ORG &11E3
 	CMP #&0A
 	BNE addr15FD
 	LDA #&32
-	CMP &03A7
+	CMP my_energy
 	BCC addr15DA
 	ASL A
 	JSR addr45C6
@@ -1825,7 +1843,7 @@ ORG &11E3
 	LDY &033E
 	LDX &0313,Y
 	BEQ addr1CA5
-	LDY &03A7
+	LDY my_energy
 	CPY #&80
 	ADC #&01
 .addr1CA5
@@ -1841,10 +1859,10 @@ ORG &11E3
 	JSR addr338F
 	LDA #&10
 	JSR addr2B6D
-	LDA &03A0
+	LDA my_kills_hi
 	BNE addr1C70
 	TAX
-	LDA &039F
+	LDA my_kills_lo
 	LSR A
 	LSR A
 .addr1CCB
@@ -2276,7 +2294,7 @@ ORG &11E3
 	DEX
 	BPL addr1FB3
 	LDX #&03
-	LDA &03A7
+	LDA my_energy
 	LSR A
 	LSR A
 	STA &81
@@ -2306,9 +2324,9 @@ ORG &11E3
 	STA screen_hi
 	LDA #&10
 	STA screen_lo
-	LDA &03A5
+	LDA my_shield_front
 	JSR addr2036
-	LDA &03A6
+	LDA my_shield_aft
 	JSR addr2036
 	LDA &0365
 	JSR addr2038
@@ -4833,7 +4851,7 @@ ORG &11E3
 .addr318E
 	LDA &74
 	AND #&1F
-	LDY &03AC
+	LDY planet_economy
 	STA &75
 	CLC
 	LDA #&00
@@ -4858,11 +4876,11 @@ ORG &11E3
 	INX
 	STX &0349
 	LDA &03B8
-	STA &03AC
+	STA planet_economy
 	LDA &03BA
-	STA &03AF
+	STA planet_techlevel
 	LDA &03B9
-	STA &03AE
+	STA planet_government
 	JSR addr3F86
 	STA &039E
 	LDX #&00
@@ -5404,7 +5422,7 @@ ORG &11E3
 	LDA #&7F
 	STA &63
 	STA &64
-	LDA &03AF
+	LDA planet_techlevel
 	AND #&02
 	ORA #&80
 	JMP addr3768
@@ -5503,10 +5521,10 @@ ORG &11E3
 	INX
 	BEQ addr3624
 .addr3629
-	DEC &03A7
+	DEC my_energy
 	PHP
 	BNE addr3632
-	INC &03A7
+	INC my_energy
 .addr3632
 	PLP
 	RTS
@@ -5553,13 +5571,13 @@ ORG &11E3
 	JSR addr3642
 	TXA
 	ADC #&C3
-	STA &03A8
+	STA my_compass_x
 	LDA &35
 	JSR addr3642
 	STX &D1
 	LDA #&CC
 	SBC &D1
-	STA &03A9
+	STA my_compass_y
 	LDA #&F0
 	LDX &36
 	BPL addr3691
@@ -5567,9 +5585,9 @@ ORG &11E3
 .addr3691
 	STA &03C5
 .addr3694
-	LDA &03A9
+	LDA my_compass_y
 	STA &35
-	LDA &03A8
+	LDA my_compass_x
 	STA &34
 	LDA &03C5
 	STA &91
@@ -5617,25 +5635,25 @@ ORG &11E3
 	LDY #&08
 	LDA (inf_pointer),Y
 	BMI addr36FE
-	LDA &03A5
+	LDA my_shield_front
 	SBC &D1
 	BCC addr36F9
-	STA &03A5
+	STA my_shield_front
 	RTS
 .addr36F9
-	STX &03A5
+	STX my_shield_front
 	BCC addr370C
 .addr36FE
-	LDA &03A6
+	LDA my_shield_aft
 	SBC &D1
 	BCC addr3709
-	STA &03A6
+	STA my_shield_aft
 	RTS
 .addr3709
-	STX &03A6
+	STX my_shield_aft
 .addr370C
-	ADC &03A7
-	STA &03A7
+	ADC my_energy
+	STA my_energy
 	BEQ addr3716
 	BCS addr3719
 .addr3716
@@ -6579,7 +6597,7 @@ ORG &11E3
 .addr3D89
 	JSR addr3F26
 	JSR addr360A
-	STA &0312
+	STA object02_type
 	STA &0320
 	JSR addr3821
 	LDA #&06
@@ -6756,7 +6774,7 @@ ORG &11E3
 	TXA
 	LDX #&02
 .addr3EDB
-	STA &03A5,X
+	STA my_shield_front,X
 	DEX
 	BPL addr3EDB
 .addr3EE1
@@ -6967,12 +6985,12 @@ ORG &11E3
 	JSR addr320E
 .addr4070
 	JSR addr3F86
-	LDY &03AE
+	LDY planet_government
 	BEQ addr4083
 	CMP #&78
 	BCS addr4033
 	AND #&07
-	CMP &03AE
+	CMP planet_government
 	BCC addr4033
 .addr4083
 	JSR addr3F62
@@ -7225,10 +7243,10 @@ ORG &11E3
 	BCS addr427E
 	JSR addr3F86
 	AND #&03
-	LDX &03AE
+	LDX planet_government
 	CPX #&03
 	ROL A
-	LDX &03AF
+	LDX planet_techlevel
 	CPX #&0A
 	ROL A
 	TAX
@@ -7424,9 +7442,9 @@ ORG &11E3
 	LDA #&30
 	BNE addr43F3
 .addr43CE
-	INC &039F
+	INC my_kills_lo
 	BNE addr43DB
-	INC &03A0
+	INC my_kills_hi
 	LDA #&65
 	JSR addr45C6
 .addr43DB
@@ -10007,4 +10025,4 @@ ORG &11E3
 	RTS
 .end
 
-SAVE "bin/D.Code", start, end, codestart
+SAVE "bin/D.Code", start, end, codestart, start
