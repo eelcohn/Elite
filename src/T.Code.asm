@@ -866,8 +866,8 @@ ORG &11E3
 	DEX
 .addr17ED
 	LDA &82
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 .addr17F3
 	LSR &82
 	BCC &17FF
@@ -895,8 +895,8 @@ ORG &11E3
 	DEX
 .addr1819
 	LDA &82
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 .addr181F
 	LSR &82
 	BCC &182B
@@ -977,8 +977,8 @@ ORG &11E3
 	DEX
 .addr1898
 	LDA &82
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 .addr189E
 	DEY
 	BPL &18A5
@@ -1006,8 +1006,8 @@ ORG &11E3
 	DEX
 .addr18C4
 	LDA &82
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 .addr18CA
 	DEY
 	BPL &18D1
@@ -1096,8 +1096,8 @@ ORG &11E3
 	AND #&07
 	TAX
 	LDA &19A0,X
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	TYA
 	ADC #&08
 	TAY
@@ -1107,8 +1107,8 @@ ORG &11E3
 	CLC
 .addr1962
 	LDA #&FF
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	TYA
 	ADC #&08
 	TAY
@@ -1119,8 +1119,8 @@ ORG &11E3
 	AND #&07
 	TAX
 	LDA &1999,X
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	LDY &85
 	RTS
 .addr197E
@@ -1134,8 +1134,8 @@ ORG &11E3
 	TAX
 	LDA &1999,X
 	AND &D1
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 .addr1996
 	LDY &85
 	RTS
@@ -1147,8 +1147,8 @@ ORG &11E3
 
 .addr19A8
 	LDA &175B,X
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	LDY &06
 	RTS
 	JSR &22B0
@@ -1197,8 +1197,8 @@ ORG &11E3
 	CMP #&90
 	BCS &19A8
 	LDA &1763,X
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	LDA &88
 	CMP #&50
 	BCS &1A13
@@ -1207,8 +1207,8 @@ ORG &11E3
 	LDY #&01
 .addr1A0C
 	LDA &1763,X
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 .addr1A13
 	LDY &06
 .addr1A15
@@ -1771,8 +1771,8 @@ ORG &11E3
 	LDY #&07
 .addr1DCC
 	LDA (&1C),Y
-	ORA (&07),Y
-	STA (&07),Y
+	ORA (screen),Y
+	STA (screen),Y
 	DEY
 	BPL &1DCC
 .addr1DD5
@@ -1919,11 +1919,11 @@ ORG &11E3
 	LDA &82
 .addr1EDC
 	AND &91
-	STA (&07),Y
+	STA (screen),Y
 	INY
-	STA (&07),Y
+	STA (screen),Y
 	INY
-	STA (&07),Y
+	STA (screen),Y
 	TYA
 	CLC
 	ADC #&06
@@ -1968,14 +1968,14 @@ ORG &11E3
 	STA &81
 	LDA #&00
 .addr1F2A
-	STA (&07),Y
+	STA (screen),Y
 	INY
-	STA (&07),Y
+	STA (screen),Y
 	INY
 .addr1F30
-	STA (&07),Y
+	STA (screen),Y
 	INY
-	STA (&07),Y
+	STA (screen),Y
 	TYA
 	CLC
 	ADC #&05
@@ -2146,11 +2146,11 @@ ORG &11E3
 	LDY #&01
 .addr205C
 	TXA
-	AND (&07),Y
+	AND (screen),Y
 	BNE &2071
 	TXA
-	ORA (&07),Y
-	STA (&07),Y
+	ORA (screen),Y
+	STA (screen),Y
 	INY
 	CPY #&08
 	BNE &205C
@@ -2224,11 +2224,11 @@ ORG &11E3
 	LDA #&20
 .addr20EA
 	TAX
-	AND (&07),Y
+	AND (screen),Y
 	BNE &2100
 	TXA
-	ORA (&07),Y
-	STA (&07),Y
+	ORA (screen),Y
+	STA (screen),Y
 	TXA
 	LSR A
 	BCC &20EA
@@ -2241,11 +2241,11 @@ ORG &11E3
 	RTS
 .addr2101
 	TAX
-	AND (&07),Y
+	AND (screen),Y
 	BNE &2100
 	TXA
-	ORA (&07),Y
-	STA (&07),Y
+	ORA (screen),Y
+	STA (screen),Y
 	TXA
 	ASL A
 	BCC &2101
@@ -2943,7 +2943,7 @@ ORG &11E3
 .addr25C6
 	LDY #&E9
 .addr25C8
-	STA (&07),Y
+	STA (screen),Y
 	DEY
 	BNE &25C8
 	RTS
@@ -2969,8 +2969,8 @@ ORG &11E3
 	TAX
 	LDA &176B,X
 	AND &91
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	LDA &176C,X
 	BPL &2604
 	LDA &07
@@ -2979,8 +2979,8 @@ ORG &11E3
 	LDA &176C,X
 .addr2604
 	AND &91
-	EOR (&07),Y
-	STA (&07),Y
+	EOR (screen),Y
+	STA (screen),Y
 	RTS
 .addr260B
 	LDA #&00
@@ -4871,7 +4871,7 @@ ORG &11E3
 	TYA
 	LDY #&05
 .addr33BA
-	STA (&07),Y
+	STA (screen),Y
 	DEY
 	BNE &33BA
 	RTS
@@ -5776,7 +5776,7 @@ ORG &11E3
 	LDA #&00
 	STX &08
 .addr3A07
-	STA (&07),Y
+	STA (screen),Y
 	INY
 	BNE &3A07
 	RTS
