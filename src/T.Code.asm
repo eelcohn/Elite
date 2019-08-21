@@ -7911,29 +7911,29 @@ ship_none = &0000
 	EQUW ship_none                  ; Ship type 02: Space station
 	EQUW ship_none                  ; Ship type 03: Esacape pod
 	EQUW ship_none                  ; Ship type 04: Plate/Alloy
-	EQUW ship_cargo_cannister       ; Ship type 05: Cargo cannister
+	EQUW ship_barrel                ; Ship type 05: Barrel
 	EQUW ship_none                  ; Ship type 06: Boulder
 	EQUW ship_none                  ; Ship type 07: Asteroid
 	EQUW ship_none                  ; Ship type 08: Splinter
 	EQUW ship_shuttle               ; Ship type 09: Shuttle
 	EQUW ship_transporter           ; Ship type 10: Transporter
-	EQUW ship_cobra_mk3             ; Ship type 11: Cobra Mk3
+	EQUW ship_cobra_mk3             ; Ship type 11: Cobra MkIII
 	EQUW ship_python                ; Ship type 12: Python
-	EQUW ship_none                  ; Ship type 13: Anaconda/Boa ??
-	EQUW ship_none                  ; Ship type 14: Anaconda/Boa ??
+	EQUW ship_none                  ; Ship type 13: Boa
+	EQUW ship_none                  ; Ship type 14: Anaconda
 	EQUW ship_none                  ; Ship type 15: 
 	EQUW ship_viper                 ; Ship type 16: Viper
 	EQUW ship_none                  ; Ship type 17: Sidewinder
-	EQUW ship_none                  ; Ship type 18: 
+	EQUW ship_none                  ; Ship type 18: Mamba
 	EQUW ship_krait                 ; Ship type 19: Krait
 	EQUW ship_none                  ; Ship type 20: Adder
-	EQUW ship_none                  ; Ship type 21: Mamba
-	EQUW ship_none                  ; Ship type 22: Krait
-	EQUW ship_none                  ; Ship type 23: Adder
-	EQUW ship_none                  ; Ship type 24: Gecko
+	EQUW ship_none                  ; Ship type 21: Gecko
+	EQUW ship_none                  ; Ship type 22: Cobra MkI
+	EQUW ship_none                  ; Ship type 23: Worm
+	EQUW ship_none                  ; Ship type 24: Cobra MkIII (pirate)
 	EQUW ship_none                  ; Ship type 25: Asp MkII
-	EQUW ship_none                  ; Ship type 26: Fer de Lance ??
-	EQUW ship_none                  ; Ship type 27: Fer de Lance ??
+	EQUW ship_none                  ; Ship type 26: Python (pirate)
+	EQUW ship_none                  ; Ship type 27: Fer de Lance
 	EQUW ship_none                  ; Ship type 28: Moray
 	EQUW ship_none                  ; Ship type 29: Thargoid
 	EQUW ship_none                  ; Ship type 30: Thargon
@@ -7952,8 +7952,8 @@ ship_none = &0000
 	EQUB %01100001                  ; Ship type 10: Transporter
 	EQUB %10100000                  ; Ship type 11: Cobra MkIII
 	EQUB %10100000                  ; Ship type 12: Python
-	EQUB %00000000                  ; Ship type 13: Anaconda/Boa ??
-	EQUB %00000000                  ; Ship type 14: Anaconda/Boa ??
+	EQUB %00000000                  ; Ship type 13: Boa
+	EQUB %00000000                  ; Ship type 14: Anaconda
 	EQUB %00000000                  ; Ship type 15: 
 	EQUB %11000010                  ; Ship type 16: Viper
 	EQUB %00000000                  ; Ship type 17: Sidewinder
@@ -7961,19 +7961,19 @@ ship_none = &0000
 	EQUB %10001100                  ; Ship type 19: Krait
 	EQUB %00000000                  ; Ship type 20: Adder
 	EQUB %00000000                  ; Ship type 21: Gecko
-	EQUB %00000000                  ; Ship type 22: Cobra MkI ??
+	EQUB %00000000                  ; Ship type 22: Cobra MkI
 	EQUB %00000000                  ; Ship type 23: Worm
-	EQUB %00000000                  ; Ship type 24: 
+	EQUB %00000000                  ; Ship type 24: Cobra MkIII (pirate)
 	EQUB %00000000                  ; Ship type 25: Asp MkII
-	EQUB %00000000                  ; Ship type 26: Fer de Lance ??
-	EQUB %00000000                  ; Ship type 27: Fer de Lance ??
+	EQUB %00000000                  ; Ship type 26: Python (pirate)
+	EQUB %00000000                  ; Ship type 27: Fer de Lance
 	EQUB %00000000                  ; Ship type 28: Moray
 	EQUB %00000000                  ; Ship type 29: Thargoid
 	EQUB %00000000                  ; Ship type 30: Thargon
 	EQUB %10001100                  ; Ship type 31: Constrictor
 
-.ship_cargo_cannister
-INCLUDE "src/ships/cargo_cannister.asm"
+.ship_barrel
+INCLUDE "src/ships/barrel.asm"
 
 .ship_shuttle
 INCLUDE "src/ships/shuttle.asm"

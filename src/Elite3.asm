@@ -141,12 +141,12 @@ ORG &1900
 	STA &70
 	LDA #&78
 	STA &71
-	LDA #&4B
+	LDA #img_scanner MOD 256
 	STA &72
-	LDA #&1D
+	LDA #img_scanner DIV 256
 	STA &73
 	LDX #&08
-	JSR addr1D39                    ; Move &0800 bytes from &1D4B to &7800
+	JSR addr1D39                    ; Move scanner and missile data (&0800 bytes) from &1D4B to &7800
 	SEI
 	LDA systemvia_t1lc              ; System VIA T1 Low-Order Counter
 	STA &01                         ; Initial value for the random number generator
@@ -169,9 +169,9 @@ ORG &1900
 	STA &70
 	LDA #&61
 	STA &71
-	LDA #&62
+	LDA #img_logo_acornsoft MOD 256
 	STA &72
-	LDA #&2B
+	LDA #img_logo_acornsoft DIV 256
 	STA &73
 	JSR addr1D2C                    ; Move the ACORNSOFT text from &2B62 to &6100
 	LDA #&63
@@ -618,6 +618,10 @@ ORG &1900
 
 .img_scanner
 	INCBIN "src/data/scanner.bin"
+
+.ship_missile
+	INCLUDE "src/ships/missile.asm"
+	EQUB &00, &00                  ; Align to 256 bytes
 
 .bin_0400code
 	INCBIN "src/data/Elite3-0400code.bin"
