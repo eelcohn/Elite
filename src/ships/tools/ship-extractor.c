@@ -71,13 +71,13 @@ int main(int argc, char** argv) {
 	unsigned char	byte;
 	int		i, j, k;
 
+	printf("Elite ship data extractor v0.01\n");
+	printf("written by Eelco Huininga 2019\n\n");
+
 	if (argc != 2) {
 		printf("Usage: %s <filename>\n", argv[0]);
 		exit(1);
 	}
-
-	printf("Elite ship data extractor v0.01\n");
-	printf("written by Eelco Huininga 2019\n\n");
 
 	fp_in = fopen(argv[1], "rb");
 	if (fp_in == NULL) {
