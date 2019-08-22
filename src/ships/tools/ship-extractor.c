@@ -3,28 +3,28 @@
 #include <string.h>			// strncpy(), strncat()
 
 #define BINARY_LASERS(byte)  \
-  (byte & 0x80 ? '1' : '0'), \
-  (byte & 0x40 ? '1' : '0'), \
-  (byte & 0x20 ? '1' : '0'), \
-  (byte & 0x10 ? '1' : '0'), \
-  (byte & 0x08 ? '1' : '0')
+	(byte & 0x80 ? '1' : '0'), \
+	(byte & 0x40 ? '1' : '0'), \
+	(byte & 0x20 ? '1' : '0'), \
+	(byte & 0x10 ? '1' : '0'), \
+	(byte & 0x08 ? '1' : '0')
 
 #define BINARY_MISSILES(byte)  \
-  (byte & 0x04 ? '1' : '0'), \
-  (byte & 0x02 ? '1' : '0'), \
-  (byte & 0x01 ? '1' : '0')
+	(byte & 0x04 ? '1' : '0'), \
+	(byte & 0x02 ? '1' : '0'), \
+	(byte & 0x01 ? '1' : '0')
 
 #define BINARY_SCOOPINFO(byte)  \
-  (byte & 0x80 ? '1' : '0'), \
-  (byte & 0x40 ? '1' : '0'), \
-  (byte & 0x20 ? '1' : '0'), \
-  (byte & 0x10 ? '1' : '0')
+	(byte & 0x80 ? '1' : '0'), \
+	(byte & 0x40 ? '1' : '0'), \
+	(byte & 0x20 ? '1' : '0'), \
+	(byte & 0x10 ? '1' : '0')
 
 #define BINARY_DEBRISINFO(byte)  \
-  (byte & 0x08 ? '1' : '0'), \
-  (byte & 0x04 ? '1' : '0'), \
-  (byte & 0x02 ? '1' : '0'), \
-  (byte & 0x01 ? '1' : '0')
+	(byte & 0x08 ? '1' : '0'), \
+	(byte & 0x04 ? '1' : '0'), \
+	(byte & 0x02 ? '1' : '0'), \
+	(byte & 0x01 ? '1' : '0')
 
 const char *ships[] = {		// * = not sure yet, check against http://wiki.alioth.net/index.php/Classic_Elite_ships_firepower
 	"",			// 00
