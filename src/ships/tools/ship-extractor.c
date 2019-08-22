@@ -27,7 +27,7 @@
 	(byte & 0x01 ? '1' : '0')
 
 const char *ships[] = {		// * = not sure yet, check against http://wiki.alioth.net/index.php/Classic_Elite_ships_firepower
-	"",			// 00
+	"--none--",		// 00 Unused
 	"missile",		// 01
 	"spacestation",		// 02
 	"escape_pod",		// 03
@@ -62,7 +62,7 @@ const char *ships[] = {		// * = not sure yet, check against http://wiki.alioth.n
 };
 
 const char *goods[] = {
-	"food",
+	"none",
 	"textiles",
 	"radioactives",
 	"slaves",
@@ -76,7 +76,8 @@ const char *goods[] = {
 	"gold",
 	"platinum",
 	"gem_stones",
-	"alien_items"
+	"alien_items",
+	"food"
 };
 
 int main(int argc, char** argv) {
@@ -87,10 +88,12 @@ int main(int argc, char** argv) {
 	unsigned char	ship_attr[32];
 	unsigned char	ship_header[0x14];
 	unsigned char	byte;
+	int		scoop_type;
 	int		i, j, k;
 
 	printf("Elite ship data extractor v0.01\n");
-	printf("written by Eelco Huininga 2019\n\n");
+	printf("written by Eelco Huininga 2019\n");
+	printf("\n");
 
 	if (argc != 2) {
 		printf("Usage: %s <filename>\n", argv[0]);
@@ -151,13 +154,15 @@ int main(int argc, char** argv) {
 					fputc(ship_header[j], fp_binout);
 				}
 
+				scoop_type = ((ship_header[0] & 0xF0) == 0) ? 0 : ((ship_header[0] & 0xF0) >> 4) + 1;
+				
 				/* Write header to text output file */
 				fprintf(fp_txtout, ".%s_start\n\n", ships[i]);
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, "; Hull data header info\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, ".%s_header\n", ships[i]);
-				fprintf(fp_txtout, "	EQUB &%02X                        ; %c%c%c%c....: cargo type if scooped: %s\n", ship_header[0], BINARY_SCOOPINFO(ship_header[0]), goods[(ship_header[0] & 0xF0) >> 4]);
+				fprintf(fp_txtout, "	EQUB &%02X                        ; %c%c%c%c....: cargo type if scooped: %s\n", ship_header[0], BINARY_SCOOPINFO(ship_header[0]), goods[scoop_type]);
 				fprintf(fp_txtout, "	                                ; ....%c%c%c%c: max pieces of debris if destroyed: %d\n", BINARY_DEBRISINFO(ship_header[0]), (ship_header[0] & 0x0F));
 				fprintf(fp_txtout, "	EQUW &%04X                      ; Area for missile lock\n", (ship_header[1] + (ship_header[2] * 256)));
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Edges data info offset lo\n", ship_header[3]);
