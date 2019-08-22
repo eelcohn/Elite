@@ -26,20 +26,20 @@
   (byte & 0x02 ? '1' : '0'), \
   (byte & 0x01 ? '1' : '0')
 
-const char *ships[] = {		// * = nog controleren tegen lijst op http://wiki.alioth.net/index.php/Classic_Elite_ships_firepower
+const char *ships[] = {		// * = not sure yet, check against http://wiki.alioth.net/index.php/Classic_Elite_ships_firepower
 	"",			// 00
 	"missile",		// 01
-	"spacestation",	// 02
+	"spacestation",		// 02
 	"escape_pod",		// 03
 	"alloy",		// 04
-	"barrel",		// 05 (difference between D.MOA-D.MOP and D.MOT
+	"barrel",		// 05 (difference between D.MOA-D.MOP (D.MOA &0245) and D.MOT (&0095)
 	"boulder",		// 06
 	"asteroid",		// 07
 	"splinter",		// 08 (difference between D.MOC/D/K/N, D.MOH, D.MOO and D.MOP
-	"shuttle",		// 09 *
-	"transporter",		// 0A *
+	"shuttle",		// 09 * difference between D.MOH and D.Code
+	"transporter",		// 0A * difference between D.MOF and D.Code
 	"cobra_mk3",		// 0B
-	"python",		// 0C *
+	"python",		// 0C
 	"boa",			// 0D
 	"anaconda",		// 0E
 	"ship0F_unknown",	// 0F *
@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
 	char		ship_id_string[8], ship_attr_string[8];
 	unsigned short	ship_pointers[32];
 	unsigned char	ship_attr[32];
-	unsigned char	ship_header[14];
+	unsigned char	ship_header[0x14];
 	unsigned char	byte;
 	int		i, j, k;
 
@@ -105,13 +105,13 @@ int main(int argc, char** argv) {
 
 				sprintf(ship_id_string, "%02X", i);
 				sprintf(ship_attr_string, "%02X", ship_attr[i]);
-				strncpy(filename_binout, argv[1], sizeof(filename_binout));
+				strncpy(filename_binout, argv[1], sizeof(filename_binout)-1);
 				strncat(filename_binout, "-", sizeof(filename_binout)-1);
-//				strncat(filename_binout, ship_id_string, sizeof(filename_binout));
-				strncat(filename_binout, ships[i], sizeof(filename_binout));
+//				strncat(filename_binout, ship_id_string, sizeof(filename_binout)-1);
+				strncat(filename_binout, ships[i], sizeof(filename_binout)-1);
 				strncat(filename_binout, "-", sizeof(filename_binout)-1);
-				strncat(filename_binout, ship_attr_string, sizeof(filename_binout));
-				strncpy(filename_txtout, filename_binout, sizeof(filename_txtout));
+				strncat(filename_binout, ship_attr_string, sizeof(filename_binout)-1);
+				strncpy(filename_txtout, filename_binout, sizeof(filename_txtout)-1);
 				strncat(filename_binout, ".bin", sizeof(filename_binout)-1);
 				strncat(filename_txtout, ".asm", sizeof(filename_txtout)-1);
 
@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
 				fprintf(fp_txtout, "; Hull data header info\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, ".%s_header\n", ships[i]);
-				fprintf(fp_txtout, "	EQUB &%02X                        ; %c%c%c%cxxxx: cargo type if scooped", ship_header[0], BINARY_SCOOPINFO(ship_header[0]));
+				fprintf(fp_txtout, "	EQUB &%02X                        ; %c%c%c%cxxxx: cargo type if scooped\n", ship_header[0], BINARY_SCOOPINFO(ship_header[0]));
 				fprintf(fp_txtout, "	                                ; xxxx%c%c%c%c: max pieces of debris if destroyed\n", BINARY_DEBRISINFO(ship_header[0]));
 				fprintf(fp_txtout, "	EQUW &%04X                      ; Area for missile lock\n", (ship_header[1] + (ship_header[2] * 256)));
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Edges data info offset lo\n", ship_header[3]);
