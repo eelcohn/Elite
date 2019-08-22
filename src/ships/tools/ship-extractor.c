@@ -26,7 +26,7 @@
 	(byte & 0x02 ? '1' : '0'), \
 	(byte & 0x01 ? '1' : '0')
 
-const char *ships[] = {		// * = not sure yet, check against http://wiki.alioth.net/index.php/Classic_Elite_ships_firepower
+const char *ship_id[] = {		// * = not sure yet, check against http://wiki.alioth.net/index.php/Classic_Elite_ships_firepower
 	"--none--",		// 00 Unused
 	"missile",		// 01
 	"spacestation",		// 02
@@ -122,14 +122,14 @@ int main(int argc, char** argv) {
 		}
 		for (i = 1; i < 32; i++) {
 			if ((ship_pointers[i] != 0x0000) && (ship_pointers[i] != 0x7F00)) {
-				printf("Found ship id &%02X (%s)\n", i, ships[i]);
+				printf("Found ship id &%02X (%s)\n", i, ship_id[i]);
 
 				sprintf(ship_id_string, "%02X", i);
 				sprintf(ship_attr_string, "%02X", ship_attr[i]);
 				strncpy(filename_binout, argv[1], sizeof(filename_binout)-1);
 				strncat(filename_binout, "-", sizeof(filename_binout)-1);
 //				strncat(filename_binout, ship_id_string, sizeof(filename_binout)-1);
-				strncat(filename_binout, ships[i], sizeof(filename_binout)-1);
+				strncat(filename_binout, ship_id[i], sizeof(filename_binout)-1);
 				strncat(filename_binout, "-", sizeof(filename_binout)-1);
 				strncat(filename_binout, ship_attr_string, sizeof(filename_binout)-1);
 				strncpy(filename_txtout, filename_binout, sizeof(filename_txtout)-1);
@@ -157,11 +157,16 @@ int main(int argc, char** argv) {
 				scoop_type = ((ship_header[0] & 0xF0) == 0) ? 0 : ((ship_header[0] & 0xF0) >> 4) + 1;
 				
 				/* Write header to text output file */
-				fprintf(fp_txtout, ".%s_start\n\n", ships[i]);
+				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
+				fprintf(fp_txtout, "; Elite - %s data (type 11)\n", ship_id[i]);
+				fprintf(fp_txtout, "; written by David Braben and Ian Bell (c) Acornsoft 1984\n");
+				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
+				fprintf(fp_txtout, "\n");
+				fprintf(fp_txtout, ".%s_start\n\n", ship_id[i]);
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, "; Hull data header info\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
-				fprintf(fp_txtout, ".%s_header\n", ships[i]);
+				fprintf(fp_txtout, ".%s_header\n", ship_id[i]);
 				fprintf(fp_txtout, "	EQUB &%02X                        ; %c%c%c%c....: cargo type if scooped: %s\n", ship_header[0], BINARY_SCOOPINFO(ship_header[0]), goods[scoop_type]);
 				fprintf(fp_txtout, "	                                ; ....%c%c%c%c: max pieces of debris if destroyed: %d\n", BINARY_DEBRISINFO(ship_header[0]), (ship_header[0] & 0x0F));
 				fprintf(fp_txtout, "	EQUW &%04X                      ; Area for missile lock\n", (ship_header[1] + (ship_header[2] * 256)));
@@ -186,7 +191,7 @@ int main(int argc, char** argv) {
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, "; Vertices data\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
-				fprintf(fp_txtout, ".%s_vertices\n", ships[i]);
+				fprintf(fp_txtout, ".%s_vertices\n", ship_id[i]);
 
 				/* Vertices */
 				k = 0;
@@ -207,10 +212,10 @@ int main(int argc, char** argv) {
 
 				/* Edges */
 				fprintf(fp_txtout, "\n");
-				fprintf(fp_txtout, ".%s_edges\n", ships[i]);
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, "; Edges data\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
+				fprintf(fp_txtout, ".%s_edges\n", ship_id[i]);
 				k = 0;
 				for (j = 0; j < (ship_header[0x09] * 4); j++) {
 					byte = fgetc(fp_in);
@@ -229,10 +234,10 @@ int main(int argc, char** argv) {
 
 				/* Faces/Normals */
 				fprintf(fp_txtout, "\n");
-				fprintf(fp_txtout, ".%s_faces\n", ships[i]);
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, "; Faces/normals data\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
+				fprintf(fp_txtout, ".%s_faces\n", ship_id[i]);
 				k = 0;
 				for (j = 0; j < ship_header[0x0C]; j++) {
 					byte = fgetc(fp_in);
@@ -249,7 +254,7 @@ int main(int argc, char** argv) {
 					}
 				}
 				fprintf(fp_txtout, "\n");
-				fprintf(fp_txtout, ".%s_end\n", ships[i]);
+				fprintf(fp_txtout, ".%s_end\n", ship_id[i]);
 				fclose(fp_binout);
 				fclose(fp_txtout);
 			}
