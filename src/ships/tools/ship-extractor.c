@@ -61,6 +61,24 @@ const char *ships[] = {		// * = not sure yet, check against http://wiki.alioth.n
 	"constrictor"		// 1F
 };
 
+const char *goods[] = {
+	"food",
+	"textiles",
+	"radioactives",
+	"slaves",
+	"liquor_wines",
+	"luxuries",
+	"narcotics",
+	"computers",
+	"machinery",
+	"alloys",
+	"firearms",
+	"gold",
+	"platinum",
+	"gem_stones",
+	"alien_items"
+};
+
 int main(int argc, char** argv) {
 	FILE		*fp_in, *fp_binout, *fp_txtout;
 	char		filename_binout[300], filename_txtout[300];
@@ -139,8 +157,8 @@ int main(int argc, char** argv) {
 				fprintf(fp_txtout, "; Hull data header info\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, ".%s_header\n", ships[i]);
-				fprintf(fp_txtout, "	EQUB &%02X                        ; %c%c%c%cxxxx: cargo type if scooped\n", ship_header[0], BINARY_SCOOPINFO(ship_header[0]));
-				fprintf(fp_txtout, "	                                ; xxxx%c%c%c%c: max pieces of debris if destroyed\n", BINARY_DEBRISINFO(ship_header[0]));
+				fprintf(fp_txtout, "	EQUB &%02X                        ; %c%c%c%cxxxx: cargo type if scooped: %s\n", ship_header[0], BINARY_SCOOPINFO(ship_header[0]), goods[(ship_header[0] & 0xF0) >> 4]);
+				fprintf(fp_txtout, "	                                ; xxxx%c%c%c%c: max pieces of debris if destroyed: %d\n", BINARY_DEBRISINFO(ship_header[0]), (ship_header[0] & 0x0F));
 				fprintf(fp_txtout, "	EQUW &%04X                      ; Area for missile lock\n", (ship_header[1] + (ship_header[2] * 256)));
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Edges data info offset lo\n", ship_header[3]);
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Faces data info offset lo\n", ship_header[4]);
@@ -151,7 +169,7 @@ int main(int argc, char** argv) {
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Edges: %d\n", ship_header[9], ship_header[9]);
 				fprintf(fp_txtout, "	EQUW &%04X                      ; Bounty: %.1f Cr\n", (ship_header[10] + (ship_header[11] + 256)), (float)((ship_header[10] + (ship_header[11] * 256))) / 10);
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Faces: %d (n*4)\n", ship_header[12], (ship_header[12] / 4));
-				fprintf(fp_txtout, "	EQUB &%02X                        ; Dot beyond distance\n", ship_header[13]);
+				fprintf(fp_txtout, "	EQUB &%02X                        ; Dot beyond distance: %d\n", ship_header[13], ship_header[13]);
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Hull strength: %d\n", ship_header[14], ship_header[14]);
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Maximum speed: 0.%02d LM\n", ship_header[15], ship_header[15]);
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Edges data info offset hi\n", ship_header[16]);
