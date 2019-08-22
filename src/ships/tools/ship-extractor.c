@@ -158,7 +158,7 @@ int main(int argc, char** argv) {
 				
 				/* Write header to text output file */
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
-				fprintf(fp_txtout, "; Elite - %s data (type 11)\n", ship_id[i]);
+				fprintf(fp_txtout, "; Elite - %s data (type &%02X)\n", ship_id[i], i);
 				fprintf(fp_txtout, "; written by David Braben and Ian Bell (c) Acornsoft 1984\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, "\n");
