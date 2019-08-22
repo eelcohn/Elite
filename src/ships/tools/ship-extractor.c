@@ -157,8 +157,8 @@ int main(int argc, char** argv) {
 				fprintf(fp_txtout, "; Hull data header info\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, ".%s_header\n", ships[i]);
-				fprintf(fp_txtout, "	EQUB &%02X                        ; %c%c%c%cxxxx: cargo type if scooped: %s\n", ship_header[0], BINARY_SCOOPINFO(ship_header[0]), goods[(ship_header[0] & 0xF0) >> 4]);
-				fprintf(fp_txtout, "	                                ; xxxx%c%c%c%c: max pieces of debris if destroyed: %d\n", BINARY_DEBRISINFO(ship_header[0]), (ship_header[0] & 0x0F));
+				fprintf(fp_txtout, "	EQUB &%02X                        ; %c%c%c%c....: cargo type if scooped: %s\n", ship_header[0], BINARY_SCOOPINFO(ship_header[0]), goods[(ship_header[0] & 0xF0) >> 4]);
+				fprintf(fp_txtout, "	                                ; ....%c%c%c%c: max pieces of debris if destroyed: %d\n", BINARY_DEBRISINFO(ship_header[0]), (ship_header[0] & 0x0F));
 				fprintf(fp_txtout, "	EQUW &%04X                      ; Area for missile lock\n", (ship_header[1] + (ship_header[2] * 256)));
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Edges data info offset lo\n", ship_header[3]);
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Faces data info offset lo\n", ship_header[4]);
@@ -175,8 +175,8 @@ int main(int argc, char** argv) {
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Edges data info offset hi\n", ship_header[16]);
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Faces data info offset hi\n", ship_header[17]);
 				fprintf(fp_txtout, "	EQUB &%02X                        ; Scaling of normals to make large objects' normals flare out further away (Q%%)\n", ship_header[18]);
-				fprintf(fp_txtout, "	EQUB &%02X                        ; %c%c%c%c%cxxx: Laser class %i\n", ship_header[19], BINARY_LASERS(ship_header[19]), (ship_header[19] >> 3));
-				fprintf(fp_txtout, "	                                ; xxxxx%c%c%c: %i missiles\n", BINARY_MISSILES(ship_header[19]), (ship_header[19] & 0x07));
+				fprintf(fp_txtout, "	EQUB &%02X                        ; %c%c%c%c%c...: Laser class %i\n", ship_header[19], BINARY_LASERS(ship_header[19]), (ship_header[19] >> 3));
+				fprintf(fp_txtout, "	                                ; .....%c%c%c: %i missiles\n", BINARY_MISSILES(ship_header[19]), (ship_header[19] & 0x07));
 				fprintf(fp_txtout, "\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, "; Vertices data\n");
