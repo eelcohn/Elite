@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 	FILE		*fp_in, *fp_binout, *fp_txtout;
 	char		filename_binout[300], filename_txtout[300];
 	char		ship_id_string[8], ship_attr_string[8];
-	unsigned short	ship_pointers[32];
+	unsigned short	ship_pointers[32], ship_start, ship_end;
 	unsigned char	ship_attr[32];
 	unsigned char	ship_header[0x14];
 	unsigned char	byte;
@@ -131,12 +131,12 @@ int main(int argc, char** argv) {
 		/* Read ship data */
 		for (i = 1; i < 32; i++) {
 			if ((ship_pointers[i] != 0x0000) && (ship_pointers[i] != 0x7F00)) {
-				printf("Found ship id &%02X (%s)\n", i, ship_id[i]);
+				ship_start = 0x5600 + i;
+				printf("Found ship id &%02X (%s) at &%04X\n", i, ship_id[i], ship_start);
 
 				/* The ship pointer should match i (the current program counter) */
-				if ((i != 1) && (ship_pointers[i] != (0x5600 + i))) {
-						printf("Warning: ship_pointer for %02X is %04X, but this does not match with %04X\n", i, ship_pointer[i], (i + 0x5600));
-					}
+				if ((i != 1) && (ship_pointers[i] != ship_start)) {
+					printf("Warning: ship_pointer for %02X is %04X, but this does not match with %04X\n", i, ship_pointer[i], (i + 0x5600));
 				}
 
 				/* Prepare the output filenames */
