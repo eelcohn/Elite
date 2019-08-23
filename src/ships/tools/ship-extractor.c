@@ -2,6 +2,8 @@
 #include <stdlib.h>			// exit()
 #include <string.h>			// strncpy(), strncat()
 
+#define VERSION "0.01"
+
 #define BINARY_LASERS(byte)  \
 	(byte & 0x80 ? '1' : '0'), \
 	(byte & 0x40 ? '1' : '0'), \
@@ -26,7 +28,7 @@
 	(byte & 0x02 ? '1' : '0'), \
 	(byte & 0x01 ? '1' : '0')
 
-const char *ship_id[] = {		// * = not sure yet, check against http://wiki.alioth.net/index.php/Classic_Elite_ships_firepower
+const char *ship_id[] = {	// * = not sure yet, check against http://wiki.alioth.net/index.php/Classic_Elite_ships_firepower
 	"--none--",		// 00 Unused
 	"missile",		// 01
 	"spacestation",		// 02
@@ -91,7 +93,7 @@ int main(int argc, char** argv) {
 	int		scoop_type;
 	int		i, j, k;
 
-	printf("Elite ship data extractor v0.01\n");
+	printf("Elite ship data extractor v" VERSION "\n");
 	printf("written by Eelco Huininga 2019\n");
 	printf("\n");
 
@@ -111,19 +113,33 @@ int main(int argc, char** argv) {
 		}
 		rewind(fp_in);
 
+		/* Read ship pointers */
 		for (i = 1; i < 32; i++) {
 			ship_pointers[i] = (fgetc(fp_in) + (fgetc(fp_in) * 256));
+
+			/* Check if the first entry points to the missile data */
+			if ((i == 1) && (ship_pointers[1] != 0x7F00)) {
+				printf("Warning: file is most likely not an Elite ship data file (missing 0x7F00 header)\n");
+			}
 		}
-		if (ship_pointers[1] != 0x7F00) {
-			printf("Warning: file is most likely not an Elite ship data file (missing 0x7F00 header)\n");
-		}
+
+		/* Read ship attributes */
 		for (i = 1; i < 32; i++) {
 			ship_attr[i] = fgetc(fp_in);
 		}
+
+		/* Read ship data */
 		for (i = 1; i < 32; i++) {
 			if ((ship_pointers[i] != 0x0000) && (ship_pointers[i] != 0x7F00)) {
 				printf("Found ship id &%02X (%s)\n", i, ship_id[i]);
 
+				/* The ship pointer should match i (the current program counter) */
+				if ((i != 1) && (ship_pointers[i] != (0x5600 + i))) {
+						printf("Warning: ship_pointer for %02X is %04X, but this does not match with %04X\n", i, ship_pointer[i], (i + 0x5600));
+					}
+				}
+
+				/* Prepare the output filenames */
 				sprintf(ship_id_string, "%02X", i);
 				sprintf(ship_attr_string, "%02X", ship_attr[i]);
 				strncpy(filename_binout, argv[1], sizeof(filename_binout)-1);
@@ -162,7 +178,8 @@ int main(int argc, char** argv) {
 				fprintf(fp_txtout, "; written by David Braben and Ian Bell (c) Acornsoft 1984\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, "\n");
-				fprintf(fp_txtout, ".%s_start\n\n", ship_id[i]);
+				fprintf(fp_txtout, ".%s_start\n", ship_id[i]);
+				fprintf(fp_txtout, "\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 				fprintf(fp_txtout, "; Hull data header info\n");
 				fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
@@ -253,6 +270,8 @@ int main(int argc, char** argv) {
 						k = 0;
 					}
 				}
+
+				/* Footer */
 				fprintf(fp_txtout, "\n");
 				fprintf(fp_txtout, ".%s_end\n", ship_id[i]);
 				fclose(fp_binout);
