@@ -132,7 +132,7 @@ int main(int argc, char** argv) {
 		for (i = 1; i < 32; i++) {
 			if ((ship_pointers[i] != 0x0000) && (ship_pointers[i] != 0x7F00)) {
 				ship_start = 0x5600 + i;
-				printf("Found ship id &%02X (%s) at &%04X\n", i, ship_id[i], ship_start);
+				printf("Found ship id &%02X (%s) with attribute &%02X at &%04X\n", i, ship_id[i], ship_attr[i], ship_start);
 
 				/* The ship pointer should match i (the current program counter) */
 				if ((i != 1) && (ship_pointers[i] != ship_start)) {
