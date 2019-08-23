@@ -1,42 +1,45 @@
 ; -----------------------------------------------------------------------------
-; Elite - Barrel ship data (type 5)
+; Elite - Barrel data (type &05)
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; -----------------------------------------------------------------------------
 
-.ship_barrel_start
+.barrel_start
 
 ; -----------------------------------------------------------------------------
 ; Hull data header info
 ; -----------------------------------------------------------------------------
-	EQUB &00                        ; High nibble: scoop info, low nibble: debris spin info
+.barrel_header
+	EQUB &00                        ; 0000....: cargo type if scooped: none
+	                                ; ....0000: max pieces of debris if destroyed: 0
 	EQUW &0190                      ; Area for missile lock
 	EQUB &50                        ; Edges data info offset lo
 	EQUB &8C                        ; Faces data info offset lo
-	EQUB &31                        ; Ship lines stack = 12 (4*maxlines+1)
-	EQUB &00                        ; Gun vertex = 0 (vertex*4)
-	EQUB &12                        ; Explosion count = 3 (4*n+6)
-	EQUB &3C                        ; 10 Vertices (n*6)
-	EQUB &0F                        ; 15 Edges
-	EQUW &0000                      ; Bounty
-	EQUB &1C                        ; 7 Faces (n*4)
-	EQUB &0C                        ; Dot beyond distance
-	EQUB &11                        ; Energy
-	EQUB &0F                        ; Speed
+	EQUB &31                        ; Ship lines stack: 12 (4*max_visible_edges+1)
+	EQUB &00                        ; Gun vertex: 0 (vertex*4)
+	EQUB &12                        ; Explosion count: 3 (4*n+6)
+	EQUB &3C                        ; Vertices: 10 (n*6)
+	EQUB &0F                        ; Edges: 15
+	EQUW &0100                      ; Bounty: 0.0 Cr
+	EQUB &1C                        ; Faces: 7 (n*4)
+	EQUB &0C                        ; Dot beyond distance: 12
+	EQUB &11                        ; Hull strength: 17
+	EQUB &0F                        ; Maximum speed: 0.15 LM
 	EQUB &00                        ; Edges data info offset hi
 	EQUB &00                        ; Faces data info offset hi
 	EQUB &02                        ; Scaling of normals to make large objects' normals flare out further away (Q%)
-	EQUB &00                        ; %00000xxx No lasers | %xxxxx000: No missiles
+	EQUB &00                        ; 00000...: Laser class 0
+	                                ; .....000: 0 missiles
 
 ; -----------------------------------------------------------------------------
 ; Vertices data
 ; -----------------------------------------------------------------------------
-.ship_barrel_vertices
+.barrel_vertices
 	EQUB &18, &10, &00, &1F, &10, &55
 	EQUB &18, &05, &0F, &1F, &10, &22
 	EQUB &18, &0D, &09, &5F, &20, &33
 	EQUB &18, &0D, &09, &7F, &30, &44
-	EQUB &18, &05, &0F, &3F, &40, &55         ; end of left pentagon
-	EQUB &18, &10, &00, &9F, &51, &66         ; start of right pentagon
+	EQUB &18, &05, &0F, &3F, &40, &55
+	EQUB &18, &10, &00, &9F, &51, &66
 	EQUB &18, &05, &0F, &9F, &21, &66
 	EQUB &18, &0D, &09, &DF, &32, &66
 	EQUB &18, &0D, &09, &FF, &43, &66
@@ -45,7 +48,7 @@
 ; -----------------------------------------------------------------------------
 ; Edges data
 ; -----------------------------------------------------------------------------
-.ship_barrel_edges
+.barrel_edges
 	EQUB &1F, &10, &00, &04
 	EQUB &1F, &20, &04, &08
 	EQUB &1F, &30, &08, &0C
@@ -65,7 +68,7 @@
 ; -----------------------------------------------------------------------------
 ; Faces/normals data
 ; -----------------------------------------------------------------------------
-.ship_barrel_faces
+.barrel_faces
 	EQUB &1F, &60, &00, &00
 	EQUB &1F, &00, &29, &1E
 	EQUB &5F, &00, &12, &30
@@ -74,4 +77,4 @@
 	EQUB &3F, &00, &29, &1E
 	EQUB &9F, &60, &00, &00
 
-.ship_barrel_end
+.barrel_end
