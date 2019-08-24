@@ -136,7 +136,7 @@ int main(int argc, char** argv) {
 
 				/* The ship pointer should match i (the current program counter) */
 				if ((i != 1) && (ship_pointers[i] != ship_start)) {
-					printf("Warning: ship_pointer for %02X is %04X, but this does not match with %04X\n", i, ship_pointer[i], (i + 0x5600));
+					printf("Warning: ship_pointer for %02X is %04X, but this does not match with %04X\n", i, ship_pointers[i], (i + 0x5600));
 				}
 
 				/* Prepare the output filenames */
