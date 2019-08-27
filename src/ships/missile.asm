@@ -3,7 +3,7 @@
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; -----------------------------------------------------------------------------
 
-missile_attributes = %00000000          ; 0....... bit 7: Escape pod present
+missile_attr = %00000000                ; 0....... bit 7: Escape pod present
                                         ; .0...... bit 6: Galcop police ship
                                         ; ..0..... bit 5: Ship is protected by spacestation
                                         ; ...0.... bit 4: Ship is docking
