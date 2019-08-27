@@ -12,6 +12,8 @@ missile_attr = %00000000                ; 0....... bit 7: Escape pod present
                                         ; ......0. bit 1: Ship is a bounty hunter
                                         ; .......0 bit 0: Ship is a trader
 
+ORG &7F00                               ; Missile data is a special case
+
 .missile_start
 
 ; -----------------------------------------------------------------------------
