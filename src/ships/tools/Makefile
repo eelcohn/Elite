@@ -66,11 +66,11 @@ all:	$(MAIN) $(MAIN_LINK)
 $(MAIN): $(OBJS)
 
 main_link:
-	@echo Linking $(MAIN)...
+	@echo Linking $(TITLE)...
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LDFLAGS) $(LIBS)
 
 install:
-	@echo Installing $(MAIN)...
+	@echo Installing $(TITLE)...
 	@install -m 755 $(MAIN) $(INSTALL_PATH)
 	@strip $(INSTALL_PATH)/$(MAIN)
 	@echo
@@ -94,3 +94,4 @@ help:
 	@echo ""
 	@echo "   make help"
 	@echo "      Show this help screen."
+	@echo ""
