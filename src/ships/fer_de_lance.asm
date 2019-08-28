@@ -1,7 +1,16 @@
 ; -----------------------------------------------------------------------------
-; Elite - fer-de-lance data (type &1B)
+; Elite - Fer de Lance data (type &1B)
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; -----------------------------------------------------------------------------
+
+fer-de-lance_attr = %10000010           ; 1....... bit 7: Escape pod present
+                                        ; .0...... bit 6: Galcop police ship
+                                        ; ..0..... bit 5: Ship is protected by spacestation
+                                        ; ...0.... bit 4: Ship is docking
+                                        ; ....0... bit 3: Ship is a pirate
+                                        ; .....0.. bit 2: Ship is attacking you
+                                        ; ......1. bit 1: Ship is a bounty hunter
+                                        ; .......0 bit 0: Ship is a trader
 
 .fer-de-lance_start
 
