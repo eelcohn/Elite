@@ -3,6 +3,15 @@
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; -----------------------------------------------------------------------------
 
+barrel_attr = %00000000                 ; 0....... bit 7: Escape pod present
+                                        ; .0...... bit 6: Galcop police ship
+                                        ; ..0..... bit 5: Ship is protected by spacestation
+                                        ; ...0.... bit 4: Ship is docking
+                                        ; ....0... bit 3: Ship is a pirate
+                                        ; .....0.. bit 2: Ship is attacking you
+                                        ; ......0. bit 1: Ship is a bounty hunter
+                                        ; .......0 bit 0: Ship is a trader
+
 .barrel_start
 
 ; -----------------------------------------------------------------------------
