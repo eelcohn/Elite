@@ -246,7 +246,7 @@ int main(int argc, char** argv) {
 					fprintf(fp_txtout, "; written by David Braben and Ian Bell (c) Acornsoft 1984\n");
 					fprintf(fp_txtout, "; -----------------------------------------------------------------------------\n");
 					fprintf(fp_txtout, "\n");
-					fprintf(fp_txtout, "%s_attributes = %%%c%c%c%c%c%c%c%c        ; %c....... bit 7: Escape pod present\n", ship_id[i], BINARY_ATTRIBUTES(ship_attr[i]), BINARY_BIT(ship_attr[i], 7));
+					fprintf(fp_txtout, "%s_attr = %%%c%c%c%c%c%c%c%c%*s; %c....... bit 7: Escape pod present\n", ship_id[i], BINARY_ATTRIBUTES(ship_attr[i]), (int)(23 - strlen(ship_id[i])), "", BINARY_BIT(ship_attr[i], 7));
 					fprintf(fp_txtout, "                                        ; .%c...... bit 6: Galcop police ship\n", BINARY_BIT(ship_attr[i], 6));
 					fprintf(fp_txtout, "                                        ; ..%c..... bit 5: Ship is protected by spacestation\n", BINARY_BIT(ship_attr[i], 5));
 					fprintf(fp_txtout, "                                        ; ...%c.... bit 4: Ship is docking\n", BINARY_BIT(ship_attr[i], 4));
@@ -407,9 +407,15 @@ void generate_d_mox_asm(const char *filename) {
 		fprintf(fp_moxout, "; Length         : 00000A00\n");
 		fprintf(fp_moxout, "; -----------------------------------------------------------------------------\n");
 		fprintf(fp_moxout, "\n");
-		fprintf(fp_moxout, "ship_attr_none = %%00000000\n");
-		fprintf(fp_moxout, "ship_none      = &0000\n");
-		fprintf(fp_moxout, "ship_missile   = &7F00\n");
+		fprintf(fp_moxout, "none_start     = &0000\n");
+		fprintf(fp_moxout, "none_attr      = %%00000000              ; 7.......: Escape pod present\n");
+		fprintf(fp_moxout, "                                        ; .6......: Galcop police ship\n");
+		fprintf(fp_moxout, "                                        ; ..5.....: Ship is protected by spacestation\n");
+		fprintf(fp_moxout, "                                        ; ...4....: Ship is docking\n");
+		fprintf(fp_moxout, "                                        ; ....3...: Ship is a pirate\n");
+		fprintf(fp_moxout, "                                        ; .....2..: Ship is attacking you\n");
+		fprintf(fp_moxout, "                                        ; ......1.: Ship is a bounty hunter\n");
+		fprintf(fp_moxout, "                                        ; .......0: Ship is a trader\n");
 		fprintf(fp_moxout, "\n");
 		fprintf(fp_moxout, "ORG &5600\n");
 		fprintf(fp_moxout, "\n");
@@ -418,34 +424,26 @@ void generate_d_mox_asm(const char *filename) {
 		fprintf(fp_moxout, ".ship_pointers\n");
 		for (i = 1; i < MAX_SHIPS; i++) {
 			if (ship_pointers[i] != 0x0000) {
-				fprintf(fp_moxout, "	EQUW ship_%s               ; Ship type %02X: %s\n", ship_id[i], i, ship_desc[i]);
+				fprintf(fp_moxout, "	EQUW %s_start%*s; Ship type %02X: %s\n", ship_id[i], (int)(21 - strlen(ship_id[i])), "", i, ship_desc[i]);
 			} else {
-				fprintf(fp_moxout, "	EQUW ship_none               ; Ship type %02X: %s\n", i, ship_desc[i]);
+				fprintf(fp_moxout, "	EQUW none_start                 ; Ship type %02X: %s\n", i, ship_desc[i]);
 			}
 		}
 		fprintf(fp_moxout, "\n");
-		fprintf(fp_moxout, ".ship_attributes                    ; Ship attributes:\n");
-		fprintf(fp_moxout, "                                        ; 7.......: Escape pod present\n");
-		fprintf(fp_moxout, "                                        ; .6......: Galcop police ship\n");
-		fprintf(fp_moxout, "                                        ; ..5.....: Ship is protected by spacestation\n");
-		fprintf(fp_moxout, "                                        ; ...4....: Ship is docking\n");
-		fprintf(fp_moxout, "                                        ; ....3...: Ship is a pirate\n");
-		fprintf(fp_moxout, "                                        ; .....2..: Ship is attacking you\n");
-		fprintf(fp_moxout, "                                        ; ......1.: Ship is a bounty hunter\n");
-		fprintf(fp_moxout, "                                        ; .......0: Ship is a trader\n");
+		fprintf(fp_moxout, ".ship_attr                               ; Ship attributes:\n");
 		for (i = 1; i < MAX_SHIPS; i++) {
 			if (ship_pointers[i] != 0x0000) {
-				fprintf(fp_moxout, "	EQUB %s_attributes                  ; Ship type %i: %s\n", ship_id[i], i, ship_desc[i]);
+				fprintf(fp_moxout, "	EQUB %s_attr%*s; Ship type %i: %s\n", ship_id[i], (int)(22 - strlen(ship_id[i])), "", i, ship_desc[i]);
 			} else {
-				fprintf(fp_moxout, "	EQUB none_attributes                ; Ship type %i: %s\n", i, ship_desc[i]);
+				fprintf(fp_moxout, "	EQUB none_attr                  ; Ship type %i: %s\n", i, ship_desc[i]);
 			}
 		}
 
 		for (i = 1; i < MAX_SHIPS; i++) {
-			if (ship_pointers[i] != 0x0000) {
+			if ((ship_pointers[i] != 0x0000) && (ship_pointers[i] != 0x7F00)) {
 				fprintf(fp_moxout, "\n");
 				fprintf(fp_moxout, ".ship_%s\n", ship_id[i]);
-				fprintf(fp_moxout, "INCLUDE \"src/ships/%s.asm\n", ship_id[i]);
+				fprintf(fp_moxout, "	INCLUDE \"src/ships/%s.asm\"\n", ship_id[i]);
 			}
 		}
 
