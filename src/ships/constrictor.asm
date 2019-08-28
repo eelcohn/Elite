@@ -1,36 +1,48 @@
 ; -----------------------------------------------------------------------------
-; Elite - Constrictor ship data (type 31)
+; Elite - Constrictor data (type &1F)
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; -----------------------------------------------------------------------------
 
-.ship_constrictor_start
+constrictor_attr = %00000100            ; 0....... bit 7: Escape pod present
+                                        ; .0...... bit 6: Galcop police ship
+                                        ; ..0..... bit 5: Ship is protected by spacestation
+                                        ; ...0.... bit 4: Ship is docking
+                                        ; ....0... bit 3: Ship is a pirate
+                                        ; .....1.. bit 2: Ship is attacking you
+                                        ; ......0. bit 1: Ship is a bounty hunter
+                                        ; .......0 bit 0: Ship is a trader
+
+.constrictor_start
 
 ; -----------------------------------------------------------------------------
 ; Hull data header info
 ; -----------------------------------------------------------------------------
-	EQUB &F3                        ; High nibble: scoop info, low nibble: debris spin info
-	EQUW &2649                      ; Area for missile lock
+.constrictor_header
+	EQUB &03                        ; 0000....: cargo type if scooped: none
+	                                ; ....0011: max pieces of debris if destroyed: 3
+	EQUW &1081                      ; Area for missile lock
 	EQUB &7A                        ; Edges data info offset lo
 	EQUB &DA                        ; Faces data info offset lo
-	EQUB &4D                        ; Ship lines stack = 13 (4*maxlines+1)
-	EQUB &00                        ; Gun vertex = 0 (vertex*4)
-	EQUB &2E                        ; Explosion count = 10 (4*n+6)
-	EQUB &66                        ; 17 Vertices (n*6)
-	EQUB &18                        ; 24 Edges
-	EQUW &0000                      ; Bounty
-	EQUB &28                        ; 10 Faces (n*4)
-	EQUB &2D                        ; Dot beyond distance
-	EQUB &C8                        ; Energy
-	EQUB &37                        ; Speed
+	EQUB &4D                        ; Ship lines stack: 19 (4*max_visible_edges+1)
+	EQUB &00                        ; Gun vertex: 0 (vertex*4)
+	EQUB &2E                        ; Explosion count: 10 (4*n+6)
+	EQUB &66                        ; Vertices: 17 (n*6)
+	EQUB &18                        ; Edges: 24
+	EQUW &0100                      ; Bounty: 0.0 Cr
+	EQUB &28                        ; Faces: 10 (n*4)
+	EQUB &2D                        ; Dot beyond distance: 45
+	EQUB &FC                        ; Hull strength: 252
+	EQUB &24                        ; Maximum speed: 0.36 LM
 	EQUB &00                        ; Edges data info offset hi
 	EQUB &00                        ; Faces data info offset hi
 	EQUB &02                        ; Scaling of normals to make large objects' normals flare out further away (Q%)
-	EQUB &2F                        ; %00111xxx Laser | %xxxxx111: 7 Missiles
+	EQUB &34                        ; 00110...: Laser class 6
+	                                ; .....100: 4 missiles
 
 ; -----------------------------------------------------------------------------
 ; Vertices data
 ; -----------------------------------------------------------------------------
-.ship_constrictor_vertices
+.constrictor_vertices
 	EQUB &14, &07, &50, &5F, &02, &99
 	EQUB &14, &07, &50, &DF, &01, &99
 	EQUB &36, &07, &28, &DF, &14, &99
@@ -52,7 +64,7 @@
 ; -----------------------------------------------------------------------------
 ; Edges data
 ; -----------------------------------------------------------------------------
-.ship_constrictor_edges
+.constrictor_edges
 	EQUB &1F, &09, &00, &04
 	EQUB &1F, &19, &04, &08
 	EQUB &1F, &01, &04, &24
@@ -81,7 +93,7 @@
 ; -----------------------------------------------------------------------------
 ; Faces/normals data
 ; -----------------------------------------------------------------------------
-.ship_constrictor_faces
+.constrictor_faces
 	EQUB &1F, &00, &37, &0F
 	EQUB &9F, &18, &4B, &14
 	EQUB &1F, &18, &4B, &14
@@ -93,4 +105,4 @@
 	EQUB &3F, &00, &00, &A0
 	EQUB &5F, &00, &1B, &00
 
-.ship_constrictor_end
+.constrictor_end
