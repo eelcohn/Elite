@@ -1,35 +1,48 @@
 ; -----------------------------------------------------------------------------
-; Elite - Viper ship data (type 16)
+; Elite - Viper data (type &10)
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; -----------------------------------------------------------------------------
 
-.ship_viper_start
+viper_attr = %11000010                  ; 1....... bit 7: Escape pod present
+                                        ; .1...... bit 6: Galcop police ship
+                                        ; ..0..... bit 5: Ship is protected by spacestation
+                                        ; ...0.... bit 4: Ship is docking
+                                        ; ....0... bit 3: Ship is a pirate
+                                        ; .....0.. bit 2: Ship is attacking you
+                                        ; ......1. bit 1: Ship is a bounty hunter
+                                        ; .......0 bit 0: Ship is a trader
+
+.viper_start
 
 ; -----------------------------------------------------------------------------
 ; Hull data header info
 ; -----------------------------------------------------------------------------
-	EQUB &00                        ; High nibble: scoop info, low nibble: debris spin info
+.viper_header
+	EQUB &00                        ; 0000....: cargo type if scooped: none
+	                                ; ....0000: max pieces of debris if destroyed: 0
 	EQUW &15F9                      ; Area for missile lock
 	EQUB &6E                        ; Edges data info offset lo
 	EQUB &BE                        ; Faces data info offset lo
-	EQUB &4D                        ; Ship lines stack = 19 (4*maxlines+1)
-	EQUB &00                        ; Gun vertex = 0 (vertex*4)
-	EQUB &2A                        ; Explosion count = 9 (4*n+6)
-	EQUB &5A                        ; 15 Vertices (n*6)
-	EQUB &14                        ; 20 Edges
-	EQUW &0000                      ; Bounty
-	EQUB &1C                        ; 7 Faces (n*4)
-	EQUB &17                        ; Dot beyond distance
-	EQUB &64                        ; Energy
-	EQUB &20                        ; Speed
+	EQUB &4D                        ; Ship lines stack: 19 (4*max_visible_edges+1)
+	EQUB &00                        ; Gun vertex: 0 (vertex*4)
+	EQUB &2A                        ; Explosion count: 9 (4*n+6)
+	EQUB &5A                        ; Vertices: 15 (n*6)
+	EQUB &14                        ; Edges: 20
+	EQUW &0100                      ; Bounty: 0.0 Cr
+	EQUB &1C                        ; Faces: 7 (n*4)
+	EQUB &17                        ; Dot beyond distance: 23
+	EQUB &64                        ; Hull strength: 100
+	EQUB &20                        ; Maximum speed: 0.32 LM
 	EQUB &00                        ; Edges data info offset hi
 	EQUB &00                        ; Faces data info offset hi
 	EQUB &01                        ; Scaling of normals to make large objects' normals flare out further away (Q%)
-	EQUB &11                        ; %00010xxx Laser | %xxxxx001: 1 Missile
+	EQUB &11                        ; 00010...: Laser class 2
+	                                ; .....001: 1 missiles
 
 ; -----------------------------------------------------------------------------
 ; Vertices data
 ; -----------------------------------------------------------------------------
+.viper_vertices
 	EQUB &00, &00, &48, &1F, &21, &43
 	EQUB &00, &10, &18, &1E, &10, &22
 	EQUB &00, &10, &18, &5E, &43, &55
@@ -49,7 +62,7 @@
 ; -----------------------------------------------------------------------------
 ; Edges data
 ; -----------------------------------------------------------------------------
-.ship_viper_edges
+.viper_edges
 	EQUB &1F, &42, &00, &0C
 	EQUB &1E, &21, &00, &04
 	EQUB &1E, &43, &00, &08
@@ -74,7 +87,7 @@
 ; -----------------------------------------------------------------------------
 ; Faces/normals data
 ; -----------------------------------------------------------------------------
-.ship_viper_faces
+.viper_faces
 	EQUB &1F, &00, &20, &00
 	EQUB &9F, &16, &21, &0B
 	EQUB &1F, &16, &21, &0B
@@ -83,4 +96,4 @@
 	EQUB &5F, &00, &20, &00
 	EQUB &3F, &00, &00, &30
 
-.ship_viper_end
+.viper_end
