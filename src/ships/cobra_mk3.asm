@@ -1,36 +1,48 @@
 ; -----------------------------------------------------------------------------
-; Elite - Cobra Mk3 ship data (type 11)
+; Elite - Cobra MkIII data (type &0B)
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; -----------------------------------------------------------------------------
 
-.ship_cobra_mk3_start
+cobra_mk3_attr = %10100000              ; 1....... bit 7: Escape pod present
+                                        ; .0...... bit 6: Galcop police ship
+                                        ; ..1..... bit 5: Ship is protected by spacestation
+                                        ; ...0.... bit 4: Ship is docking
+                                        ; ....0... bit 3: Ship is a pirate
+                                        ; .....0.. bit 2: Ship is attacking you
+                                        ; ......0. bit 1: Ship is a bounty hunter
+                                        ; .......0 bit 0: Ship is a trader
+
+.cobra_mk3_start
 
 ; -----------------------------------------------------------------------------
 ; Hull data header info
 ; -----------------------------------------------------------------------------
-	EQUB &03                        ; High nibble: scoop info, low nibble: debris spin info
+.cobra_mk3_header
+	EQUB &03                        ; 0000....: cargo type if scooped: none
+	                                ; ....0011: max pieces of debris if destroyed: 3
 	EQUW &2341                      ; Area for missile lock
 	EQUB &BC                        ; Edges data info offset lo
 	EQUB &54                        ; Faces data info offset lo
-	EQUB &99                        ; Ship lines stack = 38 (4*maxlines+1)
-	EQUB &54                        ; Gun vertex = 21 (vertex*4)
-	EQUB &2A                        ; Explosion count = 9 (4*n+6)
-	EQUB &A8                        ; 28 Vertices (n*6)
-	EQUB &26                        ; 38 Edges
-	EQUW &0000                      ; Bounty
-	EQUB &34                        ; 13 Faces (n*4)
-	EQUB &32                        ; Dot beyond distance
-	EQUB &96                        ; Energy
-	EQUB &1C                        ; Speed
+	EQUB &99                        ; Ship lines stack: 38 (4*max_visible_edges+1)
+	EQUB &54                        ; Gun vertex: 21 (vertex*4)
+	EQUB &2A                        ; Explosion count: 9 (4*n+6)
+	EQUB &A8                        ; Vertices: 28 (n*6)
+	EQUB &26                        ; Edges: 38
+	EQUW &0100                      ; Bounty: 0.0 Cr
+	EQUB &34                        ; Faces: 13 (n*4)
+	EQUB &32                        ; Dot beyond distance: 50
+	EQUB &96                        ; Hull strength: 150
+	EQUB &1C                        ; Maximum speed: 0.28 LM
 	EQUB &00                        ; Edges data info offset hi
 	EQUB &01                        ; Faces data info offset hi
 	EQUB &01                        ; Scaling of normals to make large objects' normals flare out further away (Q%)
-	EQUB &13                        ; %00010xxx Laser | %xxxxx011: 3 Missiles
+	EQUB &13                        ; 00010...: Laser class 2
+	                                ; .....011: 3 missiles
 
 ; -----------------------------------------------------------------------------
 ; Vertices data
 ; -----------------------------------------------------------------------------
-.ship_cobra_mk3_vertices
+.cobra_mk3_vertices
 	EQUB &20, &00, &4C, &1F, &FF, &FF
 	EQUB &20, &00, &4C, &9F, &FF, &FF
 	EQUB &00, &1A, &18, &1F, &FF, &FF
@@ -63,7 +75,7 @@
 ; -----------------------------------------------------------------------------
 ; Edges data
 ; -----------------------------------------------------------------------------
-.ship_cobra_mk3_edges
+.cobra_mk3_edges
 	EQUB &1F, &B0, &00, &04
 	EQUB &1F, &C4, &00, &10
 	EQUB &1F, &A3, &04, &0C
@@ -106,8 +118,8 @@
 ; -----------------------------------------------------------------------------
 ; Faces/normals data
 ; -----------------------------------------------------------------------------
-.ship_cobra_mk3_faces
-	EQUB &1F, &00, &3E, &1F         ; start normals #0 = top front plate of Cobra Mk III
+.cobra_mk3_faces
+	EQUB &1F, &00, &3E, &1F
 	EQUB &9F, &12, &37, &10
 	EQUB &1F, &12, &37, &10
 	EQUB &9F, &10, &34, &0E
@@ -121,4 +133,4 @@
 	EQUB &5F, &00, &1E, &06
 	EQUB &5F, &07, &2A, &09
 
-.ship_cobra_mk3_end
+.cobra_mk3_end
