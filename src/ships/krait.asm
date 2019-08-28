@@ -1,89 +1,113 @@
 ; -----------------------------------------------------------------------------
-; Elite - Krait ship data (type 19)
+; Elite - Fer de Lance data (type &1B)
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; -----------------------------------------------------------------------------
 
-.ship_krait_start
+fer-de-lance_attr = %10000010           ; 1....... bit 7: Escape pod present
+                                        ; .0...... bit 6: Galcop police ship
+                                        ; ..0..... bit 5: Ship is protected by spacestation
+                                        ; ...0.... bit 4: Ship is docking
+                                        ; ....0... bit 3: Ship is a pirate
+                                        ; .....0.. bit 2: Ship is attacking you
+                                        ; ......1. bit 1: Ship is a bounty hunter
+                                        ; .......0 bit 0: Ship is a trader
+
+.fer-de-lance_start
 
 ; -----------------------------------------------------------------------------
 ; Hull data header info
 ; -----------------------------------------------------------------------------
-	EQUB &01                        ; High nibble: scoop info, low nibble: debris spin info
-	EQUW &0E10                      ; Area for missile lock
-	EQUB &7A                        ; Edges data info offset lo
-	EQUB &CE                        ; Faces data info offset lo
-	EQUB &55                        ; Ship lines stack = 21 (4*maxlines+1)
-	EQUB &00                        ; Gun vertex = 0 (vertex*4)
-	EQUB &12                        ; Explosion count = 3 (4*n+6)
-	EQUB &66                        ; 17 Vertices (n*6)
-	EQUB &15                        ; 21 Edges
-	EQUW &0064                      ; Bounty
-	EQUB &18                        ; 6 Faces (n*4)
-	EQUB &14                        ; Dot beyond distance
-	EQUB &50                        ; Energy
-	EQUB &1E                        ; Speed
+.fer-de-lance_header
+	EQUB &00                        ; 0000....: cargo type if scooped: none
+	                                ; ....0000: max pieces of debris if destroyed: 0
+	EQUW &0640                      ; Area for missile lock
+	EQUB &86                        ; Edges data info offset lo
+	EQUB &F2                        ; Faces data info offset lo
+	EQUB &69                        ; Ship lines stack: 26 (4*max_visible_edges+1)
+	EQUB &00                        ; Gun vertex: 0 (vertex*4)
+	EQUB &1A                        ; Explosion count: 5 (4*n+6)
+	EQUB &72                        ; Vertices: 19 (n*6)
+	EQUB &1B                        ; Edges: 27
+	EQUW &0100                      ; Bounty: 0.0 Cr
+	EQUB &28                        ; Faces: 10 (n*4)
+	EQUB &28                        ; Dot beyond distance: 40
+	EQUB &A0                        ; Hull strength: 160
+	EQUB &1E                        ; Maximum speed: 0.30 LM
 	EQUB &00                        ; Edges data info offset hi
 	EQUB &00                        ; Faces data info offset hi
-	EQUB &02                        ; Scaling of normals to make large objects' normals flare out further away (Q%)
-	EQUB &10                        ; %00010xxx Laser | %xxxxx000: No missiles
+	EQUB &01                        ; Scaling of normals to make large objects' normals flare out further away (Q%)
+	EQUB &12                        ; 00010...: Laser class 2
+	                                ; .....010: 2 missiles
 
 ; -----------------------------------------------------------------------------
 ; Vertices data
 ; -----------------------------------------------------------------------------
-.ship_krait_vertices
-	EQUB &00, &00, &60, &1F, &01, &23
-	EQUB &00, &12, &30, &3F, &03, &45
-	EQUB &00, &12, &30, &7F, &12, &45
-	EQUB &5A, &00, &03, &3F, &01, &44
-	EQUB &5A, &00, &03, &BF, &23, &55
-	EQUB &5A, &00, &57, &1C, &01, &11
-	EQUB &5A, &00, &57, &9C, &23, &33
-	EQUB &00, &05, &35, &09, &00, &33
-	EQUB &00, &07, &26, &06, &00, &33
-	EQUB &12, &07, &13, &89, &33, &33
-	EQUB &12, &07, &13, &09, &00, &00
-	EQUB &12, &0B, &27, &28, &44, &44
-	EQUB &12, &0B, &27, &68, &44, &44
-	EQUB &24, &00, &1E, &28, &44, &44
-	EQUB &12, &0B, &27, &A8, &55, &55
-	EQUB &12, &0B, &27, &E8, &55, &55
-	EQUB &24, &00, &1E, &A8, &55, &55
+.fer-de-lance_vertices
+	EQUB &00, &0E, &6C, &5F, &01, &59
+	EQUB &28, &0E, &04, &FF, &12, &99
+	EQUB &0C, &0E, &34, &FF, &23, &99
+	EQUB &0C, &0E, &34, &7F, &34, &99
+	EQUB &28, &0E, &04, &7F, &45, &99
+	EQUB &28, &0E, &04, &BC, &01, &26
+	EQUB &0C, &02, &34, &BC, &23, &67
+	EQUB &0C, &02, &34, &3C, &34, &78
+	EQUB &28, &0E, &04, &3C, &04, &58
+	EQUB &00, &12, &14, &2F, &06, &78
+	EQUB &03, &0B, &61, &CB, &00, &00
+	EQUB &1A, &08, &12, &89, &00, &00
+	EQUB &10, &0E, &04, &AB, &00, &00
+	EQUB &03, &0B, &61, &4B, &00, &00
+	EQUB &1A, &08, &12, &09, &00, &00
+	EQUB &10, &0E, &04, &2B, &00, &00
+	EQUB &00, &0E, &14, &6C, &99, &99
+	EQUB &0E, &0E, &2C, &CC, &99, &99
+	EQUB &0E, &0E, &2C, &4C, &99, &99
 
 ; -----------------------------------------------------------------------------
 ; Edges data
 ; -----------------------------------------------------------------------------
-.ship_krait_edges
-	EQUB &1F, &03, &00, &04
-	EQUB &1F, &12, &00, &08
-	EQUB &1F, &01, &00, &0C
-	EQUB &1F, &23, &00, &10
-	EQUB &1F, &35, &04, &10
-	EQUB &1F, &25, &10, &08
-	EQUB &1F, &14, &08, &0C
-	EQUB &1F, &04, &0C, &04
-	EQUB &1C, &01, &0C, &14
-	EQUB &1C, &23, &10, &18
-	EQUB &05, &45, &04, &08
-	EQUB &09, &00, &1C, &28
-	EQUB &06, &00, &20, &28
-	EQUB &09, &33, &1C, &24
-	EQUB &06, &33, &20, &24
-	EQUB &08, &44, &2C, &34
-	EQUB &08, &44, &34, &30
-	EQUB &07, &44, &30, &2C
-	EQUB &07, &55, &38, &3C
-	EQUB &08, &55, &3C, &40
-	EQUB &08, &55, &40, &38
+.fer-de-lance_edges
+	EQUB &1F, &19, &00, &04
+	EQUB &1F, &29, &04, &08
+	EQUB &1F, &39, &08, &0C
+	EQUB &1F, &49, &0C, &10
+	EQUB &1F, &59, &00, &10
+	EQUB &1C, &01, &00, &14
+	EQUB &1C, &26, &14, &18
+	EQUB &1C, &37, &18, &1C
+	EQUB &1C, &48, &1C, &20
+	EQUB &1C, &05, &00, &20
+	EQUB &0F, &06, &14, &24
+	EQUB &0B, &67, &18, &24
+	EQUB &0B, &78, &1C, &24
+	EQUB &0F, &08, &20, &24
+	EQUB &0E, &12, &04, &14
+	EQUB &0E, &23, &08, &18
+	EQUB &0E, &34, &0C, &1C
+	EQUB &0E, &45, &10, &20
+	EQUB &08, &00, &28, &2C
+	EQUB &09, &00, &2C, &30
+	EQUB &0B, &00, &28, &30
+	EQUB &08, &00, &34, &38
+	EQUB &09, &00, &38, &3C
+	EQUB &0B, &00, &34, &3C
+	EQUB &0C, &99, &40, &44
+	EQUB &0C, &99, &40, &48
+	EQUB &08, &99, &44, &48
 
 ; -----------------------------------------------------------------------------
 ; Faces/normals data
 ; -----------------------------------------------------------------------------
-.ship_krait_faces
-	EQUB &1F, &07, &30, &06
-	EQUB &5F, &07, &30, &06
-	EQUB &DF, &07, &30, &06
-	EQUB &9F, &07, &30, &06
-	EQUB &3F, &4D, &00, &9A
-	EQUB &BF, &4D, &00, &9A
+.fer-de-lance_faces
+	EQUB &1C, &00, &18, &06
+	EQUB &9F, &44, &00, &18
+	EQUB &BF, &3F, &00, &25
+	EQUB &3F, &00, &00, &68
+	EQUB &3F, &3F, &00, &25
+	EQUB &1F, &44, &00, &18
+	EQUB &BC, &0C, &2E, &13
+	EQUB &3C, &00, &2D, &16
+	EQUB &3C, &0C, &2E, &13
+	EQUB &5F, &00, &1C, &00
 
-.ship_krait_end
+.fer-de-lance_end
