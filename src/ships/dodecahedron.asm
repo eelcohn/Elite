@@ -1,14 +1,23 @@
 ; -----------------------------------------------------------------------------
-; Elite - Dodecahedron spacestation data (type &02)
+; Elite - Dodecahedron space station data (type &02)
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; -----------------------------------------------------------------------------
+
+dodecahedron_attr = %00000000           ; 0....... bit 7: Escape pod present
+                                        ; .0...... bit 6: Galcop police ship
+                                        ; ..0..... bit 5: Ship is protected by spacestation
+                                        ; ...0.... bit 4: Ship is docking
+                                        ; ....0... bit 3: Ship is a pirate
+                                        ; .....0.. bit 2: Ship is attacking you
+                                        ; ......0. bit 1: Ship is a bounty hunter
+                                        ; .......0 bit 0: Ship is a trader
 
 .dodecahedron_start
 
 ; -----------------------------------------------------------------------------
 ; Hull data header info
 ; -----------------------------------------------------------------------------
-.spacestation_header
+.dodecahedron_header
 	EQUB &00                        ; 0000....: cargo type if scooped: none
 	                                ; ....0000: max pieces of debris if destroyed: 0
 	EQUW &7E90                      ; Area for missile lock
