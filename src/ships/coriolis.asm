@@ -1,14 +1,23 @@
 ; -----------------------------------------------------------------------------
-; Elite - Coriolis spacestation data (type &02)
+; Elite - Coriolis space station data (type &02)
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; -----------------------------------------------------------------------------
 
-.coriolis_start
+spacestation_attr = %00000000           ; 0....... bit 7: Escape pod present
+                                        ; .0...... bit 6: Galcop police ship
+                                        ; ..0..... bit 5: Ship is protected by spacestation
+                                        ; ...0.... bit 4: Ship is docking
+                                        ; ....0... bit 3: Ship is a pirate
+                                        ; .....0.. bit 2: Ship is attacking you
+                                        ; ......0. bit 1: Ship is a bounty hunter
+                                        ; .......0 bit 0: Ship is a trader
+
+.spacestation_start
 
 ; -----------------------------------------------------------------------------
 ; Hull data header info
 ; -----------------------------------------------------------------------------
-.coriolis_header
+.spacestation_header
 	EQUB &00                        ; 0000....: cargo type if scooped: none
 	                                ; ....0000: max pieces of debris if destroyed: 0
 	EQUW &6400                      ; Area for missile lock
@@ -33,7 +42,7 @@
 ; -----------------------------------------------------------------------------
 ; Vertices data
 ; -----------------------------------------------------------------------------
-.coriolis_vertices
+.spacestation_vertices
 	EQUB &A0, &00, &A0, &1F, &10, &62
 	EQUB &00, &A0, &A0, &1F, &20, &83
 	EQUB &A0, &00, &A0, &9F, &30, &74
@@ -54,7 +63,7 @@
 ; -----------------------------------------------------------------------------
 ; Edges data
 ; -----------------------------------------------------------------------------
-.coriolis_edges
+.spacestation_edges
 	EQUB &1F, &10, &00, &0C
 	EQUB &1F, &20, &00, &04
 	EQUB &1F, &30, &04, &08
@@ -87,7 +96,7 @@
 ; -----------------------------------------------------------------------------
 ; Faces/normals data
 ; -----------------------------------------------------------------------------
-.coriolis_faces
+.spacestation_faces
 	EQUB &1F, &00, &00, &A0
 	EQUB &5F, &6B, &6B, &6B
 	EQUB &1F, &6B, &6B, &6B
@@ -103,4 +112,4 @@
 	EQUB &BF, &6B, &6B, &6B
 	EQUB &3F, &00, &00, &A0
 
-.coriolis_end
+.spacestation_end
