@@ -24,7 +24,27 @@ DISCIMAGE = Elite.ssd
 # --------------------------------------------------------------------------- #
 # Source files                                                                #
 # --------------------------------------------------------------------------- #
-SRCFILES = Elite2.asm Elite3.asm D.Code.asm T.Code.asm
+SRCFILES = \
+	Elite2.asm \
+	Elite3.asm \
+	D.Code.asm \
+	T.Code.asm \
+	D.MOA.asm \
+	D.MOB.asm \
+	D.MOC.asm \
+	D.MOD.asm \
+	D.MOE.asm \
+	D.MOF.asm \
+	D.MOG.asm \
+	D.MOH.asm \
+	D.MOI.asm \
+	D.MOJ.asm \
+	D.MOK.asm \
+	D.MOL.asm \
+	D.MOM.asm \
+	D.MON.asm \
+	D.MOO.asm \
+	D.MOP.asm
 TXTFILES = Elite.txt
 
 BINFILES = $(SRCFILES:.asm=.bin)
@@ -67,4 +87,3 @@ clean-beebasm:
 
 clean-disc:
 	rm -f $(DISCIMAGE)
-
