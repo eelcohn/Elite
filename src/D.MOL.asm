@@ -10,12 +10,16 @@
 none_start     = &0000
 none_attr      = %00000000              ; 7.......: Escape pod present
                                         ; .6......: Galcop police ship
-                                        ; ..5.....: Ship is protected by spacestation
+                                        ; ..5.....: Ship is protected by dodecahedron
                                         ; ...4....: Ship is docking
                                         ; ....3...: Ship is a pirate
                                         ; .....2..: Ship is attacking you
                                         ; ......1.: Ship is a bounty hunter
                                         ; .......0: Ship is a trader
+missile_start  = &7F00
+missile_attr   = %00000000
+
+
 
 ORG &5600
 
@@ -23,7 +27,7 @@ ORG &5600
 
 .ship_pointers
 	EQUW missile_start              ; Ship type 01: Missile
-	EQUW spacestation_start         ; Ship type 02: Space station
+	EQUW dodecahedron_start         ; Ship type 02: Space station
 	EQUW escape_pod_start           ; Ship type 03: Escape pod
 	EQUW none_start                 ; Ship type 04: Plate/Alloy
 	EQUW barrel_start               ; Ship type 05: Barrel
@@ -48,15 +52,15 @@ ORG &5600
 	EQUW none_start                 ; Ship type 18: Cobra MkIII (pirate)
 	EQUW none_start                 ; Ship type 19: Asp Mk2
 	EQUW none_start                 ; Ship type 1A: Python (pirate)
-	EQUW fer-de-lance_start         ; Ship type 1B: Fer de Lance
+	EQUW fer_de_lance_start         ; Ship type 1B: Fer de Lance
 	EQUW none_start                 ; Ship type 1C: Moray
 	EQUW none_start                 ; Ship type 1D: Thargoid
 	EQUW none_start                 ; Ship type 1E: Thargon
 	EQUW none_start                 ; Ship type 1F: Constrictor
 
-.ship_attr                               ; Ship attributes:
+.ship_attr                              ; Ship attributes:
 	EQUB missile_attr               ; Ship type 1: Missile
-	EQUB spacestation_attr          ; Ship type 2: Space station
+	EQUB dodecahedron_attr          ; Ship type 2: Space station
 	EQUB escape_pod_attr            ; Ship type 3: Escape pod
 	EQUB none_attr                  ; Ship type 4: Plate/Alloy
 	EQUB barrel_attr                ; Ship type 5: Barrel
@@ -81,14 +85,14 @@ ORG &5600
 	EQUB none_attr                  ; Ship type 24: Cobra MkIII (pirate)
 	EQUB none_attr                  ; Ship type 25: Asp Mk2
 	EQUB none_attr                  ; Ship type 26: Python (pirate)
-	EQUB fer-de-lance_attr          ; Ship type 27: Fer de Lance
+	EQUB fer_de_lance_attr          ; Ship type 27: Fer de Lance
 	EQUB none_attr                  ; Ship type 28: Moray
 	EQUB none_attr                  ; Ship type 29: Thargoid
 	EQUB none_attr                  ; Ship type 30: Thargon
 	EQUB none_attr                  ; Ship type 31: Constrictor
 
-.ship_spacestation
-	INCLUDE "src/ships/spacestation.asm"
+.ship_dodecahedron
+	INCLUDE "src/ships/dodecahedron.asm"
 
 .ship_escape_pod
 	INCLUDE "src/ships/escape_pod.asm"
@@ -114,8 +118,8 @@ ORG &5600
 .ship_worm
 	INCLUDE "src/ships/worm.asm"
 
-.ship_fer-de-lance
-	INCLUDE "src/ships/fer-de-lance.asm"
+.ship_fer_de_lance
+	INCLUDE "src/ships/fer_de_lance.asm"
 
 	FOR n, *, (&6000 - P%)
 		EQUB &00

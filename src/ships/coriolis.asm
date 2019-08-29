@@ -12,7 +12,7 @@ coriolis_attr = %00000000           ; 0....... bit 7: Escape pod present
                                         ; ......0. bit 1: Ship is a bounty hunter
                                         ; .......0 bit 0: Ship is a trader
 
-.spacestation_start
+.coriolis_start
 
 ; -----------------------------------------------------------------------------
 ; Hull data header info
@@ -113,3 +113,4 @@ coriolis_attr = %00000000           ; 0....... bit 7: Escape pod present
 	EQUB &3F, &00, &00, &A0
 
 .coriolis_end
+

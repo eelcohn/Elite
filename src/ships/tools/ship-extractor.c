@@ -66,12 +66,12 @@ const char *ship_id[] = {	// * = not sure yet, check against http://wiki.alioth.
 	"krait",		// 13
 	"adder",		// 14
 	"gecko",		// 15
-	"cobra_mk1-unsure",	// 16
+	"cobra_mk1",		// 16
 	"worm",			// 17
 	"cobra_mk3_pirate",	// 18
 	"asp",			// 19 *
 	"python_pirate",	// 1A *
-	"fer-de-lance",		// 1B
+	"fer_de_lance",		// 1B
 	"moray",		// 1C *
 	"thargoid",		// 1D *
 	"thargon",		// 1E *
@@ -430,7 +430,7 @@ void generate_d_mox_asm(const char *filename) {
 			}
 		}
 		fprintf(fp_moxout, "\n");
-		fprintf(fp_moxout, ".ship_attr                               ; Ship attributes:\n");
+		fprintf(fp_moxout, ".ship_attr                              ; Ship attributes:\n");
 		for (i = 1; i < MAX_SHIPS; i++) {
 			if (ship_pointers[i] != 0x0000) {
 				fprintf(fp_moxout, "	EQUB %s_attr%*s; Ship type %i: %s\n", ship_id[i], (int)(22 - strlen(ship_id[i])), "", i, ship_desc[i]);

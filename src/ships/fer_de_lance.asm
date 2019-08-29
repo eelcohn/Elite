@@ -3,7 +3,7 @@
 ; written by David Braben and Ian Bell (c) Acornsoft 1984
 ; -----------------------------------------------------------------------------
 
-fer-de-lance_attr = %10000010           ; 1....... bit 7: Escape pod present
+fer_de_lance_attr = %10000010           ; 1....... bit 7: Escape pod present
                                         ; .0...... bit 6: Galcop police ship
                                         ; ..0..... bit 5: Ship is protected by spacestation
                                         ; ...0.... bit 4: Ship is docking
@@ -12,12 +12,12 @@ fer-de-lance_attr = %10000010           ; 1....... bit 7: Escape pod present
                                         ; ......1. bit 1: Ship is a bounty hunter
                                         ; .......0 bit 0: Ship is a trader
 
-.fer-de-lance_start
+.fer_de_lance_start
 
 ; -----------------------------------------------------------------------------
 ; Hull data header info
 ; -----------------------------------------------------------------------------
-.fer-de-lance_header
+.fer_de_lance_header
 	EQUB &00                        ; 0000....: cargo type if scooped: none
 	                                ; ....0000: max pieces of debris if destroyed: 0
 	EQUW &0640                      ; Area for missile lock
@@ -42,7 +42,7 @@ fer-de-lance_attr = %10000010           ; 1....... bit 7: Escape pod present
 ; -----------------------------------------------------------------------------
 ; Vertices data
 ; -----------------------------------------------------------------------------
-.fer-de-lance_vertices
+.fer_de_lance_vertices
 	EQUB &00, &0E, &6C, &5F, &01, &59
 	EQUB &28, &0E, &04, &FF, &12, &99
 	EQUB &0C, &0E, &34, &FF, &23, &99
@@ -66,7 +66,7 @@ fer-de-lance_attr = %10000010           ; 1....... bit 7: Escape pod present
 ; -----------------------------------------------------------------------------
 ; Edges data
 ; -----------------------------------------------------------------------------
-.fer-de-lance_edges
+.fer_de_lance_edges
 	EQUB &1F, &19, &00, &04
 	EQUB &1F, &29, &04, &08
 	EQUB &1F, &39, &08, &0C
@@ -98,7 +98,7 @@ fer-de-lance_attr = %10000010           ; 1....... bit 7: Escape pod present
 ; -----------------------------------------------------------------------------
 ; Faces/normals data
 ; -----------------------------------------------------------------------------
-.fer-de-lance_faces
+.fer_de_lance_faces
 	EQUB &1C, &00, &18, &06
 	EQUB &9F, &44, &00, &18
 	EQUB &BF, &3F, &00, &25
@@ -110,4 +110,4 @@ fer-de-lance_attr = %10000010           ; 1....... bit 7: Escape pod present
 	EQUB &3C, &0C, &2E, &13
 	EQUB &5F, &00, &1C, &00
 
-.fer-de-lance_end
+.fer_de_lance_end
