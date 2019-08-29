@@ -58,9 +58,9 @@ ORG &5600
 	EQUW thargon_start              ; Ship type 1E: Thargon
 	EQUW none_start                 ; Ship type 1F: Constrictor
 
-.ship_attr                               ; Ship attributes:
+.ship_attr                              ; Ship attributes:
 	EQUB missile_attr               ; Ship type 1: Missile
-	EQUB spacestation_attr          ; Ship type 2: Space station
+	EQUB dodecahedron_attr          ; Ship type 2: Space station
 	EQUB escape_pod_attr            ; Ship type 3: Escape pod
 	EQUB none_attr                  ; Ship type 4: Plate/Alloy
 	EQUB barrel_attr                ; Ship type 5: Barrel
@@ -91,8 +91,8 @@ ORG &5600
 	EQUB thargon_attr               ; Ship type 30: Thargon
 	EQUB none_attr                  ; Ship type 31: Constrictor
 
-.ship_spacestation
-	INCLUDE "src/ships/spacestation.asm"
+.ship_dodecahedron
+	INCLUDE "src/ships/dodecahedron.asm"
 
 .ship_escape_pod
 	INCLUDE "src/ships/escape_pod.asm"
