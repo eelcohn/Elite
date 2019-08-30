@@ -25,29 +25,32 @@ DISCIMAGE = Elite.ssd
 # Source files                                                                #
 # --------------------------------------------------------------------------- #
 SRCFILES = \
-	Elite2.asm \
-	Elite3.asm \
-	D.Code.asm \
-	T.Code.asm \
-	D.MOA.asm \
-	D.MOB.asm \
-	D.MOC.asm \
-	D.MOD.asm \
-	D.MOE.asm \
-	D.MOF.asm \
-	D.MOG.asm \
-	D.MOH.asm \
-	D.MOI.asm \
-	D.MOJ.asm \
-	D.MOK.asm \
-	D.MOL.asm \
-	D.MOM.asm \
-	D.MON.asm \
-	D.MOO.asm \
-	D.MOP.asm
+	src/Elite2.asm \
+	src/Elite3.asm \
+	src/D.Code.asm \
+	src/T.Code.asm \
+	src/D.MOA.asm \
+	src/D.MOB.asm \
+	src/D.MOC.asm \
+	src/D.MOD.asm \
+	src/D.MOE.asm \
+	src/D.MOF.asm \
+	src/D.MOG.asm \
+	src/D.MOH.asm \
+	src/D.MOI.asm \
+	src/D.MOJ.asm \
+	src/D.MOK.asm \
+	src/D.MOL.asm \
+	src/D.MOM.asm \
+	src/D.MON.asm \
+	src/D.MOO.asm \
+	src/D.MOP.asm
+
 TXTFILES = Elite.txt
 
 BINFILES = $(SRCFILES:.asm=.bin)
+
+SHIPFILES = *.asm
 
 
 # --------------------------------------------------------------------------- #
@@ -68,11 +71,22 @@ ifeq (,$(wildcard ./beebem/beebem))
 	cd beebasm/src/ && make code
 endif
 
-%.bin: src/%.asm
+%.bin: %.asm
 	$(BEEBASM) $(BEEBASMFLAGS) -i $< -o bin/$@
 
 txtfiles: src/$(TXTFILES)
 	cp $< bin/
+
+ships: src/ships/$(SHIPFILES)
+	@for ship in $^ ; do \	
+		@echo "ORG &0000" > src/ships/tmp.asm ; \
+		@echo ".start" >> src/ships/tmp.asm ; \
+		@cat $< >> src/ships/tmp.asm ; \
+		@echo ".end" >> src/ships/tmp.asm ; \
+		@echo "SAVE \"bin/$@.bin\", start, end, start, start" >> src/ships/tmp.asm ; \
+		$(BEEBASM) $(BEEBASMFLAGS) -i src/ships/tmp.asm -o bin/$(ship) ; \
+		@rm src/ships/tmp.asm ; \
+	done
 
 elitedisc: $(BINFILES)
 	$(BEEBASM) $(BEEBASMFLAGS) -i $< -do $(DISCIMAGE)
