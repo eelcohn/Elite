@@ -21,6 +21,8 @@ missile_attr   = %00000000
 
 
 
+CLEAR &5600, &6000
+
 ORG &5600
 
 .start
@@ -127,10 +129,7 @@ ORG &5600
 .ship_thargon
 	INCLUDE "src/ships/thargon.asm"
 
-	FOR n, *, (&6000 - P%)
-		EQUB &00
-	NEXT
-
+	ORG &6000
 .end
 
 SAVE "bin/D.MOD", start, end, start, start

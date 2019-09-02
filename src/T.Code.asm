@@ -7997,10 +7997,9 @@ INCLUDE "src/ships/krait.asm"
 INCLUDE "src/ships/constrictor.asm"
 
 .addr5F55
-	FOR n, *, (&6000 - P%)
-		EQUB &00
-	NEXT
+	CLEAR P%, &6000
 
+	ORG &6000
 .end
 
 SAVE "bin/T.Code", start, end, startcode, start

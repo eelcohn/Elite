@@ -21,6 +21,8 @@ missile_attr   = %00000000
 
 
 
+CLEAR &5600, &6000
+
 ORG &5600
 
 .start
@@ -127,10 +129,7 @@ ORG &5600
 .ship_cobra_mk1       
 	INCLUDE "src/ships/cobra_mk1.asm"
 
-	FOR n, *, (&6000 - P%)
-		EQUB &00
-	NEXT
-
+	ORG &6000
 .end
 
 SAVE "bin/D.MOE", start, end, start, start
